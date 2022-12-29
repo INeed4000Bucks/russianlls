@@ -62,7 +62,7 @@ const lesson1Words = [
     const definition =  document.getElementById("definition")
     const word = document.getElementById("word")
     let wordOnDisplay = false;
-    let currentWords = lesson1Words.slice(0, 7);
+    let currentWords = lessonWords.slice(0, 7);
     let currentIndex = 0;
     let setNum = 1;
     let setSize = 7;
@@ -76,7 +76,9 @@ const lesson1Words = [
         // Event listeners for the buttons
         document.getElementById("left-button").addEventListener("click", function() {
             this.blur();
-            // Move the current word back in the queue by 3 positions
+
+            if(wordOnDisplay === true) {
+                // Move the current word back in the queue by 3 positions
             // or to the back if there are less than 4 words in the queue
             let currentWord = currentWords.shift();
             if (currentWords.length < 4) {
@@ -92,7 +94,14 @@ const lesson1Words = [
     
             displayDone();
             displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
             wordOnDisplay = false;
+            }
+            else {
+                wordOnDisplay = true;
+                definition.style.visibility = "visible";
+                document.getElementById("left-button").innerHTML = "Again";
+            }
         });
     
         document.getElementById("right-button").addEventListener("click", function() {
@@ -107,7 +116,7 @@ const lesson1Words = [
             }
             definition.style.visibility = "hidden";
             definition.style.textTransform = "lowercase"
-    
+            document.getElementById("left-button").innerHTML = "Translate";
             displayDone();
             displayNextWord();
             wordOnDisplay = false;
@@ -115,9 +124,9 @@ const lesson1Words = [
     
         document.getElementById("next-button").addEventListener("click", function() {
             this.blur();
-            // Load the next setSize words from the lesson1Words array
+            // Load the next setSize words from the lessonWords array
             currentIndex += setSize;
-            currentWords = lesson1Words.slice(currentIndex, currentIndex + setSize);
+            currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
             definition.style.visibility = "hidden";
             definition.style.textTransform = "lowercase"
     
@@ -196,7 +205,7 @@ const lesson1Words = [
         setNum = parseInt(numInput.value);
         currentIndex = setNum * setSize - setSize;
 
-        currentWords = lesson1Words.slice(currentIndex, currentIndex + setSize);
+        currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
         definition.style.visibility = "hidden";
         definition.style.textTransform = "lowercase";
 

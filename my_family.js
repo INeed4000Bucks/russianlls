@@ -97,7 +97,9 @@ const lessonWords = [
         // Event listeners for the buttons
         document.getElementById("left-button").addEventListener("click", function() {
             this.blur();
-            // Move the current word back in the queue by 3 positions
+
+            if(wordOnDisplay === true) {
+                // Move the current word back in the queue by 3 positions
             // or to the back if there are less than 4 words in the queue
             let currentWord = currentWords.shift();
             if (currentWords.length < 4) {
@@ -113,7 +115,14 @@ const lessonWords = [
     
             displayDone();
             displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
             wordOnDisplay = false;
+            }
+            else {
+                wordOnDisplay = true;
+                definition.style.visibility = "visible";
+                document.getElementById("left-button").innerHTML = "Again";
+            }
         });
     
         document.getElementById("right-button").addEventListener("click", function() {
@@ -128,7 +137,7 @@ const lessonWords = [
             }
             definition.style.visibility = "hidden";
             definition.style.textTransform = "lowercase"
-    
+            document.getElementById("left-button").innerHTML = "Translate";
             displayDone();
             displayNextWord();
             wordOnDisplay = false;
