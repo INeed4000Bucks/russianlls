@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Noto Sans SC Thin';
+  src: url(fonts/NotoSansSC-Thin.otf);
+}
+
 html,body {
   display: flex;
   width: 100vw;
