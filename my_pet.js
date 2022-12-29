@@ -1,4 +1,4 @@
-const lesson1Words = [
+const lessonWords = [
   {word: "питомец", definition: "pet", score: 0},
 {word: "детство", definition: "childhood", score: 0},
 {word: "хотеть", definition: "to want", score: 0},
