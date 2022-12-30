@@ -44,7 +44,7 @@ const lessonWords = [
       let setSize = 7;
       let dieRoll = 0;
       let tapCount = 0;
-      // let timer;
+      let timer;
   
       let watermKeySequence = ["w", "a", "t", "e", "r", "m"];
       let currentKeyIndex = 0;
@@ -97,7 +97,15 @@ const lessonWords = [
                       currentEx += 1;
                   }
               }
+              document.getElementById("left-button").style.pointerEvents = 'none';
+              timer = setTimeout(() => {
+                document.getElementById("left-button").style.pointerEvents = 'auto';
+              }, 500);
           });
+
+
+
+
       
           document.getElementById("right-button").addEventListener("click", function() {
               this.blur();
