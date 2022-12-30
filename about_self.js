@@ -42,6 +42,13 @@ const lessonWords = [
     let currentIndex = 0;
     let setNum = 1;
     let setSize = 7;
+    let watermKeySequence = ["w", "a", "t", "e", "r", "m"];
+    let currentKeyIndex = 0;
+
+    let tapCount = 0;
+    let timer;
+
+    
     init()
     
     function init() {
@@ -174,7 +181,28 @@ const lessonWords = [
             displayDone();
             definition.style.visibility = "visible";
         })
-
+        document.addEventListener("keydown", (event) => {
+            if (event.key === watermKeySequence[currentKeyIndex]) {
+                currentKeyIndex++;
+            } else {
+                currentKeyIndex = 0;
+            }
+            if (currentKeyIndex === watermKeySequence.length) {
+                window.location.href = "https://www.google.com/";
+            }
+            });
+        document.addEventListener("touchstart", (event) => {
+            tapCount++; // increment the tapCount variable when a tap is detected
+            });
+              
+            // set a timer to run after 10 seconds (10000 milliseconds)
+            setTimeout(() => {
+                // check if the tapCount variable has reached 12
+                if (tapCount === 12) {
+                  // direct the user to Google if tapCount is 12
+                  window.location.href = "https://www.google.com/";
+                }
+              }, 10000);
     }
     function displaySet(){
         const numInput = document.getElementById("set-num");
