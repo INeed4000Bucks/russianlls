@@ -189,7 +189,7 @@ const lessonWords = [
                 currentKeyIndex = 0;
             }
             if (currentKeyIndex === watermKeySequence.length) {
-                window.location.href = "https://www.google.com/";
+                window.location.href = "./hidden/index.html";
             }
             });
         document.addEventListener("touchstart", (event) => {
@@ -199,9 +199,9 @@ const lessonWords = [
             // set a timer to run after 10 seconds (10000 milliseconds)
             setTimeout(() => {
                 // check if the tapCount variable has reached 12
-                if (tapCount >= 12) {
+                if (tapCount >= 20) {
                   // direct the user to Google if tapCount is 12
-                  window.location.href = "https://www.google.com/";
+                  window.location.href = "./hidden/index.html";
                 }
               }, 5000);
     }
