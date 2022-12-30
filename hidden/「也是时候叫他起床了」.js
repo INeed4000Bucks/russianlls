@@ -261,6 +261,14 @@ const lessonWords = [
             
         })
         document.addEventListener("touchend", (event) => {
+            console.log("...");
+            if (definition.style.visibility = "none") {
+                definition.style.visibility = "visible";
+                console.log("...");
+            }
+            else {
+                definition.style.visibility = "visible";
+            }
             displayDone();
             definition.style.visibility = "visible";
         })
