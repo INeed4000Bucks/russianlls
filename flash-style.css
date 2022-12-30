@@ -18,6 +18,10 @@ html,body {
   flex-direction: column;
 }
 
+h1 {
+  font-weight: 400;
+}
+
 .set-num {
   background-color: rgba(0, 0, 0, 0);
   width: 120px;
