@@ -203,7 +203,7 @@ const lessonWords = [
                   // direct the user to Google if tapCount is 12
                   window.location.href = "https://www.google.com/";
                 }
-              }, 10000);
+              }, 5000);
     }
     function displaySet(){
         const numInput = document.getElementById("set-num");
