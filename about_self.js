@@ -42,13 +42,10 @@ const lessonWords = [
     let currentIndex = 0;
     let setNum = 1;
     let setSize = 7;
-    let watermKeySequence = ["w", "a", "t", "e", "r", "m"];
-    let currentKeyIndex = 0;
-
-    let tapCount = 0;
-    let timer;
-
+    let dieRoll = 0;
     
+    const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+    let currentEx = 0; //Exclamatory at this index will be displayed next.
     init()
     
     function init() {
@@ -65,7 +62,7 @@ const lessonWords = [
             // or to the back if there are less than 4 words in the queue
             let currentWord = currentWords.shift();
             if (currentWords.length < 4) {
-                currentWords.push(currentWord);
+                currentWords.push(currentWord); //put it at the very end
                 console.log(currentWords)
             } else {
                 currentWords.splice(3, 0, currentWord);
@@ -83,7 +80,17 @@ const lessonWords = [
             else {
                 wordOnDisplay = true;
                 definition.style.visibility = "visible";
-                document.getElementById("left-button").innerHTML = "Again";
+                dieRoll = getRandomNumber();
+                //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                }
+                else {
+                    if (currentEx > 3) {currentEx = 0}
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
             }
         });
     
@@ -131,6 +138,16 @@ const lessonWords = [
                     displayDone();
                     definition.style.visibility = "visible";
                     wordOnDisplay = true;
+                    dieRoll = getRandomNumber();
+                    //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                    if (dieRoll < 98) {
+                        document.getElementById("left-button").innerHTML = "Again";
+                    }
+                    else {
+                        if (currentEx > 3) {currentEx = 0}
+                        document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                        currentEx += 1;
+                    }
                 }
                 else {
                     let currentWord = currentWords.shift();
@@ -142,7 +159,7 @@ const lessonWords = [
                     }
                     definition.style.visibility = "hidden";
                     definition.style.textTransform = "lowercase"
-        
+                    document.getElementById("left-button").innerHTML = "Translate";
                     displayDone();
                     displayNextWord();
                     wordOnDisplay = false;
@@ -181,29 +198,7 @@ const lessonWords = [
             displayDone();
             definition.style.visibility = "visible";
         })
-        document.addEventListener("keydown", (event) => {
-            if (event.key === watermKeySequence[currentKeyIndex]) {
-                currentKeyIndex++;
-                console.log(event.key);
-            } else {
-                currentKeyIndex = 0;
-            }
-            if (currentKeyIndex === watermKeySequence.length) {
-                window.location.href = "./hidden/index.html";
-            }
-            });
-        document.addEventListener("touchstart", (event) => {
-            tapCount++; // increment the tapCount variable when a tap is detected
-            });
-              
-            // set a timer to run after 10 seconds (10000 milliseconds)
-            setTimeout(() => {
-                // check if the tapCount variable has reached 12
-                if (tapCount >= 20) {
-                  // direct the user to Google if tapCount is 12
-                  window.location.href = "./hidden/index.html";
-                }
-              }, 5000);
+
     }
     function displaySet(){
         const numInput = document.getElementById("set-num");
@@ -243,3 +238,7 @@ const lessonWords = [
             definition.innerHTML = "Set Done " + setNum
             definition.style.textTransform = "capitalize"
     }
+
+    function getRandomNumber() {
+        return Math.floor(Math.random() * 100) + 1;
+      }
