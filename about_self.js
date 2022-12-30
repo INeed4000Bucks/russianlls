@@ -227,6 +227,7 @@ const lessonWords = [
           document.addEventListener("touchend", (event) => {
               displayDone();
               if (translateButtonTapped === true){
+                translateButtonTapped = false;
                 return
               }  
               if(wordOnDisplay === false){
