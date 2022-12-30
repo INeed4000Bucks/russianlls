@@ -44,7 +44,8 @@ const lessonWords = [
       let setSize = 7;
       let dieRoll = 0;
       let tapCount = 0;
-      let timer;
+      //let timer;
+      let translateButtonTapped = false;
   
       let watermKeySequence = ["w", "a", "t", "e", "r", "m"];
       let currentKeyIndex = 0;
@@ -59,9 +60,17 @@ const lessonWords = [
           definition.innerHTML = currentWords[0].definition;
           displaySetNum();
           // Event listeners for the buttons
+          document.getElementById("left-button").addEventListener("touchstart", function() {
+            if (translateButtonTapped === false) {
+                translateButtonTapped = true;
+            }
+            else {
+                translateButtonTapped = false;
+            }
+          })
           document.getElementById("left-button").addEventListener("click", function() {
               this.blur();
-  
+                
               if(wordOnDisplay === true) {
                   // Move the current word back in the queue by 3 positions
               // or to the back if there are less than 4 words in the queue
@@ -88,28 +97,15 @@ const lessonWords = [
                   dieRoll = getRandomNumber();
                   //If dieRoll < 98, display "Again" instead of an exclamatory remark
                   
-                //   if (dieRoll < 98) {
-                //       document.getElementById("left-button").innerHTML = "Again";
-                //   }
-                //   else {
-                //       if (currentEx > 3) {currentEx = 0}
-                //       document.getElementById("left-button").innerHTML = exclamatories[currentEx];
-                //       currentEx += 1;
-                //   }
+                  if (dieRoll < 98) {
+                      document.getElementById("left-button").innerHTML = "Again";
+                  }
+                  else {
+                      if (currentEx > 3) {currentEx = 0}
+                      document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                      currentEx += 1;
+                  }
               }
-              document.getElementById("left-button").style.pointerEvents = 'none';
-              document.getElementById("left-button").innerHTML = "No Touch";
-              timer = setTimeout(() => {
-                document.getElementById("left-button").style.pointerEvents = 'auto';
-                if (dieRoll < 98) {
-                    document.getElementById("left-button").innerHTML = "Again";
-                }
-                else {
-                    if (currentEx > 3) {currentEx = 0}
-                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
-                    currentEx += 1;
-                }
-              }, 500);
           });
 
 
@@ -230,6 +226,9 @@ const lessonWords = [
   
           document.addEventListener("touchend", (event) => {
               displayDone();
+              if (translateButtonTapped === true){
+                return
+              }  
               if(wordOnDisplay === false){
                 displayDone();
                 definition.style.visibility = "visible";
