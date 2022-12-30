@@ -88,18 +88,27 @@ const lessonWords = [
                   dieRoll = getRandomNumber();
                   //If dieRoll < 98, display "Again" instead of an exclamatory remark
                   
-                  if (dieRoll < 98) {
-                      document.getElementById("left-button").innerHTML = "Again";
-                  }
-                  else {
-                      if (currentEx > 3) {currentEx = 0}
-                      document.getElementById("left-button").innerHTML = exclamatories[currentEx];
-                      currentEx += 1;
-                  }
+                //   if (dieRoll < 98) {
+                //       document.getElementById("left-button").innerHTML = "Again";
+                //   }
+                //   else {
+                //       if (currentEx > 3) {currentEx = 0}
+                //       document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                //       currentEx += 1;
+                //   }
               }
               document.getElementById("left-button").style.pointerEvents = 'none';
+              document.getElementById("left-button").innerHTML = "No Touch";
               timer = setTimeout(() => {
                 document.getElementById("left-button").style.pointerEvents = 'auto';
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                }
+                else {
+                    if (currentEx > 3) {currentEx = 0}
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
               }, 500);
           });
 
