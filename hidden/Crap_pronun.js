@@ -7,7 +7,12 @@ const lessonWords = [
 {word: "big", definition: "ōkina", score: 0},
 {word: "circle", definition: "en", score: 0},
 {word: "room", definition: "heya", score: 0},
-{word: "I prefer…, definition: ...no kata ga suki", score: 0}
+{word: "I prefer…", definition: "...no kata ga suki", score: 0},
+{word: "glasses", definition: "megane", score: 0},
+{word: "to break", definition: "kowareru", score: 0},
+{word: "to sleep", definition: "neru", score: 0},
+{word: "to dream", definition: "yume o miru", score: 0},
+{word: "building", definition: "tatemono", score: 0}
     ];
 
     const definition = document.getElementById("definition");
