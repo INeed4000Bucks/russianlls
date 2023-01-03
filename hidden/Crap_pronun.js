@@ -1,11 +1,13 @@
 const lessonWords = [
-    {word: "kurai hi", definition: "dark day", score: 0},
-{word: "watashi wa miemasu ", definition: "I can see", score: 0},
-{word: "yoru wa nagai", definition: "The night is long", score: 0},
-{word: "ōkina en", definition: "big circle", score: 0},
-{word: "nagai hanashi", definition: "long story", score: 0},
-{word: "kurai heya", definition: "dark room", score: 0},
-{word: "Chūgoku no kata ga suki", definition: "I prefer China", score: 0}
+    {word: "story", definition: "hanashi", score: 0},
+{word: "dark", definition: "kurai", score: 0},
+{word: "day", definition: "hi", score: 0},
+{word: "night", definition: "yoru", score: 0},
+{word: "long", definition: "nagai", score: 0},
+{word: "big", definition: "ōkina", score: 0},
+{word: "circle", definition: "en", score: 0},
+{word: "room", definition: "heya", score: 0},
+{word: "I prefer…, definition: ...no kata ga suki", score: 0}
     ];
 
     const definition = document.getElementById("definition");
