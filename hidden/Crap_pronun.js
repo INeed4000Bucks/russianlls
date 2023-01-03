@@ -1,11 +1,11 @@
 const lessonWords = [
-    {word: "part of a worm", definition: "rúchóng de yībùfèn", score: 0},
-{word: "the whole movie", definition: "zhěng bù diànyǐng", score: 0},
-{word: "specific term", definition: "tèdìng shùyǔ", score: 0},
-{word: "around here", definition: "zhè fùjìn", score: 0},
-{word: "fifty states", definition: "wǔshí gè zhōu", score: 0},
-{word: "I smelled her", definition: "wǒ wén dàole tā", score: 0},
-{word: "I'm allowed to be here", definition: "wǒ bèi yǔnxǔ zài zhèlǐ", score: 0}
+    {word: "kurai hi", definition: "dark day", score: 0},
+{word: "watashi wa miemasu ", definition: "I can see", score: 0},
+{word: "yoru wa nagai", definition: "The night is long", score: 0},
+{word: "ōkina en", definition: "big circle", score: 0},
+{word: "nagai hanashi", definition: "long story", score: 0},
+{word: "kurai heya", definition: "dark room", score: 0},
+{word: "Chūgoku no kata ga suki", definition: "I prefer China", score: 0}
     ];
 
     const definition = document.getElementById("definition");
