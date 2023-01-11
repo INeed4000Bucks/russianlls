@@ -8,7 +8,7 @@ p{
 .tooltip {
     position: relative;
     border-bottom: 1px dotted black;
-    font-family: Bookerly;
+    font-family: Bookerly, Calibri, 'Trebuchet MS', sans-serif;
     font-size: 35px;
     
   }
@@ -60,7 +60,7 @@ p{
 
 h1 {
   font-size: 50px;
-  font-family: Bookerly;
+  font-family: Bookerly, Calibri;
 }
 
 
