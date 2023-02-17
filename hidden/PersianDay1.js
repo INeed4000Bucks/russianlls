@@ -20,7 +20,7 @@ const lessonWords = [
 {word: "My favorite month", definition: "ماه مورد علاقه من", score: 0},
 {word: "The past was peaceful", definition: "گذشته صلح آمیز بود", score: 0},
 {word: "If I leave you", definition: "اگر ترکت کنم", score: 0},
-{word: "An ordinary affair", definition: "یک امر عادی است", score: 0},
+{word: "An ordinary affair", definition: "یک امر عادی", score: 0},
 {word: "I need attention", definition: "من نیاز به توجه دارم", score: 0},
 {word: "The issue of slavery", definition: "مسئله برده داری", score: 0},
 {word: "I sit in this section", definition: "من در این بخش می نشینم", score: 0},
