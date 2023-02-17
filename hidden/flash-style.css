@@ -24,7 +24,7 @@ html,body {
   display: flex;
   width: 90%;
   height: 85%;
-  font-family: 'Noto Sans SC Thin';
+  font-family: 'Baloo Bhaijaan 2', 'Noto Sans SC Thin';
   text-transform: capitalize;
   font-size: 1.4rem;
   background: rgba(255, 255, 255, 0);
@@ -60,7 +60,7 @@ html,body {
 
 #definition {
   visibility: hidden;
-  font-family: 'Noto Sans SC Thin';
+  font-family: 'Baloo Bhaijaan 2', 'Noto Sans SC Thin';
   font-size: 40px;
   border-radius: 10px;
   text-transform: lowercase;
