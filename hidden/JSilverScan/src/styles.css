@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.link {
+    font-size: 24px;
+    color: #E9E9E9;
+    background: #1A0B08;
+    border-color: #FA8669;
+    border-radius: 8px;
+    visibility: hidden;
+    transition: opacity 0.5s;
+    border: solid 2px #FA8669;
+    margin: 10px 20px;
+    opacity: 0;
+    width: fit-content;
+    padding: 8px;
+    font-family: Consolas;
+}
