@@ -292,3 +292,10 @@ button:hover {
         height: 250px;
     }
 }
+
+@media (max-width: 490px){
+    .vid {
+        width: 400px;
+        height: 220px;
+    }
+}
