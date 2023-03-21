@@ -147,7 +147,7 @@ button:hover {
     transform: rotateY(0) rotate(45deg);
     position: absolute;
     top: -25px;
-    left: 50vw;
+    left: 48vw;
 }
 
 .grid {
@@ -305,6 +305,9 @@ button:hover {
     .vid {
         width: 450px;
         height: 250px;
+    }
+    .arrow {
+        left: 46vw;
     }
 }
 
