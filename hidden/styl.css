@@ -235,7 +235,9 @@ button:hover {
     .midsection {
         width: 100%;
     }
-
+    .midsection p {
+        max-width: 90%;
+    }
     .midsection .rr {
         max-width: 90%;
         margin-left: auto;
