@@ -195,13 +195,14 @@ button:hover {
 .tu {
     min-width: 400px;
     margin: 0 auto;
-    height: 600px;
+    height: 550px;
 }
 
 .crypto-tile {
     min-height: 100px;
     margin: 15px 0;
     box-shadow: 2px 5px 10px rgba(105, 67, 0, 0.111);
+    padding: 20px;
 }
 
 .tu-title {
@@ -211,6 +212,20 @@ button:hover {
 .tu-title img {
     height: 35px;
     margin-right: 10px;
+}
+
+.viewmore {
+    color: black;
+    max-width: 900px;
+    margin: 0 auto;
+    direction: rtl;
+}
+
+h4 {
+    color:rgba(0, 0, 0, 0.75);
+    font-weight: 700;
+    font-size: 22px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 @media (max-width: 1660px){
@@ -324,6 +339,9 @@ button:hover {
 @media (max-width: 455px){
     .grid .nova-box {
         min-width: 250px;
+    }
+    .tu {
+        min-width: 300px;
     }
 }
 
