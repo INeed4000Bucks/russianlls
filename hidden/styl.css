@@ -178,7 +178,7 @@ button:hover {
 .white-bg {
     background-color: white;
     min-height: 600px;
-    padding: 100px;
+    padding: 100px 50px 100px 50px;
 }
 
 .titles {
@@ -188,17 +188,14 @@ button:hover {
 
 .tu-segment {
     display: flex;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .tu {
     min-width: 400px;
     margin: 0 auto;
     height: 600px;
-}
-
-.tu-segment {
-    max-width: 900px;
-    margin: 0 auto;
 }
 
 .crypto-tile {
@@ -241,6 +238,8 @@ button:hover {
 
     .midsection p {
         max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
     }
     header {
         width: 95%;
@@ -255,6 +254,9 @@ button:hover {
     .grid .nova-box {
         min-width: 350px;
     }
+    .tu {
+        min-width: 350px;
+    }
 }
 
 @media (max-width: 833px) {
@@ -264,6 +266,9 @@ button:hover {
     }
     .grid .nova-box {
         min-width: 450px;
+    }
+    .tu-segment {
+        flex-direction: column;
     }
 }
 
