@@ -153,6 +153,8 @@ button:hover {
 .grid {
     max-width: 1000px;
     margin: 0 auto;
+    display: flex;
+    gap: 23px;
 }
 
 .nova-box .tile-num {
@@ -161,10 +163,9 @@ button:hover {
 
 .grid .nova-box {
     background-color: rgb(31,33,37);
-    width: 450px;
+    min-width: 450px;
     height: 300px;
-    display: inline-grid;
-    margin: 23px 23px;
+    margin: 23px auto;
     border-radius: 10px;
     padding: 20px;
 }
@@ -250,12 +251,19 @@ button:hover {
     }
 }
 
-@media (max-width: 1111px) {
-    .grid {
-        margin: 0 auto;
+@media (max-width: 1109px) {
+    .grid .nova-box {
+        min-width: 350px;
     }
-    .nova-box {
-        max-width: 350px;
+}
+
+@media (max-width: 833px) {
+    .grid {
+        flex-direction: column;
+        gap: unset;
+    }
+    .grid .nova-box {
+        min-width: 450px;
     }
 }
 
@@ -293,9 +301,28 @@ button:hover {
     }
 }
 
+@media (max-width: 575px){
+    .grid .nova-box {
+        min-width: 350px;
+        height: 250px;
+    }
+    .nova-box .tile-num {
+        height: 100px;
+    }
+}
+
+@media (max-width: 455px){
+    .grid .nova-box {
+        min-width: 250px;
+    }
+}
+
 @media (max-width: 490px){
     .vid {
-        width: 400px;
-        height: 220px;
+        width: 360px;
+        height: 200px;
+    }
+    header {
+        padding: 2rem 1.5rem;
     }
 }
