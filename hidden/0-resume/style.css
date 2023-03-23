@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 4rem 0 4rem;
+    padding: 0 0rem 0 0rem;
     color: gray;
 }
 .title {
@@ -51,7 +51,7 @@ ul {
 .main-content {
     width: 70%;
     padding: 2rem;
-    padding-left: 6rem;
+    padding-left: 0rem;
 }
 .part-of-ops {
     display: flex;
@@ -68,7 +68,7 @@ ul {
     background-color: bisque;
     width: 30%;
     margin: 10px;
-    margin-right: 6rem;
+    margin-right: 0rem;
     padding: 2rem;
     height: fit-content;
 }
