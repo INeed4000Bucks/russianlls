@@ -1,5 +1,21 @@
 const lessonWords = [
-    {word: "дом", definition: "house", score: 0},
+    {word: "agree", definition: "tóngyì", score: 0},
+    {word: "alcohol", definition: "jiǔjīng", score: 0},
+    {word: "arrive", definition: "dàodá", score: 0},
+    {word: "August", definition: "bā yuè", score: 0},
+    {word: "boat", definition: "chuán", score: 0},
+    {word: "breakfast", definition: "zǎocān", score: 0},
+    {word: "camera", definition: "xiàngjī", score: 0},
+    {word: "capital", definition: "shǒudū", score: 0},
+    {word: "catch", definition: "zhuāzhù", score: 0},
+    {word: "duck", definition: "yā", score: 0},
+    {word: "enjoy", definition: "xiǎngshòu", score: 0},
+    {word: "invite", definition: "yāoqǐng", score: 0},
+    {word: "love", definition: "ài", score: 0},
+    {word: "month", definition: "yuè", score: 0},
+    {word: "travel", definition: "lǚxíng", score: 0},
+    {word: "typical", definition: "diǎnxíng", score: 0},
+    {word: "visit", definition: "fǎngwèn", score: 0}
       ];
   
       const definition = document.getElementById("definition");
@@ -14,7 +30,7 @@ const lessonWords = [
       //let timer;
       let translateButtonTapped = false;
       
-      const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+      const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Sex"];
       let currentEx = 0; //Exclamatory at this index will be displayed next.
       init();
       
