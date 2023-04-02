@@ -15,7 +15,10 @@ const lessonWords = [
     {word: "month", definition: "yuè", score: 0},
     {word: "travel", definition: "lǚxíng", score: 0},
     {word: "typical", definition: "diǎnxíng", score: 0},
-    {word: "visit", definition: "fǎngwèn", score: 0}
+    {word: "visit", definition: "fǎngwèn", score: 0},
+    {word: "weather", definition: "tiānqì", score: 0},
+    {word: "week", definition: "zhōu", score: 0},
+    {word: "wine", definition: "pútáojiǔ", score: 0}
       ];
   
       const definition = document.getElementById("definition");
