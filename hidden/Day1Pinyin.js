@@ -248,7 +248,7 @@ function displayDone() {
     const definition = document.getElementById("definition");
     definition.style.visibility = "visible";
     definition.innerHTML = "Set Done " + setNum;
-    definition.style.textTransform = "capitalize";
+    //definition.style.textTransform = "capitalize";
 }
 
 function getRandomNumber() {
