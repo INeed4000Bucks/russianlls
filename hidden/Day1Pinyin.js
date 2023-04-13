@@ -1,4 +1,5 @@
 const lessonWords = [
+    { word: "yī", definition: "one", score: 0 },
     { word: "yī tiān", definition: "one day", score: 0 },
     { word: "wǒ de", definition: "my", score: 0 },
     { word: "gǒu", definition: "dog", score: 0 },
@@ -8,7 +9,15 @@ const lessonWords = [
     { word: "yùdào", definition: "to encounter", score: 0 },
     { word: "qítā", definition: "other", score: 0 },
     { word: "jǐ", definition: "few", score: 0 },
-    { word: "xián-guàng", definition: "to wander (around)", score: 0 }
+    { word: "xián-guàng", definition: "to wander (around)", score: 0 },
+    { word: "tā", definition: "he, she, it", score: 0 },
+    { word: "xīwàng", definition: "to hope, wish", score: 0 },
+    { word: "xiǎngyào", definition: "to want", score: 0 },
+    { word: "yīyàng", definition: "the same", score: 0 },
+    { word: "tāmen", definition: "they", score: 0 },
+    { word: "xiàng", definition: "similar", score: 0 },
+    { word: "de", definition: "'s (indicates posession)", score: 0 },
+    { word: "xiàng", definition: "língdāng", score: 0 },
 ];
 
 const definition = document.getElementById("definition");
