@@ -158,11 +158,7 @@ function init() {
                     document.getElementById("left-button").innerHTML = exclamatories[currentEx];
                     currentEx += 1;
                 }
-                previousAction = {
-                    word: currentWord,
-                    action: 'next',
-                    prevScore: currentWord.score
-                };
+                
             } else {
                 let currentWord = currentWords.shift();
                 currentWords.push(currentWord);
@@ -175,6 +171,11 @@ function init() {
                 definition.style.textTransform = "lowercase";
                 document.getElementById("left-button").innerHTML = "Translate";
                 displayDone();
+                previousAction = {
+                    word: currentWord,
+                    action: 'next',
+                    prevScore: currentWord.score
+                };
                 displayNextWord();
                 wordOnDisplay = false;
             }
