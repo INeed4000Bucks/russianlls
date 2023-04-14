@@ -29,6 +29,7 @@ let setNum = 1;
 let setSize = 7;
 let dieRoll = 0;
 let tapCount = 0;
+let previousAction = null;
 //let timer;
 let translateButtonTapped = false;
 
@@ -71,6 +72,11 @@ function init() {
             displayNextWord();
             document.getElementById("left-button").innerHTML = "Translate";
             wordOnDisplay = false;
+            previousAction = {
+                word: currentWord,
+                action: 'again',
+                prevScore: currentWord.score
+            };
         } else {
             wordOnDisplay = true;
             definition.style.visibility = "visible";
@@ -105,6 +111,11 @@ function init() {
         displayDone();
         displayNextWord();
         wordOnDisplay = false;
+        previousAction = {
+            word: currentWord,
+            action: 'next',
+            prevScore: currentWord.score
+        };
     });
 
     document.getElementById("next-button").addEventListener("click", function () {
@@ -164,6 +175,10 @@ function init() {
             const numInput = document.getElementById("set-num");
             numInput.blur();
             displaySet();
+        }
+        //Check for Ctrl+Z
+        if (event.ctrlKey && event.key === 'z') {
+            undoPreviousAction();
         }
     });
     document.addEventListener("keydown", (event) => {
@@ -253,4 +268,26 @@ function displayDone() {
 
 function getRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
+}
+function undoPreviousAction() {
+    if (!previousAction) return;
+
+    // Retrieve the word and action from the previousAction object
+    let wordToUndo = previousAction.word;
+    let actionToUndo = previousAction.action;
+
+    // Undo the previous action and update the score
+    if (actionToUndo === 'again') {
+        let index = currentWords.findIndex((word) => word.word === wordToUndo.word);
+        if (index >= 0) {
+            currentWords[index].score = previousAction.prevScore;
+        }
+    } else if (actionToUndo === 'next') {
+        let index = currentWords.findIndex((word) => word.word === wordToUndo.word);
+        if (index >= 0) {
+            currentWords[index].score = previousAction.prevScore;
+            currentWords.unshift(currentWords.splice(index, 1)[0]);
+        }
+    }
+    previousAction = null;
 }
