@@ -1,7 +1,7 @@
 const lessonWords = [
-    { word: "妹妹", definition: "", score: 0 },
-    { word: "搬入", definition: "one day", score: 0 },
-    { word: "wǒ de", definition: "my", score: 0 },
+    { word: "妹妹", definition: "little sister", score: 0 },
+    { word: "搬入", definition: "to move in", score: 0 },
+    { word: "进入", definition: "to enter", score: 0 },
     { word: "gǒu", definition: "dog", score: 0 },
     { word: "zài", definition: "in", score: 0 },
     { word: "cūnzi", definition: "village", score: 0 },
