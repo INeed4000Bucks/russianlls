@@ -30,7 +30,7 @@ let setSize = 7;
 let dieRoll = 0;
 let tapCount = 0;
 let previousAction = null;
-console.log(previousAction);
+console.log("Version 1.1");
 //let timer;
 let translateButtonTapped = false;
 
