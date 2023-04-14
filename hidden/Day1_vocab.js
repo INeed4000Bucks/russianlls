@@ -142,11 +142,7 @@ function init() {
         if (event.key === " ") {
             const numInput = document.getElementById("set-num");
             numInput.value = numInput.value.replaceAll(" ", "");
-            previousAction = {
-                word: currentWord,
-                action: 'next',
-                prevScore: currentWord.score
-            };
+            
             if (wordOnDisplay === false) {
                 displayDone();
                 definition.style.visibility = "visible";
@@ -162,6 +158,11 @@ function init() {
                     document.getElementById("left-button").innerHTML = exclamatories[currentEx];
                     currentEx += 1;
                 }
+                previousAction = {
+                    word: currentWord,
+                    action: 'next',
+                    prevScore: currentWord.score
+                };
             } else {
                 let currentWord = currentWords.shift();
                 currentWords.push(currentWord);
