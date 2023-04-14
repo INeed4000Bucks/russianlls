@@ -30,6 +30,7 @@ let setSize = 7;
 let dieRoll = 0;
 let tapCount = 0;
 let previousAction = null;
+console.log(previousAction);
 //let timer;
 let translateButtonTapped = false;
 
@@ -176,11 +177,11 @@ function init() {
             numInput.blur();
             displaySet();
         }
-    });
-    document.addEventListener("keydown", (event) => {
-        if (event.ctrlKey && event.key === 'z') {
+        if (event.key === 'z') {
             undoPreviousAction();
         }
+    });
+    document.addEventListener("keydown", (event) => {
         if (event.key !== "1") return;
 
         let currentWord = currentWords.shift();
