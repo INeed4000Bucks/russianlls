@@ -176,13 +176,11 @@ function init() {
             numInput.blur();
             displaySet();
         }
-        //Check for Ctrl+Z
+    });
+    document.addEventListener("keydown", (event) => {
         if (event.ctrlKey && event.key === 'z') {
             undoPreviousAction();
         }
-    });
-    document.addEventListener("keydown", (event) => {
-        // Check if the key that was pressed is the space key
         if (event.key !== "1") return;
 
         let currentWord = currentWords.shift();
