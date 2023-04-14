@@ -30,7 +30,7 @@ let setSize = 7;
 let dieRoll = 0;
 let tapCount = 0;
 let previousAction = null;
-console.log("Version 1.2");
+console.log("Version 1.3");
 //let timer;
 let translateButtonTapped = false;
 
@@ -282,14 +282,13 @@ function getRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
 }
 function undoPreviousAction() {
-    console.log("Undoing...")
     if (!previousAction) return;
-    console.log("The previous action is something")
+    console.log("There is a previous action to undo")
     // Retrieve the word and action from the previousAction object
     let wordToUndo = previousAction.word;
-    console.log(wordToUndo)
+    console.log("Word: " + wordToUndo)
     let actionToUndo = previousAction.action;
-    console.log(actionToUndo)
+    console.log("Action: " + actionToUndo)
 
     // Undo the previous action and update the score
     if (actionToUndo === 'again') {
@@ -304,5 +303,13 @@ function undoPreviousAction() {
             currentWords.unshift(currentWords.splice(index, 1)[0]);
         }
     }
+
+    // Put the previous word back on the screen
+    word.innerHTML = wordToUndo.word;
+    console.log("Word That Was Updated: " + wordToUndo.word)
+    definition.innerHTML = wordToUndo.definition;
+    definition.style.visibility = "hidden";
+    wordOnDisplay = false;
+    document.getElementById("left-button").innerHTML = "Translate";
     previousAction = null;
 }
