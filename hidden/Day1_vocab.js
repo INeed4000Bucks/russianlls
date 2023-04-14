@@ -178,6 +178,7 @@ function init() {
             displaySet();
         }
         if (event.key === 'z') {
+            console.log("Heard z...")
             undoPreviousAction();
         }
     });
@@ -269,11 +270,14 @@ function getRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
 }
 function undoPreviousAction() {
+    console.log("Undoing...")
     if (!previousAction) return;
-
+    console.log("The previous action is something")
     // Retrieve the word and action from the previousAction object
     let wordToUndo = previousAction.word;
+    console.log(wordToUndo)
     let actionToUndo = previousAction.action;
+    console.log(actionToUndo)
 
     // Undo the previous action and update the score
     if (actionToUndo === 'again') {
