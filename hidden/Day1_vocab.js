@@ -68,16 +68,16 @@ function init() {
             currentWord.score = -1;
             definition.style.visibility = "hidden";
             definition.style.textTransform = "lowercase";
-
-            displayDone();
-            displayNextWord();
-            document.getElementById("left-button").innerHTML = "Translate";
-            wordOnDisplay = false;
             previousAction = {
                 word: currentWord,
                 action: 'again',
                 prevScore: currentWord.score
             };
+            displayDone();
+            displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
+            wordOnDisplay = false;
+            
         } else {
             wordOnDisplay = true;
             definition.style.visibility = "visible";
@@ -109,14 +109,15 @@ function init() {
         definition.style.visibility = "hidden";
         definition.style.textTransform = "lowercase";
         document.getElementById("left-button").innerHTML = "Translate";
-        displayDone();
-        displayNextWord();
-        wordOnDisplay = false;
         previousAction = {
             word: currentWord,
             action: 'next',
             prevScore: currentWord.score
         };
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+        
     });
 
     document.getElementById("next-button").addEventListener("click", function () {
@@ -141,6 +142,11 @@ function init() {
         if (event.key === " ") {
             const numInput = document.getElementById("set-num");
             numInput.value = numInput.value.replaceAll(" ", "");
+            previousAction = {
+                word: currentWord,
+                action: 'next',
+                prevScore: currentWord.score
+            };
             if (wordOnDisplay === false) {
                 displayDone();
                 definition.style.visibility = "visible";
@@ -184,7 +190,11 @@ function init() {
     });
     document.addEventListener("keydown", (event) => {
         if (event.key !== "1") return;
-
+        previousAction = {
+            word: currentWord,
+            action: 'next',
+            prevScore: currentWord.score
+        };
         let currentWord = currentWords.shift();
         if (currentWords.length < 4) {
             currentWords.push(currentWord);
