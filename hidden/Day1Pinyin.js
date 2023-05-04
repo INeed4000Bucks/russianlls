@@ -35,12 +35,12 @@ const lessonWords = [
 { word: "obediate wife", definition: "hamsare moti", score: 0 },
 { word: "I read words", definition: "kalamaat raa mikhaanam", score: 0 },
 { word: "I see if I'm right", definition: "می‌بینَم کِه درست است", score: 0 },
-{ word: "wet floor", definition: "کَف تَر", score: 0 },
-{ word: "carpet floor", definition: "فَرشِ زَمین", score: 0 },
-{ word: "What's the word for when the floor is wet", definition: "کَلمِه بَرای وَقتی کِه زَمین تَر است چیست؟", score: 0 },
-{ word: "What did you eat?", definition: "چِه چیزی خُردی؟", score: 0 },
-{ word: "Did it taste good?", definition: "خُوشمَزِه بود؟", score: 0 },
-{ word: "Answer in Persian", definition: "بِه فارسی جَواب بِده", score: 0 }
+{ word: "wet floor", definition: "زمین خیس", score: 0 },
+{ word: "carpet floor", definition: "کف فرش", score: 0 },
+{ word: "scary times", definition: "زمان های ترسناک", score: 0 },
+{ word: "What did you eat?", definition: "چی خوردی؟", score: 0 },
+{ word: "Did it taste good?", definition: "طعمش خوب بود؟", score: 0 },
+{ word: "Answer in Persian", definition: "به زبان فارسی پاسخ دهید", score: 0 }
 ];
 
 const definition = document.getElementById("definition");
