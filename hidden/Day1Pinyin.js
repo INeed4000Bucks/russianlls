@@ -24,7 +24,7 @@ const lessonWords = [
 { word: "catchy music", definition: "مُوسیقی گیرا", score: 0 },
 { word: "I listen to you", definition: "be to gush mikonam", score: 0 },
 { word: "I learn from the book", definition: "از کِتاب یاد می‌گیرَم", score: 0 },
-{ word: "He said nothing", definition: "هیچ چیز نِگَفت", score: 0 },
+{ word: "He said nothing", definition: "hich chiz negoft", score: 0 },
 { word: "big city", definition: "shahre bozorg", score: 0 },
 { word: "first floor", definition: "طَبَقِه اَوَل", score: 0 },
 { word: "come with me", definition: "با مَن بِیا", score: 0 },
