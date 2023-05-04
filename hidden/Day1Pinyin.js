@@ -3,7 +3,7 @@ const lessonWords = [
 { word: "Expensive food", definition: "qazā-ye gerān qeymat", score: 0 },
 { word: "I worked yesterday", definition: "man diruz kār kardam", score: 0 },
 { word: "You speak quietly", definition: "to ārām harf mizani", score: 0 },
-{ word: "I'm not hungry", definition: "gersne nistam", score: 0 },
+{ word: "I'm not hungry", definition: "gorosne nistam", score: 0 },
 { word: "I finished the task", definition: "man kār rā tamām kardam", score: 0 },
 { word: "I returned home", definition: "man bargaštam khāne", score: 0 },
 { word: "Bright light", definition: "nur-e rošan", score: 0 },
