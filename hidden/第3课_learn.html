@@ -178,6 +178,7 @@ function init() {
         // Check if the key that was pressed is the space key
         if (event.key === " ") {
             const numInput = document.getElementById("set-num");
+            console.log(currentWords);
             numInput.value = numInput.value.replaceAll(" ", "");
             if (wordOnDisplay === false) {
                 displayDone();
