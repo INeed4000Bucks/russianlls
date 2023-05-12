@@ -222,6 +222,7 @@ function init() {
             const numInput = document.getElementById("set-num");
             numInput.blur();
             displaySet();
+          currentWords.forEach((word) => (word.score = 0));
         }
     });
     document.addEventListener("keydown", (event) => {
