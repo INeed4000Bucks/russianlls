@@ -181,6 +181,7 @@ function init() {
             numInput.value = numInput.value.replaceAll(" ", "");
             if (wordOnDisplay === false) {
                 displayDone();
+                console.log(currentWords);
                 definition.style.visibility = "visible";
                 wordOnDisplay = true;
                 dieRoll = getRandomNumber();
