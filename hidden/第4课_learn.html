@@ -222,7 +222,6 @@ function init() {
             const numInput = document.getElementById("set-num");
             numInput.blur();
             displaySet();
-          currentWords.forEach((word) => (word.score = 0));
         }
     });
     document.addEventListener("keydown", (event) => {
@@ -280,6 +279,7 @@ function displaySet() {
     currentIndex = setNum * setSize - setSize;
 
     currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+    currentWords.forEach((word) => (word.score = 0));
     definition.style.visibility = "hidden";
     definition.style.textTransform = "lowercase";
 
