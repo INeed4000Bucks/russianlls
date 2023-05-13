@@ -191,6 +191,7 @@ function init() {
             numInput.value = numInput.value.replaceAll(" ", "");
             if (wordOnDisplay === false) {
                 displayDone();
+                console.log(currentWords);
                 definition.style.visibility = "visible";
                 wordOnDisplay = true;
                 dieRoll = getRandomNumber();
@@ -306,7 +307,6 @@ function displayNextWord() {
 
 function displayDone() {
     if (currentWords.length !== 0) return;
-    console.log(currentWords);
     const definition = document.getElementById("definition");
     definition.style.visibility = "visible";
     definition.innerHTML = "Set Done " + setNum;
