@@ -76,8 +76,8 @@ const lessonWords = [
 {word: "где", definition: "where", score: 0},
 {word: "они", definition: "they", score: 0},
 {word: "выращивать", definition: "to grow", score: 0},
-{word: "овощ", definition: "to grow", score: 0},
-{word: "фрукт", definition: "to grow", score: 0}
+{word: "овощ", definition: "vegetable", score: 0},
+{word: "фрукт", definition: "fruit", score: 0}
     ];
 
 const definition = document.getElementById("definition");
