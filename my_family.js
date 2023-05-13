@@ -45,7 +45,7 @@ const lessonWords = [
 {word: "обожать", definition: "to adore", score: 0},
 {word: "овсяный", definition: "oat", score: 0},
 {word: "каша", definition: "porridge", score: 0},
-{word: "а", definition: "a", score: 0},
+{word: "а", definition: "and", score: 0},
 {word: "блин", definition: "pancake", score: 0},
 {word: "после", definition: "after", score: 0},
 {word: "собираться", definition: "going to", score: 0},
