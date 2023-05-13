@@ -306,6 +306,7 @@ function displayNextWord() {
 
 function displayDone() {
     if (currentWords.length !== 0) return;
+    console.log(currentWords);
     const definition = document.getElementById("definition");
     definition.style.visibility = "visible";
     definition.innerHTML = "Set Done " + setNum;
