@@ -215,7 +215,7 @@ const lessonWords = [
                     definition.style.visibility = "hidden";
                     definition.style.textTransform = "lowercase";
                     document.getElementById("left-button").innerHTML = "Translate";
-                    displayDone();
+                   
                     displayNextWord();
                     wordOnDisplay = false;
                 }
@@ -314,4 +314,5 @@ const lessonWords = [
     function getRandomNumber() {
         return Math.floor(Math.random() * 100) + 1;
     }
+    
     
