@@ -2,7 +2,7 @@ const lessonWords = [
     {word: "свободный", definition: "free", score: 0},
     {word: "время", definition: "time", score: 0},
     {word: "ты", definition: "you", score: 0},
-    {word: "заниматься", definition: "study", score: 0},
+    {word: "заниматься", definition: "to study, to engage in", score: 0},
     {word: "сидеть", definition: "sit", score: 0},
     {word: "интернет", definition: "the Internet", score: 0},
     {word: "какой", definition: "which", score: 0},
@@ -57,12 +57,12 @@ const lessonWords = [
     const definition = document.getElementById("definition");
     const word = document.getElementById("word");
     let wordOnDisplay = false;
-    let currentWords = lessonWords.slice(0, 7);
     let currentIndex = 0;
     let setNum = 1;
-    let setSize = 7;
+    let setSize = 9;
     let dieRoll = 0;
     let tapCount = 0;
+    let currentWords = lessonWords.slice(0, setSize);
     //let timer;
     let translateButtonTapped = false;
     
