@@ -55,12 +55,12 @@ const lessonWords = [
     const definition = document.getElementById("definition");
     const word = document.getElementById("word");
     let wordOnDisplay = false;
-    let currentWords = lessonWords.slice(0, 7);
     let currentIndex = 0;
     let setNum = 1;
-    let setSize = 7;
+    let setSize = 9;
     let dieRoll = 0;
     let tapCount = 0;
+    let currentWords = lessonWords.slice(0, setSize);
     //let timer;
     let translateButtonTapped = false;
     
