@@ -5,7 +5,7 @@ const lessonWords = [
 {word: "родитель", definition: "parent", score: 0},
 {word: "не", definition: "not", score: 0},
 {word: "разрешать", definition: "allow", score: 0},
-{word: "пока", definition: "bye", score: 0},
+{word: "пока", definition: "since, until, bye", score: 0},
 {word: "ребёнок", definition: "child", score: 0},
 {word: "хомяк", definition: "hamster", score: 0},
 {word: "маленький", definition: "little", score: 0},
