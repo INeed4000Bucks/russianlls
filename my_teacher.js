@@ -27,7 +27,7 @@ const lessonWords = [
 {word: "кофта", definition: "sweater", score: 0},
 {word: "носить", definition: "to wear", score: 0},
 {word: "золотой", definition: "gold", score: 0},
-{word: "сережки", definition: "earrings", score: 0},
+{word: "серëжки", definition: "earrings", score: 0},
 {word: "подарок", definition: "present", score: 0},
 {word: "ее", definition: "her", score: 0},
 {word: "мужа", definition: "husband", score: 0},
