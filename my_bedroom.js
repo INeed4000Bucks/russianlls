@@ -1,55 +1,55 @@
 const lessonWords = [
-  {word: "спальня", definition: "bedroom", score: 0},
-{word: "пятикомнатная", definition: "five-room", score: 0},
-{word: "квартира", definition: "apartment", score: 0},
-{word: "центр", definition: "center", score: 0},
-{word: "город", definition: "town", score: 0},
-{word: "член", definition: "member", score: 0},
-{word: "гостиный", definition: "living room", score: 0},
-{word: "комната", definition: "room", score: 0},
-{word: "наш", definition: "our", score: 0},
-{word: "иметь", definition: "have", score: 0},
-{word: "площадь", definition: "square", score: 0},
-{word: "несмотря", definition: "despite", score: 0},
-{word: "то", definition: "then", score: 0},
-{word: "мало", definition: "few", score: 0},
-{word: "место", definition: "place", score: 0},
-{word: "здесь", definition: "here", score: 0},
-{word: "необходимый", definition: "necessary", score: 0},
-{word: "письменный", definition: "writing", score: 0},
-{word: "стол", definition: "table", score: 0},
-{word: "стул", definition: "chair", score: 0},
-{word: "шкаф", definition: "cupboard", score: 0},
-{word: "одежда", definition: "clothes", score: 0},
-{word: "кровать", definition: "bed", score: 0},
-{word: "стоять", definition: "stand", score: 0},
-{word: "рядом", definition: "near", score: 0},
-{word: "с", definition: "with", score: 0},
-{word: "со", definition: "with", score: 0},
-{word: "стена", definition: "wall", score: 0},
-{word: "установлен", definition: "installed", score: 0},
-{word: "розетка", definition: "socket", score: 0},
-{word: "зарядка", definition: "charger", score: 0},
-{word: "телефон", definition: "phone", score: 0},
-{word: "справа", definition: "on right", score: 0},
-{word: "располагаться", definition: "be located", score: 0},
-{word: "учебник", definition: "textbook", score: 0},
-{word: "принадлежность", definition: "belonging", score: 0},
-{word: "под", definition: "under", score: 0},
-{word: "ковер", definition: "carpet", score: 0},
-{word: "чтобы", definition: "to", score: 0},
-{word: "нога", definition: "leg", score: 0},
-{word: "холодно", definition: "cold", score: 0},
-{word: "шаг", definition: "step", score: 0},
-{word: "хранить", definition: "keep", score: 0},
-{word: "обувь", definition: "shoes", score: 0},
-{word: "окно", definition: "window", score: 0},
-{word: "открывать", definition: "open", score: 0},
-{word: "проветривать", definition: "ventilate", score: 0},
-{word: "a", definition: "a", score: 0},
-{word: "подоконник", definition: "windowsill", score: 0},
-{word: "горшок", definition: "pot", score: 0},
-{word: "кактус", definition: "cactus", score: 0}
+    {word: "спальня", definition: "bedroom", score: 0},
+    {word: "пятикомнатная", definition: "five-room", score: 0},
+    {word: "квартира", definition: "apartment", score: 0},
+    {word: "центр", definition: "center", score: 0},
+    {word: "город", definition: "town", score: 0},
+    {word: "член", definition: "member", score: 0},
+    {word: "гостиный", definition: "living room", score: 0},
+    {word: "комната", definition: "room", score: 0},
+    {word: "наш", definition: "our", score: 0},
+    {word: "иметь", definition: "have", score: 0},
+    {word: "площадь", definition: "square", score: 0},
+    {word: "несмотря", definition: "despite", score: 0},
+    {word: "то", definition: "then", score: 0},
+    {word: "мало", definition: "few", score: 0},
+    {word: "место", definition: "place", score: 0},
+    {word: "здесь", definition: "here", score: 0},
+    {word: "необходимый", definition: "necessary", score: 0},
+    {word: "письменный", definition: "writing", score: 0},
+    {word: "стол", definition: "table", score: 0},
+    {word: "стул", definition: "chair", score: 0},
+    {word: "шкаф", definition: "cupboard", score: 0},
+    {word: "одежда", definition: "clothes", score: 0},
+    {word: "кровать", definition: "bed", score: 0},
+    {word: "стоять", definition: "stand", score: 0},
+    {word: "рядом", definition: "near", score: 0},
+    {word: "с", definition: "with", score: 0},
+    {word: "со", definition: "with", score: 0},
+    {word: "стена", definition: "wall", score: 0},
+    {word: "установлен", definition: "installed", score: 0},
+    {word: "розетка", definition: "socket", score: 0},
+    {word: "зарядка", definition: "charger", score: 0},
+    {word: "телефон", definition: "phone", score: 0},
+    {word: "справа", definition: "on right", score: 0},
+    {word: "располагаться", definition: "be located", score: 0},
+    {word: "учебник", definition: "textbook", score: 0},
+    {word: "принадлежность", definition: "belonging", score: 0},
+    {word: "под", definition: "under", score: 0},
+    {word: "ковер", definition: "carpet", score: 0},
+    {word: "чтобы", definition: "to", score: 0},
+    {word: "нога", definition: "leg", score: 0},
+    {word: "холодно", definition: "cold", score: 0},
+    {word: "шаг", definition: "step", score: 0},
+    {word: "хранить", definition: "keep", score: 0},
+    {word: "обувь", definition: "shoes", score: 0},
+    {word: "окно", definition: "window", score: 0},
+    {word: "открывать", definition: "open", score: 0},
+    {word: "проветривать", definition: "ventilate", score: 0},
+    {word: "a", definition: "a", score: 0},
+    {word: "подоконник", definition: "windowsill", score: 0},
+    {word: "горшок", definition: "pot", score: 0},
+    {word: "кактус", definition: "cactus", score: 0}
     ];
 
     const definition = document.getElementById("definition");
@@ -253,6 +253,7 @@ const lessonWords = [
         currentIndex = setNum * setSize - setSize;
     
         currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        currentWords.forEach((word) => (word.score = 0));
         definition.style.visibility = "hidden";
         definition.style.textTransform = "lowercase";
     
@@ -280,7 +281,7 @@ const lessonWords = [
         const definition = document.getElementById("definition");
         definition.style.visibility = "visible";
         definition.innerHTML = "Set Done " + setNum;
-        definition.style.textTransform = "capitalize";
+        //definition.style.textTransform = "capitalize";
     }
     
     function getRandomNumber() {

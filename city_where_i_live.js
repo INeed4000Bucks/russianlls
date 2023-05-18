@@ -1,41 +1,41 @@
 const lessonWords = [
-  {word: "назад", definition: "back", score: 0},
-{word: "переехать", definition: "to move", score: 0},
-{word: "родиться", definition: "be born", score: 0},
-{word: "север", definition: "north", score: 0},
-{word: "знать", definition: "to know", score: 0},
-{word: "никак", definition: "no way", score: 0},
-{word: "привыкнуть", definition: "to get used to", score: 0},
-{word: "количество", definition: "amount", score: 0},
-{word: "люди", definition: "people", score: 0},
-{word: "торопиться", definition: "to hurry", score: 0},
-{word: "бежать", definition: "to run away", score: 0},
-{word: "суетиться", definition: "to fuss", score: 0},
-{word: "однако", definition: "however", score: 0},
-{word: "вскоре", definition: "soon", score: 0},
-{word: "полюбить", definition: "to fall in love", score: 0},
-{word: "столичный", definition: "metropolitan", score: 0},
-{word: "круглосуточный", definition: "round the clock", score: 0},
-{word: "магазин", definition: "shop", score: 0},
-{word: "угол", definition: "corner", score: 0},
-{word: "развлечение", definition: "entertainment", score: 0},
-{word: "музей", definition: "museum", score: 0},
-{word: "театр", definition: "theater", score: 0},
-{word: "удобно", definition: "comfortable", score: 0},
-{word: "близко", definition: "close", score: 0},
-{word: "если", definition: "if", score: 0},
-{word: "оно", definition: "it", score: 0},
-{word: "быстрый", definition: "fast", score: 0},
-{word: "любоваться", definition: "to admire", score: 0},
-{word: "необычный", definition: "unusual", score: 0},
-{word: "здание", definition: "building", score: 0},
-{word: "просто", definition: "simply", score: 0},
-{word: "книжка", definition: "book", score: 0},
-{word: "приветливый", definition: "friendly", score: 0},
-{word: "конечно", definition: "certainly", score: 0},
-{word: "скучать", definition: "to miss", score: 0},
-{word: "родной", definition: "native", score: 0},
-{word: "равно", definition: "equals", score: 0}
+    {word: "назад", definition: "back", score: 0},
+    {word: "переехать", definition: "to move", score: 0},
+    {word: "родиться", definition: "be born", score: 0},
+    {word: "север", definition: "north", score: 0},
+    {word: "знать", definition: "to know", score: 0},
+    {word: "никак", definition: "no way", score: 0},
+    {word: "привыкнуть", definition: "to get used to", score: 0},
+    {word: "количество", definition: "amount", score: 0},
+    {word: "люди", definition: "people", score: 0},
+    {word: "торопиться", definition: "to hurry", score: 0},
+    {word: "бежать", definition: "to run away", score: 0},
+    {word: "суетиться", definition: "to fuss", score: 0},
+    {word: "однако", definition: "however", score: 0},
+    {word: "вскоре", definition: "soon", score: 0},
+    {word: "полюбить", definition: "to fall in love", score: 0},
+    {word: "столичный", definition: "metropolitan", score: 0},
+    {word: "круглосуточный", definition: "round the clock", score: 0},
+    {word: "магазин", definition: "shop", score: 0},
+    {word: "угол", definition: "corner", score: 0},
+    {word: "развлечение", definition: "entertainment", score: 0},
+    {word: "музей", definition: "museum", score: 0},
+    {word: "театр", definition: "theater", score: 0},
+    {word: "удобно", definition: "comfortable", score: 0},
+    {word: "близко", definition: "close", score: 0},
+    {word: "если", definition: "if", score: 0},
+    {word: "оно", definition: "it", score: 0},
+    {word: "быстрый", definition: "fast", score: 0},
+    {word: "любоваться", definition: "to admire", score: 0},
+    {word: "необычный", definition: "unusual", score: 0},
+    {word: "здание", definition: "building", score: 0},
+    {word: "просто", definition: "simply", score: 0},
+    {word: "книжка", definition: "book", score: 0},
+    {word: "приветливый", definition: "friendly", score: 0},
+    {word: "конечно", definition: "certainly", score: 0},
+    {word: "скучать", definition: "to miss", score: 0},
+    {word: "родной", definition: "native", score: 0},
+    {word: "равно", definition: "equals", score: 0}
     ];
 
     const definition = document.getElementById("definition");
@@ -239,6 +239,7 @@ const lessonWords = [
         currentIndex = setNum * setSize - setSize;
     
         currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        currentWords.forEach((word) => (word.score = 0));
         definition.style.visibility = "hidden";
         definition.style.textTransform = "lowercase";
     
@@ -266,7 +267,7 @@ const lessonWords = [
         const definition = document.getElementById("definition");
         definition.style.visibility = "visible";
         definition.innerHTML = "Set Done " + setNum;
-        definition.style.textTransform = "capitalize";
+        //definition.style.textTransform = "capitalize";
     }
     
     function getRandomNumber() {

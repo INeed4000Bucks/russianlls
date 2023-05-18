@@ -250,6 +250,7 @@ const lessonWords = [
         currentIndex = setNum * setSize - setSize;
     
         currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        currentWords.forEach((word) => (word.score = 0));
         definition.style.visibility = "hidden";
         definition.style.textTransform = "lowercase";
     
@@ -277,7 +278,7 @@ const lessonWords = [
         const definition = document.getElementById("definition");
         definition.style.visibility = "visible";
         definition.innerHTML = "Set Done " + setNum;
-        definition.style.textTransform = "capitalize";
+        //definition.style.textTransform = "capitalize";
     }
     
     function getRandomNumber() {
