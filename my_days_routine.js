@@ -25,6 +25,7 @@ const lessonWords = [
     {word: "машина", definition: "the machine", score: 0},
     {word: "пол-", definition: "floor-", score: 0},
     {word: "полдевятого", definition: "a half past eight", score: 0},
+    {word: "собираться", definition: "to gather, to be going (leaving) to, intend to", score: 0},
     {word: "выезжа́ть", definition: "leave", score: 0},
     {word: "офис", definition: "office", score: 0},
     {word: "находи́ться", definition: "be", score: 0},
