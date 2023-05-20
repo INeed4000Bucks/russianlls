@@ -20,7 +20,7 @@ const lessonWords = [
 {word: "нас", definition: "us", score: 0},
 {word: "перемена", definition: "turn", score: 0},
 {word: "обедать", definition: "to have lunch", score: 0},
-{word: "подруга", definition: "girl friend", score: 0},
+{word: "подруга", definition: "female friend", score: 0},
 {word: "который", definition: "which", score: 0},
 {word: "обед", definition: "dinner", score: 0},
 {word: "еще", definition: "more", score: 0},
