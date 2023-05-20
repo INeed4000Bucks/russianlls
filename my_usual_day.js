@@ -35,7 +35,7 @@ const lessonWords = [
 {word: "до", definition: "before", score: 0},
 {word: "вечер", definition: "evening", score: 0},
 {word: "затем", definition: "then", score: 0},
-{word: "же", definition: "same", score: 0},
+{word: "же", definition: "(contrasting) and, but / (emphasis) very, same", score: 0},
 {word: "возвращаться", definition: "come back", score: 0},
 {word: "кино", definition: "cinema", score: 0},
 {word: "фантастика", definition: "fiction", score: 0},
