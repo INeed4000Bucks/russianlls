@@ -39,7 +39,7 @@ const lessonWords = [
 {word: "возвращаться", definition: "come back", score: 0},
 {word: "кино", definition: "cinema", score: 0},
 {word: "фантастика", definition: "fiction", score: 0},
-{word: "боевик", definition: "action movie", score: 0},
+{word: "боеви́к", definition: "action movie", score: 0},
 {word: "душ", definition: "shower", score: 0}
     ];
 
