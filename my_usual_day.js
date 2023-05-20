@@ -22,7 +22,7 @@ const lessonWords = [
 {word: "обедать", definition: "to have lunch", score: 0},
 {word: "подруга", definition: "female friend", score: 0},
 {word: "который", definition: "which", score: 0},
-{word: "обед", definition: "dinner", score: 0},
+{word: "обед", definition: "dinner, lunch", score: 0},
 {word: "еще", definition: "more", score: 0},
 {word: "кружок", definition: "circle", score: 0},
 {word: "рисование", definition: "painting", score: 0},
