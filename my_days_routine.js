@@ -17,7 +17,7 @@ const lessonWords = [
     {word: "бы́стро", definition: "fast", score: 0},
     {word: "одева́ться", definition: "to get dressed", score: 0},
     {word: "причёсываться", definition: "comb own hair", score: 0},
-    {word: "проверя́ть", definition: "checking", score: 0},
+    {word: "проверя́ть", definition: "to check", score: 0},
     {word: "свой", definition: "mine", score: 0},
     {word: "рюкзак", definition: "backpack", score: 0},
     {word: "ноутбук", definition: "a laptop", score: 0},
