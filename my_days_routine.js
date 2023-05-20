@@ -31,7 +31,7 @@ const lessonWords = [
     {word: "находи́ться", definition: "be", score: 0},
     {word: "далеко́", definition: "far", score: 0},
     {word: "от", definition: "from", score: 0},
-    {word: "добира́ться", definition: "get", score: 0},
+    {word: "добира́ться", definition: "to reach (a destination)", score: 0},
     {word: "туда", definition: "there", score: 0},
     {word: "полтора́", definition: "one and a half", score: 0},
     {word: "рабо́чий", definition: "working, operating, worker", score: 0},
