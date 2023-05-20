@@ -26,7 +26,7 @@ const lessonWords = [
 {word: "весело", definition: "funny", score: 0},
 {word: "бегать", definition: "run", score: 0},
 {word: "колесо", definition: "wheel", score: 0},
-{word: "кормить", definition: "feed", score: 0},
+{word: "корми́ть", definition: "feed", score: 0},
 {word: "морковка", definition: "carrot", score: 0},
 {word: "орех", definition: "nut", score: 0},
 {word: "рости", definition: "grow up", score: 0},
