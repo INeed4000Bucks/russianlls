@@ -47,7 +47,7 @@ const lessonWords = [
     {word: "зака́нчиваться", definition: "to end", score: 0},
     {word: "возвраща́ться", definition: "to return", score: 0},
     {word: "о́коло", definition: "about", score: 0},
-    {word: "заходи́ть", definition: "getting in", score: 0},
+    {word: "заходи́ть", definition: "to go (to see), to come in (to see)", score: 0},
     {word: "продукт", definition: "product", score: 0},
     {word: "супермаркет", definition: "supermarket", score: 0},
     {word: "спортза́л", definition: "gym", score: 0},
