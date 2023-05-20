@@ -4,7 +4,7 @@ const lessonWords = [
     {word: "сначала", definition: "first", score: 0},
     {word: "принимать", definition: "take", score: 0},
     {word: "примерно", definition: "approximately", score: 0},
-    {word: "масло", definition: "oil", score: 0},
+    {word: "масло", definition: "butter, oil", score: 0},
     {word: "яичница", definition: "fried eggs", score: 0},
     {word: "утро", definition: "morning", score: 0},
     {word: "пить", definition: "drink", score: 0},
