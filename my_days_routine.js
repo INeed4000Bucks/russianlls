@@ -16,7 +16,7 @@ const lessonWords = [
     {word: "часов", definition: "hours", score: 0},
     {word: "бы́стро", definition: "fast", score: 0},
     {word: "одева́ться", definition: "to get dressed", score: 0},
-    {word: "причёсываться", definition: "combing my hair", score: 0},
+    {word: "причёсываться", definition: "comb one's hair", score: 0},
     {word: "проверя́ть", definition: "checking", score: 0},
     {word: "свой", definition: "mine", score: 0},
     {word: "рюкзак", definition: "backpack", score: 0},
