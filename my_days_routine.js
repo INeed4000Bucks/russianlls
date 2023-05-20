@@ -8,7 +8,7 @@ const lessonWords = [
     {word: "яичница", definition: "fried eggs", score: 0},
     {word: "утро", definition: "morning", score: 0},
     {word: "пить", definition: "drink", score: 0},
-    {word: "апельсиновый", definition: "orange", score: 0},
+    {word: "апельсиновый", definition: "orange juice", score: 0},
     {word: "фреш", definition: "fresh", score: 0},
     {word: "длиться", definition: "last", score: 0},
     {word: "полчаса́", definition: "half an hour", score: 0},
