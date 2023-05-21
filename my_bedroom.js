@@ -46,7 +46,7 @@ const lessonWords = [
     {word: "окно", definition: "window", score: 0},
     {word: "открывать", definition: "open", score: 0},
     {word: "проветривать", definition: "ventilate", score: 0},
-    {word: "a", definition: "a", score: 0},
+    {word: "a", definition: "and, but", score: 0},
     {word: "подоконник", definition: "windowsill", score: 0},
     {word: "горшок", definition: "pot", score: 0},
     {word: "кактус", definition: "cactus", score: 0}
