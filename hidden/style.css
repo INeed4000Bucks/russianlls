@@ -2,7 +2,7 @@ body {
   padding: 0 20%;
 }
 p{
-    font-family: Bookerly, "BBC Qalam";
+    font-family: "BBC Qalam", Bookerly;
     font-size: 30px;
 }
 .tooltip {
