@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>ARFA5.2</title>
+  <title>ARFA5.3</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,48 +26,37 @@
 
 <script>
   const lessonWords = [
-    {word: "امکان", definition: "Possibility", score: 0},
-    {word: "عیب", definition: "Flaw, Defect", score: 0},
-    {word: "نقص", definition: "Shortcoming, Imperfection", score: 0},
-    {word: "شرایطش", definition: "His/Her/Its conditions", score: 0},
-    {word: "دشوار", definition: "Difficult", score: 0},
-    {word: "تصاویری", definition: "Images", score: 0},
-    {word: "خاطراتی", definition: "Memories", score: 0},
-    {word: "ساختار", definition: "Structure", score: 0},
-    {word: "کلی", definition: "General, Overall", score: 0},
-    {word: "جهان", definition: "World", score: 0},
-    {word: "درختان", definition: "Trees", score: 0},
-    {word: "جاده‌ای", definition: "A road", score: 0},
-    {word: "برگ", definition: "Leaf", score: 0},
-    {word: "چمنزاری", definition: "Meadow, Grassland", score: 0},
-    {word: "چمن", definition: "Grass", score: 0},
-    {word: "می‌تابید", definition: "Was shining, Was casting light", score: 0},
-    {word: "دریاچه‌ای", definition: "A lake", score: 0},
-    {word: "شنا", definition: "Swimming", score: 0},
-    {word: "همبرگری", definition: "A hamburger", score: 0},
-    {word: "خورده", definition: "Eaten, Had eaten", score: 0},
-    {word: "میدان", definition: "Square, Plaza", score: 0},
-    {word: "شلوغ", definition: "Crowded, Busy", score: 0},
-    {word: "شهر", definition: "City", score: 0},
-    {word: "روزانه‌شان", definition: "Their daily (activities or tasks)", score: 0},
-    {word: "عجله", definition: "Hurry, Rush", score: 0},
-    {word: "دانست", definition: "Knew, Understood", score: 0},
-    {word: "آسانسور", definition: "Elevator", score: 0},
-    {word: "والدینش", definition: "His/Her parents", score: 0},
-    {word: "کسانی", definition: "Some people, Who", score: 0},
-    {word: "خانوادگی", definition: "Family, Surname (contextual)", score: 0},
-    {word: "خاطر", definition: "Memory, Mind", score: 0},
-    {word: "نفر", definition: "Person, Individual", score: 0},
-    {word: "جلوی", definition: "In front of, Before", score: 0},
-    {word: "چشمش", definition: "His/Her eye, eyes", score: 0},
+    {word: "درحال", definition: "In the process of, currently", score: 0},
+    {word: "تکان", definition: "Jolt, Jerk, Shake", score: 0},
+    {word: "ادامه", definition: "Continuation", score: 0},
+    {word: "زنجیر", definition: "Chain", score: 0},
+    {word: "قفس", definition: "Cage", score: 0},
+    {word: "آزار", definition: "Annoyance, Disturbance", score: 0},
     {word: "گذشت", definition: "Passed, Went by", score: 0},
-    {word: "نشناخت", definition: "Didn't recognize, Didn't know", score: 0},
-    {word: "تار", definition: "Blurry, Fuzzy", score: 0},
-    {word: "نقاط", definition: "Points, Spots", score: 0},
-    {word: "رنگ", definition: "Color, Hue", score: 0},
-    {word: "تبدیل", definition: "Transformed, Converted", score: 0},
-    {word: "شوند", definition: "Become (plural, formal)", score: 0},
-    {word: "اصلاً", definition: "At all, Absolutely", score: 0}
+    {word: "دقیقه", definition: "Minute", score: 0},
+    {word: "ثانیه", definition: "Second", score: 0},
+    {word: "ابدیت", definition: "Eternity", score: 0},
+    {word: "اعتماد", definition: "Trust, Confidence", score: 0},
+    {word: "شهود", definition: "(shohud) Intuition", score: 0},
+    {word: "متوجه", definition: "(motevaʤe) Aware, Realize", score: 0},
+    {word: "صعود", definition: "(so'ud) Ascent, Climb", score: 0},
+    {word: "حدود", definition: "(hodud) Approximately, Around", score: 0},
+    {word: "عجیب", definition: "Strange, Odd", score: 0},
+    {word: "ترس‌هایش", definition: "His/her fears", score: 0},
+    {word: "گله‌ای", definition: "Swarm", score: 0},
+    {word: "پشه", definition: "(pæʃe) Mosquito", score: 0},
+    {word: "وزش", definition: "(væzeʃ) Gust", score: 0},
+    {word: "باد", definition: "Wind", score: 0},
+    {word: "کنجکاوی", definition: "Curiosity", score: 0},
+    {word: "حاد", definition: "Acute, Sharp", score: 0},
+    {word: "اتفاقی", definition: "Accidental, Incidental", score: 0},
+    {word: "ناگهان", definition: "Suddenly, Abruptly", score: 0},
+    {word: "متوقف", definition: "Halted, Stopped", score: 0},
+    {word: "ناگهانی", definition: "Suddenly, Unexpectedly", score: 0},
+    {word: "خراش", definition: "Scratch, Scrape", score: 0},
+    {word: "غیرمنتظره", definition: "Unexpected", score: 0},
+    {word: "گوشه", definition: "Corner", score: 0},
+    {word: "پرتاب", definition: "(pærtɑb) Throw, Fling", score: 0}
 ];
 
 const definition = document.getElementById("definition");
