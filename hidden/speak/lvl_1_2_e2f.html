@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Speak 1.2 - E2F</title>
+  <link rel="stylesheet" href="flash-style.css" />
+</head>
+
+<body>
+<div id="container">
+  <div id="flashcard">
+    <h1 id="word" style="font-size: 40px; font-family: 'PingFang SC'">Word goes here</h1>
+    <h1 id="definition" dir="rtl" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
+  </div>
+  <div id="button-container">
+    <button class="button" id="left-button">Translate</button>
+    <button class="button" id="right-button">I got it right</button>
+    <button class="button" id="next-button">Next words</button>
+    <input type="number" class="set-num" id="set-num" min="1" max="1000">
+  </div>
+
+</div>
+
+<script>
+  const lessonWords = [
+    {word: "I put gas in the tank", definition: "بنزین زدم تو باک", score: 0},
+    {word: "I'm wasting time", definition: "دارم وقت تلف میکنم", score: 0},
+    {word: "Reading is hard", definition: "خواندن سخت است", score: 0},
+    {word: "A pair of shoes", definition: "یک جفت کفش", score: 0},
+    {word: "I ride a bike", definition: "من دوچرخه سواری می کنم", score: 0},
+    {word: "Dirt in my house", definition: "خاک در خانه من", score: 0},
+    {word: "He walks on the path", definition: "او در مسیر راه می رود", score: 0},
+    {word: "his long legs", definition: "پاهای بلندش", score: 0},
+    {word: "It's behind the dumpster", definition: "پشت زباله دان است", score: 0},
+    {word: "Your big head", definition: "سر بزرگ تو", score: 0},
+    {word: "He was hit by a car", definition: "او با یک ماشین برخورد کرد", score: 0},
+    {word: "I don't respect you", definition: "من به شما احترام نمی گذارم", score: 0},
+    {word: "My boss is rich", definition: "رئیس من ثروتمند است", score: 0},
+    {word: "He was saved by a hero", definition: "او توسط یک قهرمان نجات یافت", score: 0},
+    {word: "He was hit by a bullet", definition: "او با یک گلوله برخورد کرد", score: 0},
+    {word: "I am reading the newspaper", definition: "دارم روزنامه میخونم", score: 0},
+    {word: "The city is abandoned", definition: "شهر رها شده است", score: 0},
+    {word: "America's dark past", definition: "گذشته تاریک آمریکا", score: 0},
+    {word: "My signature is in Farsi", definition: "امضای من فارسی است", score: 0},
+    {word: "The child identified his friend", definition: "کودک دوست خود را شناسایی کرد", score: 0},
+    {word: "The water is refreshing", definition: "آب گوارا است", score: 0},
+    {word: "I have no choice", definition: "من چاره ای ندارم", score: 0},
+    {word: "She has a boyfriend", definition: "او یک دوست پسر دارد", score: 0},
+    {word: "There's nothing wrong with me", definition: "هیچ مشکلی با من نیست", score: 0},
+    {word: "sad story", definition: "داستان غم انگیز", score: 0},
+    {word: "Being single is sad", definition: "مجرد بودن غم انگیز است", score: 0},
+    {word: "I entered the house", definition: "وارد خانه شدم", score: 0},
+    {word: "Dead mosquito", definition: "پشه مرده", score: 0},
+    {word: "He eats insects", definition: "او حشرات می خورد", score: 0},
+    {word: "The oatmeal is brown", definition: "بلغور جو دوسر قهوه ای است", score: 0},
+    {word: "Water is a liquid", definition: "آب یک مایع است", score: 0},
+    {word: "The liquid is thick", definition: "مایع غلیظ است", score: 0},
+    {word: "with no hesitation", definition: "بدون تردید", score: 0},
+    {word: "Protecting you is hard", definition: "محافظت از شما سخت است", score: 0},
+    {word: "I want to get paid", definition: "من می خواهم حقوق بگیرم", score: 0},
+    {word: "my favorite tags", definition: "برچسب‌های مورد علاقه‌ام", score: 0}
+];
+
+const definition = document.getElementById("definition");
+const word = document.getElementById("word");
+let wordOnDisplay = false;
+let currentWords = lessonWords.slice(0, 9);
+let currentIndex = 0;
+let setNum = 1;
+let setSize = 9;
+let dieRoll = 0;
+let tapCount = 0;
+//let timer;
+let translateButtonTapped = false;
+
+const exclamatories = ["Oops", "I Forgor", "Not Great", "Uh-Oh"];
+let currentEx = 0; //Exclamatory at this index will be displayed next.
+init();
+
+function init() {
+    // Display the first word and definition
+    word.innerHTML = currentWords[0].word;
+    definition.innerHTML = currentWords[0].definition;
+    displaySetNum();
+    // Event listeners for the buttons
+    document.getElementById("left-button").addEventListener("touchstart", function () {
+        if (translateButtonTapped === false) {
+            translateButtonTapped = true;
+        } else {
+            translateButtonTapped = false;
+        }
+    });
+    document.getElementById("left-button").addEventListener("click", function () {
+        this.blur();
+
+        if (wordOnDisplay === true) {
+            // Move the current word back in the queue by 3 positions
+            // or to the back if there are less than 4 words in the queue
+            let currentWord = currentWords.shift();
+            if (currentWords.length < 4) {
+                currentWords.push(currentWord); //put it at the very end
+                console.log(currentWords);
+            } else {
+                currentWords.splice(3, 0, currentWord);
+                console.log(currentWords);
+            }
+            currentWord.score = -1;
+            definition.style.visibility = "hidden";
+            definition.style.textTransform = "lowercase";
+
+            displayDone();
+            displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
+            wordOnDisplay = false;
+        } else {
+            wordOnDisplay = true;
+            definition.style.visibility = "visible";
+            dieRoll = getRandomNumber();
+            //If dieRoll < 98, display "Again" instead of an exclamatory remark
+
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.getElementById("right-button").addEventListener("click", function () {
+        this.blur();
+        // Move the current word to the back of the queue
+        let currentWord = currentWords.shift();
+        currentWords.push(currentWord);
+        currentWord.score++;
+        // If the word's score is 2, remove it from the queue
+        if (currentWord.score === 2) {
+            currentWords = currentWords.filter((word) => word !== currentWord);
+        }
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+        document.getElementById("left-button").innerHTML = "Translate";
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.getElementById("next-button").addEventListener("click", function () {
+        this.blur();
+        // Load the next setSize words from the lessonWords array
+        currentIndex += setSize;
+        currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        setNum += 1;
+
+        displaySetNum();
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key === " ") {
+            const numInput = document.getElementById("set-num");
+            numInput.value = numInput.value.replaceAll(" ", "");
+            if (wordOnDisplay === false) {
+                displayDone();
+                definition.style.visibility = "visible";
+                wordOnDisplay = true;
+                dieRoll = getRandomNumber();
+                //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                } else {
+                    if (currentEx > 3) {
+                        currentEx = 0;
+                    }
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
+            } else {
+                let currentWord = currentWords.shift();
+                currentWords.push(currentWord);
+                currentWord.score++;
+                // If the word's score is 2, remove it from the queue
+                if (currentWord.score === 2) {
+                    currentWords = currentWords.filter((word) => word !== currentWord);
+                }
+                definition.style.visibility = "hidden";
+                definition.style.textTransform = "lowercase";
+                document.getElementById("left-button").innerHTML = "Translate";
+                displayDone();
+                displayNextWord();
+                wordOnDisplay = false;
+            }
+        }
+        if (event.key === "Enter") {
+            const numInput = document.getElementById("set-num");
+            numInput.blur();
+            displaySet();
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key !== "1") return;
+
+        let currentWord = currentWords.shift();
+        if (currentWords.length < 4) {
+            currentWords.push(currentWord);
+            console.log(currentWords);
+        } else {
+            currentWords.splice(3, 0, currentWord);
+            console.log(currentWords);
+        }
+        currentWord.score = -1;
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("touchend", (event) => {
+        // Check if the event target is an input or textarea
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        displayDone();
+        if (translateButtonTapped === true) {
+            translateButtonTapped = false;
+            return;
+        }
+        if (wordOnDisplay === false) {
+            displayDone();
+            definition.style.visibility = "visible";
+            wordOnDisplay = true;
+            dieRoll = getRandomNumber();
+            // If dieRoll < 98, display "Again" instead of an exclamatory remark
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.addEventListener("touchstart", (event) => {
+        tapCount++; // increment the tapCount variable when a tap is detected
+    });
+}
+function displaySet() {
+    const numInput = document.getElementById("set-num");
+    setNum = parseInt(numInput.value);
+    currentIndex = setNum * setSize - setSize;
+
+    currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+    currentWords.forEach((word) => (word.score = 0));
+    definition.style.visibility = "hidden";
+    definition.style.textTransform = "lowercase";
+
+    displaySetNum();
+
+    displayDone();
+    displayNextWord();
+}
+
+function displaySetNum() {
+    //Find input box
+    const numInput = document.getElementById("set-num");
+    numInput.value = setNum;
+}
+
+function displayNextWord() {
+    // Display the next word and definition
+    let currentWord = currentWords[0];
+    document.getElementById("word").innerHTML = currentWord.word;
+    definition.innerHTML = currentWord.definition;
+}
+
+function displayDone() {
+    if (currentWords.length !== 0) return;
+    const definition = document.getElementById("definition");
+    definition.style.visibility = "visible";
+    definition.innerHTML = "Set Done " + setNum;
+    //definition.style.textTransform = "capitalize";
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 100) + 1;
+}
+  </script>
+</body>
+</html>
