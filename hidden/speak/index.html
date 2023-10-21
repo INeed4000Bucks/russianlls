@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grey Tiles</title>
+    <style>
+        body {
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+
+        .tile {
+            background-color: rgba(60, 216, 182, 0.443);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 200px;
+            margin: 10px;
+            font-size: 30px;
+            font-family: 'Noto Sans SC Thin', 'Calibri Light';
+            position: relative;
+        }
+        .prelearn-link {
+            font-size: 20px;
+            position: absolute;
+            bottom: 0; /* Anchor it to the bottom of the container */
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tile" onclick="window.location='lvl_1_1_text.html'">
+            <p>LEVEL 1.1</p>
+            <a class ="prelearn-link" href="lvl_1_1_f2e.html" style="left:50px;">F2E</a>
+            <a class ="prelearn-link" href="lvl_1_1_e2f.html" style="right:50px;">E2F</a>
+        </div>
+    </div>
+</body>
+</html>
