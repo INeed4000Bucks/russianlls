@@ -13,7 +13,7 @@
 <div id="container">
   <div id="flashcard">
     <h1 id="word" style="font-size: 40px; font-family: 'PingFang SC'">Word goes here</h1>
-    <h1 id="definition" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
+    <h1 id="definition" dir="rtl" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
   </div>
   <div id="button-container">
     <button class="button" id="left-button">Translate</button>
@@ -26,7 +26,7 @@
 
 <script>
   const lessonWords = [
-    {word: "This is the best way to learn.", definition: "این بهترین راه برای یادگیری است.", score: 0},
+    {word: "This is the best way to learn.", definition: "این بهترین راه برای یادگیری است", score: 0},
     {word: "I need practice speaking.", definition: "من به تمرین صحبت کردن نیاز دارم", score: 0},
     {word: "Nice to meet you.", definition: "از ملاقات شما خوشبختم.", score: 0},
     {word: "You were born in Iran.", definition: "تو ایران بدنیا اومدی", score: 0},
@@ -34,16 +34,16 @@
     {word: "A story about me.", definition: "داستانی در مورد من", score: 0},
     {word: "An independant woman.", definition: "یک زن مستقل", score: 0},
     {word: "Blue light.", definition: "نور آبی.", score: 0},
-    {word: "Healthy food.", definition: "غذای سالم.", score: 0},
+    {word: "Healthy food.", definition: "غذای سالم", score: 0},
     {word: "Clean hands.", definition: "دست های تمیز.", score: 0},
     {word: "I am cooking food.", definition: "دارم غذا میپزم", score: 0},
     {word: "The food tastes good.", definition: "طعم غذا خوب است.", score: 0},
-    {word: "I need more information.", definition: "من به اطلاعات بیشتری نیاز دارم.", score: 0},
+    {word: "I need more information.", definition: "من به اطلاعات بیشتری نیاز دارم", score: 0},
     {word: "I met him today.", definition: "من امروز او را ملاقات کردم.", score: 0},
-    {word: "My team is the best.", definition: "تیم من بهترین است.", score: 0},
-    {word: "I'm lying in bed.", definition: "من در رختخواب دراز کشیده ام.", score: 0},
-    {word: "The sign is red.", definition: "علامت قرمز است.", score: 0},
-    {word: "I was bored in my room.", definition: "در اتاقم حوصله ام سر رفته بود.", score: 0},
+    {word: "My team is the best.", definition: "تیم من بهترین است", score: 0},
+    {word: "I'm lying in bed.", definition: "من در رختخواب دراز کشیده ام", score: 0},
+    {word: "The sign is red.", definition: "علامت قرمز است", score: 0},
+    {word: "I was bored in my room.", definition: "در اتاقم حوصله ام سر رفته بود", score: 0},
     {word: "What is the source of the noise?", definition: "منبع صدا چیست؟", score: 0},
     {word: "This woman was killed.", definition: "این زن کشته شد.", score: 0},
     {word: "An Iranian protestor died.", definition: "یک معترض ایرانی کشته شد", score: 0},
