@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Speak 1.5 - F2E</title>
+  <title>Speak 1.6 - F2E</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,42 +26,42 @@
 
 <script>
   const lessonWords = [
-    {word: "horny/lustful religion", definition: "دین شهوتی", score: 0},
-    {word: "I need to pee", definition: "من باید بشاشم", score: 0},
-    {word: "the sound of the pee", definition: "صدای ادرار کردن", score: 0},
-    {word: "The view from the top", definition: "نمایی از بالا", score: 0},
-    {word: "I turned the light on", definition: "چراغ را روشن کردم", score: 0},
-    {word: "A long time since I saw you", definition: "خیلی وقته تورو دیدم", score: 0},
-    {word: "They are competitors", definition: "آنها رقیب هستند", score: 0},
-    {word: "A photo of your dad", definition: "عکس بابات", score: 0},
-    {word: "taken in nature", definition: "در طبیعت گرفته شده است", score: 0},
-    {word: "You run down the hill", definition: "از تپه پایین می دوید", score: 0},
-    {word: "I memorized words", definition: "کلمات را حفظ کردم", score: 0},
-    {word: "My unicycle is fixed", definition: "تک چرخ من درست شد", score: 0},
-    {word: "I study math", definition: "من ریاضی میخونم", score: 0},
-    {word: "He fixed it for free", definition: "او آن را به صورت رایگان تعمیر کرد", score: 0},
-    {word: "Is this topic interesting?", definition: "آیا این موضوع جالب است؟", score: 0},
-    {word: "Strangers are people", definition: "غریبه ها مردم هستند", score: 0},
-    {word: "Tell me your sins", definition: "گناهانت را بگو", score: 0},
-    {word: "They consider me dead", definition: "آنها مرا مرده می دانند", score: 0},
-    {word: "The last time I gave it to him", definition: "آخرین باری که بهش دادم", score: 0},
-    {word: "Peace in Gaza", definition: "صلح در غزه", score: 0},
-    {word: "Let's have a meal", definition: "بیا یه غذا بخوریم", score: 0},
-    {word: "Between her legs", definition: "بین پاهایش", score: 0},
-    {word: "The sale of guns", definition: "فروش اسلحه", score: 0},
-    {word: "He sells food", definition: "او غذا می فروشد", score: 0},
-    {word: "The wind is strong", definition: "باد شدید است", score: 0},
-    {word: "The wind blows", definition: "باد می وزد", score: 0},
-    {word: "Eight eyes on a spider", definition: "هشت چشم به عنکبوت", score: 0},
-    {word: "They support Israel", definition: "آنها از اسرائیل حمایت می کنند", score: 0},
-    {word: "My teacher is sad", definition: "معلم من غمگین است", score: 0},
-    {word: "A box of dogs", definition: "یک جعبه سگ", score: 0},
-    {word: "The box's corners", definition: "گوشه های جعبه", score: 0},
-    {word: "It's made of cardboard", definition: "از مقوا ساخته شده است", score: 0},
-    {word: "Wooden box", definition: "جعبه چوبی", score: 0},
-    {word: "Not safe to look at", definition: "نگاه کردن امن نیست", score: 0},
-    {word: "The busy city square", definition: "میدان شلوغ شهر", score: 0},
-    {word: "The woman's makeup", definition: "آرایش زن", score: 0}
+    {word: "نوجوانان در یک اتاق", definition: "Teenagers in a room", score: 0},
+    {word: "پوستم خارش داره", definition: "My skin itches", score: 0},
+    {word: "فروشگاه چیزهایی می فروشد", definition: "The store sells things", score: 0},
+    {word: "من با تام فامیل هستم", definition: "I am related to Tom", score: 0},
+    {word: "اسباب بازی پلاستیکی است", definition: "The toy is plastic", score: 0},
+    {word: "صدای شکستن اسباب بازی را شنیدم", definition: "I heard the toy break", score: 0},
+    {word: "دو مِنهْای دو", definition: "I write with a pencil", score: 0},
+    {word: "یک بِعَلاوِه یک", definition: "Two minus two", score: 0},
+    {word: "یک بعلاوه یک", definition: "One plus one", score: 0},
+    {word: "با زنگ موسیقی می سازند", definition: "They make music with bells", score: 0},
+    {word: "یادم رفت چطوری", definition: "I forgot how", score: 0},
+    {word: "در حالی که منتظریم", definition: "While we wait", score: 0},
+    {word: "با خوشحالی خوابید", definition: "He happily slept", score: 0},
+    {word: "در حالی که من روی کار تمرکز کردم", definition: "While I focused on working", score: 0},
+    {word: "شما من را به یاد دارید؟", definition: "Do you remember me?", score: 0},
+    {word: "احتمالا درست است", definition: "That's probably right", score: 0},
+    {word: "راهنمای توسعه", definition: "Development guide", score: 0},
+    {word: "جواب خوبی بود", definition: "Good answer", score: 0},
+    {word: "باید دویدن را متوقف کنم", definition: "I need to stop running", score: 0},
+    {word: "با مداد نقاشی می کشم", definition: "I draw with a pencil", score: 0},
+    {word: "بیشتر مدادها نارنجی هستند", definition: "Most pencils are orange", score: 0},
+    {word: "کیفیت محصول", definition: "The quality of the product", score: 0},
+    {word: "زمان بررسی است", definition: "It's time to review", score: 0},
+    {word: "دستگیره را تکان داد", definition: "He shook the handle", score: 0},
+    {word: "نمایی از کوه ها", definition: "View of the mountains", score: 0},
+    {word: "میمون تو سرم", definition: "The monkey in my head", score: 0},
+    {word: "او ماشین را هدایت می کند", definition: "He steers the car", score: 0},
+    {word: "فیلم های خشن", definition: "Violent movies", score: 0},
+    {word: "رمان های عاشقانه", definition: "Romance novels", score: 0},
+    {word: "نسبتا آسان است", definition: "Moderately easy", score: 0},
+    {word: "حواسم را جلب می کنم", definition: "I give my attention", score: 0},
+    {word: "نظر خنثی", definition: "Neutral opinion", score: 0},
+    {word: "استراتژی ما چیست؟", definition: "What's our strategy?", score: 0},
+    {word: "محل فیلمبرداری", definition: "Filming location", score: 0},
+    {word: "من با ماشین به سمت خانه او می روم", definition: "I'm driving to her house", score: 0},
+    {word: "دسترسی به اتاق", definition: "Access to the room", score: 0}
 ];
 
 const definition = document.getElementById("definition");

@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Speak 1.5 - F2E</title>
+  <title>Speak 1.6 - F2E</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,42 +26,42 @@
 
 <script>
   const lessonWords = [
-    {word: "horny/lustful religion", definition: "دین شهوتی", score: 0},
-    {word: "I need to pee", definition: "من باید بشاشم", score: 0},
-    {word: "the sound of the pee", definition: "صدای ادرار کردن", score: 0},
-    {word: "The view from the top", definition: "نمایی از بالا", score: 0},
-    {word: "I turned the light on", definition: "چراغ را روشن کردم", score: 0},
-    {word: "A long time since I saw you", definition: "خیلی وقته تورو دیدم", score: 0},
-    {word: "They are competitors", definition: "آنها رقیب هستند", score: 0},
-    {word: "A photo of your dad", definition: "عکس بابات", score: 0},
-    {word: "taken in nature", definition: "در طبیعت گرفته شده است", score: 0},
-    {word: "You run down the hill", definition: "از تپه پایین می دوید", score: 0},
-    {word: "I memorized words", definition: "کلمات را حفظ کردم", score: 0},
-    {word: "My unicycle is fixed", definition: "تک چرخ من درست شد", score: 0},
-    {word: "I study math", definition: "من ریاضی میخونم", score: 0},
-    {word: "He fixed it for free", definition: "او آن را به صورت رایگان تعمیر کرد", score: 0},
-    {word: "Is this topic interesting?", definition: "آیا این موضوع جالب است؟", score: 0},
-    {word: "Strangers are people", definition: "غریبه ها مردم هستند", score: 0},
-    {word: "Tell me your sins", definition: "گناهانت را بگو", score: 0},
-    {word: "They consider me dead", definition: "آنها مرا مرده می دانند", score: 0},
-    {word: "The last time I gave it to him", definition: "آخرین باری که بهش دادم", score: 0},
-    {word: "Peace in Gaza", definition: "صلح در غزه", score: 0},
-    {word: "Let's have a meal", definition: "بیا یه غذا بخوریم", score: 0},
-    {word: "Between her legs", definition: "بین پاهایش", score: 0},
-    {word: "The sale of guns", definition: "فروش اسلحه", score: 0},
-    {word: "He sells food", definition: "او غذا می فروشد", score: 0},
-    {word: "The wind is strong", definition: "باد شدید است", score: 0},
-    {word: "The wind blows", definition: "باد می وزد", score: 0},
-    {word: "Eight eyes on a spider", definition: "هشت چشم به عنکبوت", score: 0},
-    {word: "They support Israel", definition: "آنها از اسرائیل حمایت می کنند", score: 0},
-    {word: "My teacher is sad", definition: "معلم من غمگین است", score: 0},
-    {word: "A box of dogs", definition: "یک جعبه سگ", score: 0},
-    {word: "The box's corners", definition: "گوشه های جعبه", score: 0},
-    {word: "It's made of cardboard", definition: "از مقوا ساخته شده است", score: 0},
-    {word: "Wooden box", definition: "جعبه چوبی", score: 0},
-    {word: "Not safe to look at", definition: "نگاه کردن امن نیست", score: 0},
-    {word: "The busy city square", definition: "میدان شلوغ شهر", score: 0},
-    {word: "The woman's makeup", definition: "آرایش زن", score: 0}
+    {word: "Teenagers in a room", definition: "نوجوانان در یک اتاق", score: 0},
+    {word: "My skin itches", definition: "پوستم خارش داره", score: 0},
+    {word: "The store sells things", definition: "فروشگاه چیزهایی می فروشد", score: 0},
+    {word: "I am related to Tom", definition: "من با تام فامیل هستم", score: 0},
+    {word: "The toy is plastic", definition: "اسباب بازی پلاستیکی است", score: 0},
+    {word: "I heard the toy break", definition: "صدای شکستن اسباب بازی را شنیدم", score: 0},
+    {word: "I write with a pencil", definition: "دو مِنهْای دو", score: 0},
+    {word: "Two minus two", definition: "یک بِعَلاوِه یک", score: 0},
+    {word: "One plus one", definition: "یک بعلاوه یک", score: 0},
+    {word: "They make music with bells", definition: "با زنگ موسیقی می سازند", score: 0},
+    {word: "I forgot how", definition: "یادم رفت چطوری", score: 0},
+    {word: "While we wait", definition: "در حالی که منتظریم", score: 0},
+    {word: "He happily slept", definition: "با خوشحالی خوابید", score: 0},
+    {word: "While I focused on working", definition: "در حالی که من روی کار تمرکز کردم", score: 0},
+    {word: "Do you remember me?", definition: "شما من را به یاد دارید؟", score: 0},
+    {word: "That's probably right", definition: "احتمالا درست است", score: 0},
+    {word: "Development guide", definition: "راهنمای توسعه", score: 0},
+    {word: "Good answer", definition: "جواب خوبی بود", score: 0},
+    {word: "I need to stop running", definition: "باید دویدن را متوقف کنم", score: 0},
+    {word: "I draw with a pencil", definition: "با مداد نقاشی می کشم", score: 0},
+    {word: "Most pencils are orange", definition: "بیشتر مدادها نارنجی هستند", score: 0},
+    {word: "The quality of the product", definition: "کیفیت محصول", score: 0},
+    {word: "It's time to review", definition: "زمان بررسی است", score: 0},
+    {word: "He shook the handle", definition: "دستگیره را تکان داد", score: 0},
+    {word: "View of the mountains", definition: "نمایی از کوه ها", score: 0},
+    {word: "The monkey in my head", definition: "میمون تو سرم", score: 0},
+    {word: "He steers the car", definition: "او ماشین را هدایت می کند", score: 0},
+    {word: "Violent movies", definition: "فیلم های خشن", score: 0},
+    {word: "Romance novels", definition: "رمان های عاشقانه", score: 0},
+    {word: "Moderately easy", definition: "نسبتا آسان است", score: 0},
+    {word: "I give my attention", definition: "حواسم را جلب می کنم", score: 0},
+    {word: "Neutral opinion", definition: "نظر خنثی", score: 0},
+    {word: "What's our strategy?", definition: "استراتژی ما چیست؟", score: 0},
+    {word: "Filming location", definition: "محل فیلمبرداری", score: 0},
+    {word: "I'm driving to her house", definition: "من با ماشین به سمت خانه او می روم", score: 0},
+    {word: "Access to the room", definition: "دسترسی به اتاق", score: 0}
 ];
 
 const definition = document.getElementById("definition");
@@ -76,7 +76,7 @@ let tapCount = 0;
 //let timer;
 let translateButtonTapped = false;
 
-const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+const exclamatories = ["Whoopsie", "I Forgor", "RIP Memory", "Uh-Oh"];
 let currentEx = 0; //Exclamatory at this index will be displayed next.
 init();
 
@@ -179,7 +179,7 @@ function init() {
                 wordOnDisplay = true;
                 dieRoll = getRandomNumber();
                 //If dieRoll < 98, display "Again" instead of an exclamatory remark
-                if (dieRoll < 98) {
+                if (dieRoll < 96) {
                     document.getElementById("left-button").innerHTML = "Again";
                 } else {
                     if (currentEx > 3) {
