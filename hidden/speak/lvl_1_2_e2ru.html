@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Speak 1.2 - F2E</title>
+  <title>Speak 1.6 - F2E</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,46 +26,24 @@
 
 <script>
   const lessonWords = [
-    {word: "поисковик", definition: "search engine", score: 0},
-    {word: "определенные", definition: "certain", score: 0},
-    {word: "находит", definition: "finds", score: 0},
-    {word: "понравилась", definition: "I liked it", score: 0},
-    {word: "любви", definition: "love", score: 0},
-    {word: "практически", definition: "practically", score: 0},
-    {word: "зато", definition: "but", score: 0},
-    {word: "сюжет", definition: "plot", score: 0},
-    {word: "приключения", definition: "adventures", score: 0},
-    {word: "совсем", definition: "at all", score: 0},
-    {word: "традиционный", definition: "traditional", score: 0},
-    {word: "взгляд", definition: "sight", score: 0},
-    {word: "магов", definition: "magicians", score: 0},
-    {word: "фамильяров", definition: "familiars", score: 0},
-    {word: "перегибы", definition: "kinks, bends", score: 0},
-    {word: "уж", definition: "really", score: 0},
-    {word: "идеализированы", definition: "idealized", score: 0},
-    {word: "дивы", definition: "divas", score: 0},
-    {word: "прям", definition: "straight", score: 0},
-    {word: "рыцари", definition: "knights", score: 0},
-    {word: "страха", definition: "fear", score: 0},
-    {word: "упрёка", definition: "reproach", score: 0},
-    {word: "обман", definition: "deception", score: 0},
-    {word: "умеют", definition: "know how", score: 0},
-    {word: "преданы", definition: "betrayed", score: 0},
-    {word: "субординация", definition: "subordination", score: 0},
-    {word: "выкручена", definition: "unscrewed", score: 0},
-    {word: "максимум", definition: "maximum", score: 0},
-    {word: "терпилы", definition: "pushover", score: 0},
-    {word: "слуги", definition: "servants", score: 0},
-    {word: "тема", definition: "subject", score: 0},
-    {word: "дружбы", definition: "friendship", score: 0},
-    {word: "долга", definition: "debt", score: 0},
-    {word: "зашкаливает", definition: "goes off scale", score: 0},
-    {word: "пафос", definition: "pathos", score: 0},
-    {word: "сиропчик", definition: "syrup boy", score: 0},
-    {word: "целом", definition: "in general", score: 0},
-    {word: "затянута", definition: "tightened", score: 0},
-    {word: "проседая", definition: "sagging", score: 0},
-    {word: "словоблудие", definition: "verbiage", score: 0}
+    {word: "They talk about the lesson", definition: "Они говорят об уроке", score: 0},
+    {word: "I thought you were dead", definition: "я думал, ты умер", score: 0},
+    {word: "Which one is dead now?", definition: "Кто из них сейчас мертв?", score: 0},
+    {word: "The land is dry", definition: "Земля сухая", score: 0},
+    {word: "I once read a book", definition: "Однажды я прочитал книгу", score: 0},
+    {word: "This is the last time", definition: "Это в последний раз", score: 0},
+    {word: "I talked with him", definition: "я разговаривал с ним", score: 0},
+    {word: "A long time ago", definition: "Давным давно", score: 0},
+    {word: "I got a lot of sex", definition: "у меня много секса", score: 0},
+    {word: "Russian practice", definition: "Российская практика", score: 0},
+    {word: "speaking practice", definition: "разговорной практики", score: 0},
+    {word: "I finally saw it", definition: "Я наконец увидел это", score: 0},
+    {word: "I never met her", definition: "Я никогда не встречал ее", score: 0},
+    {word: "I learned words", definition: "я выучил слова", score: 0},
+    {word: "Some people", definition: "Некоторые люди", score: 0},
+    {word: "I need to write more", definition: "мне нужно написать больше", score: 0},
+    {word: "After I go home", definition: "После того, как я пойду домой", score: 0},
+    {word: "I learn Romanian", definition: "Я учу румынский", score: 0}
 ];
 
 const definition = document.getElementById("definition");
@@ -80,7 +58,7 @@ let tapCount = 0;
 //let timer;
 let translateButtonTapped = false;
 
-const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+const exclamatories = ["Whoopsie", "I Forgor", "RIP Memory", "Uh-Oh"];
 let currentEx = 0; //Exclamatory at this index will be displayed next.
 init();
 
@@ -183,7 +161,7 @@ function init() {
                 wordOnDisplay = true;
                 dieRoll = getRandomNumber();
                 //If dieRoll < 98, display "Again" instead of an exclamatory remark
-                if (dieRoll < 98) {
+                if (dieRoll < 96) {
                     document.getElementById("left-button").innerHTML = "Again";
                 } else {
                     if (currentEx > 3) {
