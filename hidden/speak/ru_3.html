@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>RU 1.2</title>
+  <title>RU 1.3</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,32 +26,58 @@
 
 <script>
   const lessonWords = [
-    {word: "морализаторства", definition: "moralizing", score: 0},
-    {word: "пафоса", definition: "pathos", score: 0},
-    {word: "полутонов", definition: "halftones", score: 0},
-    {word: "сжать", definition: "compress", score: 0},
-    {word: "процентов", definition: "percent", score: 0},
-    {word: "получилась", definition: "it turned out", score: 0},
-    {word: "при", definition: "at", score: 0},
-    {word: "отсутствии", definition: "absence", score: 0},
-    {word: "конкурентов", definition: "competitors", score: 0},
-    {word: "проглотила", definition: "swallowed", score: 0},
-    {word: "сравнению", definition: "comparison", score: 0},
-    {word: "выкладывают", definition: "(they) post", score: 0},
-    {word: "шедевр", definition: "masterpiece", score: 0},
-    {word: "хотя", definition: "Although", score: 0},
-    {word: "третья", definition: "third", score: 0},
-    {word: "предыдущих", definition: "previous", score: 0},
-    {word: "восхищаюсь", definition: "I admire", score: 0},
+    {word: "то ли", definition: "either (this or that)", score: 0},
+    {word: "привыкла", definition: "I'm used to it", score: 0},
+    {word: "несвязных", definition: "incoherent", score: 0},
+    {word: "событий", definition: "events", score: 0},
+    {word: "увлекательным", definition: "fascinating", score: 0},
+    {word: "события", definition: "events", score: 0},
+    {word: "выброс", definition: "ejection", score: 0},
+    {word: "дивов", definition: "divas", score: 0},
+    {word: "шлиссельбуржской", definition: "Shlisselburg", score: 0},
+    {word: "крепостью", definition: "fortress", score: 0},
+    {word: "картинки", definition: "Pictures", score: 0},
+    {word: "перед", definition: "before", score: 0},
+    {word: "отзывов", definition: "reviews", score: 0},
+    {word: "фоне", definition: "background", score: 0},
+    {word: "имеющихся", definition: "available", score: 0},
+    {word: "перлов", definition: "pearls", score: 0},
+    {word: "успехов", definition: "success", score: 0},
+    {word: "чтоб", definition: "so that", score: 0},
+    {word: "муза", definition: "muse", score: 0},
+    {word: "покидала", definition: "left", score: 0},
+    {word: "единственная", definition: "the only one", score: 0},
+    {word: "книжная", definition: "book", score: 0},
+    {word: "стиле", definition: "style", score: 0},
+    {word: "котороц", definition: "which", score: 0},
+    {word: "совестью", definition: "conscience", score: 0},
+    {word: "поставила", definition: "put (past tense)", score: 0},
+    {word: "слог", definition: "syllable", score: 0},
+    {word: "послушных", definition: "obedient", score: 0},
+    {word: "учитывая", definition: "considering", score: 0},
+    {word: "зверские", definition: "brutal", score: 0},
+    {word: "условия", definition: "conditions", score: 0},
+    {word: "пустоши", definition: "wasteland", score: 0},
+    {word: "захочется", definition: "want to", score: 0},
+    {word: "стать", definition: "become", score: 0},
+    {word: "пушистым", definition: "fluffy", score: 0},
+    {word: "незаезженый", definition: "unworn", score: 0},
+    {word: "сюжет", definition: "plot", score: 0},
+    {word: "вполне", definition: "quite", score: 0},
+    {word: "увлекательное", definition: "fascinating", score: 0},
+    {word: "изложение", definition: "presentation", score: 0},
     {word: "удовольствием", definition: "pleasure", score: 0},
-    {word: "ставлю", definition: "I bet", score: 0},
-    {word: "взирая", definition: "looking", score: 0},
-    {word: "натянутости", definition: "tension", score: 0},
-    {word: "сюжете", definition: "to the plot", score: 0},
-    {word: "субъективные", definition: "subjective", score: 0},
-    {word: "ощущения", definition: "Feel", score: 0},
-    {word: "увлекательную", definition: "exciting", score: 0},
-    {word: "следить", definition: "track", score: 0}
+    {word: "военных", definition: "military", score: 0},
+    {word: "цепляют", definition: "catch", score: 0},
+    {word: "трагизм", definition: "tragedy", score: 0},
+    {word: "донести", definition: "convey", score: 0},
+    {word: "стоило", definition: "it was worth it", score: 0},
+    {word: "добавить", definition: "add", score: 0},
+    {word: "изложения", definition: "presentation", score: 0},
+    {word: "участников", definition: "participants", score: 0},
+    {word: "целом", definition: "in general", score: 0},
+    {word: "обогатило", definition: "enriched", score: 0},
+    {word: "непросвещенный", definition: "unenlightened", score: 0}
 ];
 
 const definition = document.getElementById("definition");
