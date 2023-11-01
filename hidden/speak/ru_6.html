@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>RU 1.3</title>
+  <link rel="stylesheet" href="flash-style.css" />
+</head>
+
+<body>
+<div id="container">
+  <div id="flashcard">
+    <h1 id="word" style="font-size: 40px; font-family: 'PingFang SC'">Word goes here</h1>
+    <h1 id="definition" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
+  </div>
+  <div id="button-container">
+    <button class="button" id="left-button">Translate</button>
+    <button class="button" id="right-button">I got it right</button>
+    <button class="button" id="next-button">Next words</button>
+    <input type="number" class="set-num" id="set-num" min="1" max="1000">
+  </div>
+
+</div>
+
+<script>
+  const lessonWords = [
+    {word: "заставить", definition: "to force", score: 0},
+    {word: "видения", definition: "visions", score: 0},
+    {word: "исчезнуть", definition: "disappear", score: 0},
+    {word: "простиралась", definition: "extended", score: 0},
+    {word: "засохшая", definition: "dried up", score: 0},
+    {word: "потрескавшаяся", definition: "cracked", score: 0},
+    {word: "мертвеца", definition: "dead man", score: 0},
+    {word: "пейзаж", definition: "scenery", score: 0},
+    {word: "изменится", definition: "will change", score: 0},
+    {word: "хуже", definition: "worse", score: 0},
+    {word: "умирал", definition: "was dying", score: 0},
+    {word: "выжить", definition: "survive", score: 0},
+    {word: "молили", definition: "begged", score: 0},
+    {word: "пришли", definition: "came", score: 0},
+    {word: "кислота", definition: "acid", score: 0},
+    {word: "урожаи", definition: "harvests", score: 0},
+    {word: "добила", definition: "finished off", score: 0},
+    {word: "голод", definition: "hunger", score: 0},
+    {word: "выкосили", definition: "mowed down", score: 0},
+    {word: "плаще", definition: "raincoat", score: 0},
+    {word: "вдаль", definition: "into the distance", score: 0},
+    {word: "сами", definition: "themselves", score: 0},
+    {word: "виноваты", definition: "are to blame", score: 0},
+    {word: "бедах", definition: "troubles", score: 0},
+    {word: "разрушили", definition: "destroyed", score: 0},
+    {word: "хрупкий", definition: "fragile", score: 0},
+    {word: "гордыне", definition: "pride", score: 0},
+    {word: "рухнул", definition: "collapsed", score: 0},
+    {word: "развернувшись", definition: "turning around", score: 0},
+    {word: "сам", definition: "myself", score: 0},
+    {word: "построил", definition: "built", score: 0},
+    {word: "похоронил", definition: "buried", score: 0},
+    {word: "последнего", definition: "last", score: 0},
+    {word: "рода", definition: "sort of", score: 0},
+    {word: "отправился", definition: "went", score: 0},
+    {word: "изгнанье", definition: "exile", score: 0},
+    {word: "уходить", definition: "leave", score: 0},
+    {word: "мертвом", definition: "dead", score: 0},
+    {word: "разнообразия", definition: "diversity", score: 0},
+    {word: "убежище", definition: "shelter", score: 0},
+    {word: "ничем", definition: "nothing", score: 0},
+    {word: "отличалось", definition: "was different", score: 0},
+    {word: "предыдущего", definition: "previous", score: 0},
+    {word: "уйти", definition: "leave", score: 0},
+    {word: "считал", definition: "thought", score: 0},
+    {word: "родными", definition: "relatives", score: 0},
+    {word: "тяжело", definition: "hard", score: 0},
+    {word: "наблюдать", definition: "observe", score: 0},
+    {word: "окончательно", definition: "finally", score: 0},
+    {word: "погибли", definition: "died", score: 0},
+    {word: "ушла", definition: "left", score: 0},
+    {word: "называли", definition: "called", score: 0},
+    {word: "опустился", definition: "got down", score: 0},
+    {word: "худой", definition: "thin", score: 0},
+    {word: "костлявый", definition: "bony", score: 0},
+    {word: "осунувшимся", definition: "haggard", score: 0},
+    {word: "кругами", definition: "in circles", score: 0},
+    {word: "словно", definition: "as if", score: 0},
+    {word: "призрак", definition: "ghost", score: 0},
+    {word: "плохая", definition: "bad", score: 0},
+    {word: "суровые", definition: "harsh", score: 0},
+    {word: "условия", definition: "conditions", score: 0},
+    {word: "одиночество", definition: "loneliness", score: 0},
+    {word: "испытания", definition: "tests", score: 0},
+    {word: "подкосило", definition: "crippled", score: 0},
+    {word: "человеческое", definition: "human", score: 0},
+    {word: "дрожащими", definition: "trembling", score: 0},
+    {word: "пальцами", definition: "fingers", score: 0},
+    {word: "принялся", definition: "started", score: 0},
+    {word: "ощупывать", definition: "palpate", score: 0},
+    {word: "выбитые", definition: "knocked out", score: 0},
+    {word: "собственноручно", definition: "with his own hand", score: 0},
+    {word: "борозды", definition: "furrows (farm trenches)", score: 0}
+];
+
+const definition = document.getElementById("definition");
+const word = document.getElementById("word");
+let wordOnDisplay = false;
+let currentWords = lessonWords.slice(0, 9);
+let currentIndex = 0;
+let setNum = 1;
+let setSize = 9;
+let dieRoll = 0;
+let tapCount = 0;
+//let timer;
+let translateButtonTapped = false;
+
+const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+let currentEx = 0; //Exclamatory at this index will be displayed next.
+init();
+
+function init() {
+    // Display the first word and definition
+    word.innerHTML = currentWords[0].word;
+    definition.innerHTML = currentWords[0].definition;
+    displaySetNum();
+    // Event listeners for the buttons
+    document.getElementById("left-button").addEventListener("touchstart", function () {
+        if (translateButtonTapped === false) {
+            translateButtonTapped = true;
+        } else {
+            translateButtonTapped = false;
+        }
+    });
+    document.getElementById("left-button").addEventListener("click", function () {
+        this.blur();
+
+        if (wordOnDisplay === true) {
+            // Move the current word back in the queue by 3 positions
+            // or to the back if there are less than 4 words in the queue
+            let currentWord = currentWords.shift();
+            if (currentWords.length < 4) {
+                currentWords.push(currentWord); //put it at the very end
+                console.log(currentWords);
+            } else {
+                currentWords.splice(3, 0, currentWord);
+                console.log(currentWords);
+            }
+            currentWord.score = -1;
+            definition.style.visibility = "hidden";
+            definition.style.textTransform = "lowercase";
+
+            displayDone();
+            displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
+            wordOnDisplay = false;
+        } else {
+            wordOnDisplay = true;
+            definition.style.visibility = "visible";
+            dieRoll = getRandomNumber();
+            //If dieRoll < 98, display "Again" instead of an exclamatory remark
+
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.getElementById("right-button").addEventListener("click", function () {
+        this.blur();
+        // Move the current word to the back of the queue
+        let currentWord = currentWords.shift();
+        currentWords.push(currentWord);
+        currentWord.score++;
+        // If the word's score is 2, remove it from the queue
+        if (currentWord.score === 2) {
+            currentWords = currentWords.filter((word) => word !== currentWord);
+        }
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+        document.getElementById("left-button").innerHTML = "Translate";
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.getElementById("next-button").addEventListener("click", function () {
+        this.blur();
+        // Load the next setSize words from the lessonWords array
+        currentIndex += setSize;
+        currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        setNum += 1;
+
+        displaySetNum();
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key === " ") {
+            const numInput = document.getElementById("set-num");
+            numInput.value = numInput.value.replaceAll(" ", "");
+            if (wordOnDisplay === false) {
+                displayDone();
+                definition.style.visibility = "visible";
+                wordOnDisplay = true;
+                dieRoll = getRandomNumber();
+                //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                } else {
+                    if (currentEx > 3) {
+                        currentEx = 0;
+                    }
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
+            } else {
+                let currentWord = currentWords.shift();
+                currentWords.push(currentWord);
+                currentWord.score++;
+                // If the word's score is 2, remove it from the queue
+                if (currentWord.score === 2) {
+                    currentWords = currentWords.filter((word) => word !== currentWord);
+                }
+                definition.style.visibility = "hidden";
+                definition.style.textTransform = "lowercase";
+                document.getElementById("left-button").innerHTML = "Translate";
+                displayDone();
+                displayNextWord();
+                wordOnDisplay = false;
+            }
+        }
+        if (event.key === "Enter") {
+            const numInput = document.getElementById("set-num");
+            numInput.blur();
+            displaySet();
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key !== "1") return;
+
+        let currentWord = currentWords.shift();
+        if (currentWords.length < 4) {
+            currentWords.push(currentWord);
+            console.log(currentWords);
+        } else {
+            currentWords.splice(3, 0, currentWord);
+            console.log(currentWords);
+        }
+        currentWord.score = -1;
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("touchend", (event) => {
+        // Check if the event target is an input or textarea
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        displayDone();
+        if (translateButtonTapped === true) {
+            translateButtonTapped = false;
+            return;
+        }
+        if (wordOnDisplay === false) {
+            displayDone();
+            definition.style.visibility = "visible";
+            wordOnDisplay = true;
+            dieRoll = getRandomNumber();
+            // If dieRoll < 98, display "Again" instead of an exclamatory remark
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.addEventListener("touchstart", (event) => {
+        tapCount++; // increment the tapCount variable when a tap is detected
+    });
+}
+function displaySet() {
+    const numInput = document.getElementById("set-num");
+    setNum = parseInt(numInput.value);
+    currentIndex = setNum * setSize - setSize;
+
+    currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+    currentWords.forEach((word) => (word.score = 0));
+    definition.style.visibility = "hidden";
+    definition.style.textTransform = "lowercase";
+
+    displaySetNum();
+
+    displayDone();
+    displayNextWord();
+}
+
+function displaySetNum() {
+    //Find input box
+    const numInput = document.getElementById("set-num");
+    numInput.value = setNum;
+}
+
+function displayNextWord() {
+    // Display the next word and definition
+    let currentWord = currentWords[0];
+    document.getElementById("word").innerHTML = currentWord.word;
+    definition.innerHTML = currentWord.definition;
+}
+
+function displayDone() {
+    if (currentWords.length !== 0) return;
+    const definition = document.getElementById("definition");
+    definition.style.visibility = "visible";
+    definition.innerHTML = "Set Done " + setNum;
+    //definition.style.textTransform = "capitalize";
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 100) + 1;
+}
+  </script>
+</body>
+</html>
