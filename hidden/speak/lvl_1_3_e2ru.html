@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>RU 1.3</title>
+  <title>Speak 1.6 - F2E</title>
   <link rel="stylesheet" href="flash-style.css" />
 </head>
 
@@ -26,52 +26,24 @@
 
 <script>
   const lessonWords = [
-    {word: "любимый", definition: "darling", score: 0},
-    {word: "взрослых", definition: "adults", score: 0},
-    {word: "могло", definition: "could", score: 0},
-    {word: "причём", definition: "moreover / and", score: 0},
-    {word: "парней", definition: "guys", score: 0},
-    {word: "объяснимо", definition: "understandable", score: 0},
-    {word: "просто-напросто", definition: "simpoly / just", score: 0},
-    {word: "заставляет", definition: "forces", score: 0},
-    {word: "удовольствия", definition: "pleasure", score: 0},
-    {word: "подтвердят", definition: "will confirm", score: 0},
-    {word: "ищем", definition: "are looking for", score: 0},
-    {word: "одеялом", definition: "blanket", score: 0},
-    {word: "мероприятия", definition: "Events", score: 0},
-    {word: "раскрепощённой", definition: "liberated", score: 0},
-    {word: "присутствуют", definition: "present", score: 0},
-    {word: "иронично", definition: "ironic", score: 0},
-    {word: "приглашенных", definition: "invited", score: 0},
-    {word: "сходку", definition: "gathering, assembly", score: 0},
-    {word: "обратная", definition: "reverse", score: 0},
-    {word: "зависимость", definition: "dependence", score: 0},
-    {word: "подробный", definition: "detailed", score: 0},
-    {word: "разбор", definition: "parsing", score: 0},
-    {word: "хентая", definition: "hentai", score: 0},
-    {word: "сторонке", definition: "aside", score: 0},
-    {word: "остального", definition: "the rest", score: 0},
-    {word: "привыкаешь", definition: "you get used to it", score: 0},
-    {word: "сути", definition: "essentially", score: 0},
-    {word: "лишь", definition: "only", score: 0},
-    {word: "способ", definition: "way", score: 0},
-    {word: "передачи", definition: "transfers", score: 0},
-    {word: "правилами", definition: "rules", score: 0},
-    {word: "разумеется", definition: "of course", score: 0},
-    {word: "увы", definition: "alas", score: 0},
-    {word: "обычных", definition: "ordinary", score: 0},
-    {word: "встретишь", definition: "you'll meet", score: 0},
-    {word: "вопервых", definition: "Firstly", score: 0},
-    {word: "хентая", definition: "hentai", score: 0},
-    {word: "доходят", definition: "they reach", score: 0},
-    {word: "среди", definition: "among", score: 0},
-    {word: "зрителей", definition: "spectators", score: 0},
-    {word: "скромным", definition: "modest", score: 0},
-    {word: "переживай", definition: "worry", score: 0},
-    {word: "впереди", definition: "ahead", score: 0},
-    {word: "раздел", definition: "section, chapter", score: 0},
-    {word: "повод", definition: "occasion", score: 0},
-    {word: "отдельной", definition: "separate", score: 0}
+    {word: "They talk about the lesson", definition: "Они говорят об уроке", score: 0},
+    {word: "I thought you were dead", definition: "я думал, ты умер", score: 0},
+    {word: "Which one is dead now?", definition: "Кто из них сейчас мертв?", score: 0},
+    {word: "The land is dry", definition: "Земля сухая", score: 0},
+    {word: "I once read a book", definition: "Однажды я прочитал книгу", score: 0},
+    {word: "This is the last time", definition: "Это в последний раз", score: 0},
+    {word: "I talked with him", definition: "я разговаривал с ним", score: 0},
+    {word: "A long time ago", definition: "Давным давно", score: 0},
+    {word: "I got a lot of sex", definition: "у меня много секса", score: 0},
+    {word: "Russian practice", definition: "Российская практика", score: 0},
+    {word: "speaking practice", definition: "разговорной практики", score: 0},
+    {word: "I finally saw it", definition: "Я наконец увидел это", score: 0},
+    {word: "I never met her", definition: "Я никогда не встречал ее", score: 0},
+    {word: "I learned words", definition: "я выучил слова", score: 0},
+    {word: "Some people", definition: "Некоторые люди", score: 0},
+    {word: "I need to write more", definition: "мне нужно написать больше", score: 0},
+    {word: "After I go home", definition: "После того, как я пойду домой", score: 0},
+    {word: "I learn Romanian", definition: "Я учу румынский", score: 0}
 ];
 
 const definition = document.getElementById("definition");
@@ -86,7 +58,7 @@ let tapCount = 0;
 //let timer;
 let translateButtonTapped = false;
 
-const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+const exclamatories = ["Whoopsie", "I Forgor", "RIP Memory", "Uh-Oh"];
 let currentEx = 0; //Exclamatory at this index will be displayed next.
 init();
 
@@ -189,7 +161,7 @@ function init() {
                 wordOnDisplay = true;
                 dieRoll = getRandomNumber();
                 //If dieRoll < 98, display "Again" instead of an exclamatory remark
-                if (dieRoll < 98) {
+                if (dieRoll < 96) {
                     document.getElementById("left-button").innerHTML = "Again";
                 } else {
                     if (currentEx > 3) {
