@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>RU 15 - Comment</title>
+  <link rel="stylesheet" href="flash-style.css" />
+</head>
+
+<body>
+<div id="container">
+  <div id="flashcard">
+    <h1 id="word" style="font-size: 40px; font-family: 'PingFang SC'">Word goes here</h1>
+    <h1 id="definition" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
+  </div>
+  <div id="button-container">
+    <button class="button" id="left-button">Translate</button>
+    <button class="button" id="right-button">I got it right</button>
+    <button class="button" id="next-button">Next words</button>
+    <input type="number" class="set-num" id="set-num" min="1" max="1000">
+  </div>
+
+</div>
+
+<script>
+  const lessonWords = [
+    {word: "пробираясь", definition: "making his way", score: 0},
+    {word: "переднему", definition: "front", score: 0},
+    {word: "пространству", definition: "space", score: 0},
+    {word: "передней", definition: "front", score: 0},
+    {word: "небольшим", definition: "small", score: 0},
+    {word: "столом/рабочим", definition: "desk/workspace", score: 0},
+    {word: "подойдя", definition: "approaching", score: 0},
+    {word: "встает", definition: "rises", score: 0},
+    {word: "представился", definition: "introduced himself", score: 0},
+    {word: "брук", definition: "Brook", score: 0},
+    {word: "протягиваю", definition: "I hold out", score: 0},
+    {word: "рукопожатия", definition: "handshakes", score: 0},
+    {word: "прежде", definition: "before", score: 0},
+    {word: "жестом", definition: "gesture", score: 0},
+    {word: "приказать", definition: "order", score: 0},
+    {word: "следовать", definition: "follow", score: 0},
+    {word: "возвращаемся", definition: "we're coming back", score: 0},
+    {word: "подходит", definition: "fits", score: 0},
+    {word: "собеседований", definition: "interviews", score: 0},
+    {word: "поскольку", definition: "because the", score: 0},
+    {word: "переговоров", definition: "negotiations", score: 0},
+    {word: "выдвигаю", definition: "I nominate", score: 0},
+    {word: "присаживайся", definition: "have a seat", score: 0},
+    {word: "касается", definition: "concerns", score: 0},
+    {word: "расплывается", definition: "blurry", score: 0},
+    {word: "кладет", definition: "puts", score: 0},
+    {word: "пачки", definition: "packs", score: 0},
+    {word: "приятно", definition: "Nice", score: 0},
+    {word: "украдкой", definition: "furtively", score: 0},
+    {word: "садилась", definition: "sat down", score: 0},
+    {word: "отметив", definition: "noting", score: 0},
+    {word: "миниатюрные", definition: "miniature", score: 0},
+    {word: "черты", definition: "features", score: 0},
+    {word: "выпрямленные", definition: "straightened", score: 0},
+    {word: "каштановые", definition: "chestnut", score: 0},
+    {word: "ниспадающие", definition: "cascading", score: 0},
+    {word: "середины", definition: "middle", score: 0},
+    {word: "привлекая", definition: "attracting", score: 0},
+    {word: "твердую", definition: "hard", score: 0},
+    {word: "задницу", definition: "ass", score: 0},
+    {word: "скользнул", definition: "slid", score: 0},
+    {word: "облачены", definition: "dressed", score: 0},
+    {word: "брюк", definition: "trousers", score: 0},
+    {word: "профессионального", definition: "professional", score: 0},
+    {word: "вида", definition: "kind", score: 0},
+    {word: "глаза", definition: "eyes", score: 0},
+    {word: "снова", definition: "again", score: 0},
+    {word: "поднялись", definition: "got up", score: 0},
+    {word: "рассмотреть", definition: "consider", score: 0},
+    {word: "маленькую", definition: "small", score: 0},
+    {word: "заключенную", definition: "prisoner", score: 0},
+    {word: "пуговицах", definition: "buttons", score: 0},
+    {word: "общем", definition: "in general", score: 0},
+    {word: "милая", definition: "Darling", score: 0},
+    {word: "маленькая", definition: "small", score: 0},
+    {word: "упаковка", definition: "package", score: 0},
+    {word: "вплоть", definition: "right up to", score: 0},
+    {word: "дружелюбных", definition: "friendly", score: 0},
+    {word: "карих", definition: "brown", score: 0},
+    {word: "маленьких", definition: "little ones", score: 0},
+    {word: "ямочек", definition: "dimples", score: 0},
+    {word: "наблюдая", definition: "watching", score: 0},
+    {word: "итак", definition: "So", score: 0},
+    {word: "приехала", definition: "arrived", score: 0},
+    {word: "летнюю", definition: "summer", score: 0},
+    {word: "программу", definition: "program", score: 0},
+    {word: "трудоустройства", definition: "employment", score: 0},
+    {word: "осенью", definition: "in autumn", score: 0},
+    {word: "поступить", definition: "enroll", score: 0},
+    {word: "выражение", definition: "expression", score: 0},
+    {word: "изменилось", definition: "has changed", score: 0},
+    {word: "правильно", definition: "Right", score: 0},
+    {word: "валяться", definition: "lie around", score: 0},
+    {word: "получаю", definition: "I receive", score: 0},
+    {word: "зачет", definition: "test", score: 0},
+    {word: "окончанию", definition: "the end", score: 0},
+    {word: "учебы", definition: "study", score: 0},
+    {word: "летних", definition: "summer", score: 0},
+    {word: "временных", definition: "temporary", score: 0},
+    {word: "наняты", definition: "hired", score: 0},
+    {word: "последние", definition: "latest", score: 0},
+    {word: "поймал", definition: "caught", score: 0},
+    {word: "пожимаю", definition: "I shake", score: 0},
+    {word: "плечами", definition: "shoulders", score: 0},
+    {word: "расскажите", definition: "tell me", score: 0},
+    {word: "образовании", definition: "education", score: 0},
+    {word: "успеха", definition: "success", score: 0},
+    {word: "потратив", definition: "having spent", score: 0},
+    {word: "откашляться", definition: "clear your throat", score: 0},
+    {word: "села", definition: "villages", score: 0},
+    {word: "прямее", definition: "straighter", score: 0},
+    {word: "учебная", definition: "educational", score: 0},
+    {word: "нагрузка", definition: "load", score: 0},
+    {word: "сосредоточена", definition: "concentrated", score: 0},
+    {word: "разделили", definition: "divided", score: 0},
+    {word: "предварительную", definition: "preliminary", score: 0},
+    {word: "экономике", definition: "economy", score: 0},
+    {word: "упором", definition: "emphasis", score: 0},
+    {word: "рыночные", definition: "market", score: 0},
+    {word: "тенденции", definition: "trends", score: 0},
+    {word: "макроэкономику", definition: "macroeconomics", score: 0},
+    {word: "математическое", definition: "mathematical", score: 0},
+    {word: "образование", definition: "education", score: 0},
+    {word: "свободно", definition: "free", score: 0},
+    {word: "владею", definition: "I own", score: 0},
+    {word: "несколькими", definition: "several", score: 0},
+    {word: "системами", definition: "systems", score: 0},
+    {word: "управления", definition: "management", score: 0},
+    {word: "обеспечением", definition: "providing", score: 0},
+    {word: "откинулся", definition: "leaned back", score: 0},
+    {word: "воспользоваться", definition: "take advantage", score: 0},
+    {word: "впитать", definition: "absorb", score: 0},
+    {word: "столько", definition: "so many", score: 0},
+    {word: "представленной", definition: "presented", score: 0},
+    {word: "представлена", definition: "presented", score: 0},
+    {word: "полна", definition: "full", score: 0},
+    {word: "уверенности", definition: "confidence", score: 0},
+    {word: "пришло", definition: "it's arrived", score: 0},
+    {word: "сообщить", definition: "to report", score: 0},
+    {word: "части", definition: "parts", score: 0},
+    {word: "посмотреть", definition: "look", score: 0},
+    {word: "выпадет", definition: "will fall out", score: 0},
+    {word: "равновесия", definition: "equilibrium", score: 0},
+    {word: "сказать", definition: "say", score: 0},
+    {word: "впечатляешь", definition: "you're impressive", score: 0},
+    {word: "прошлое", definition: "past", score: 0},
+    {word: "уверенно", definition: "confident", score: 0},
+    {word: "ведешь", definition: "you lead", score: 0},
+    {word: "среда", definition: "Wednesday", score: 0},
+    {word: "ограниченного", definition: "limited", score: 0},
+    {word: "использования", definition: "use", score: 0},
+    {word: "новенькой", definition: "new girl", score: 0},
+    {word: "сути", definition: "essentially", score: 0},
+    {word: "начинаете", definition: "start", score: 0},
+    {word: "дыр", definition: "holes", score: 0},
+    {word: "волнуйтесь", definition: "worry", score: 0},
+    {word: "запрещено", definition: "forbidden", score: 0},
+    {word: "бесплатно", definition: "for free", score: 0},
+    {word: "на самом деле", definition: "In fact", score: 0},
+    {word: "замужем", definition: "Married", score: 0},
+    {word: "доступ", definition: "access", score: 0},
+    {word: "запрещен", definition: "prohibited", score: 0},
+    {word: "полдня", definition: "half a day", score: 0},
+    {word: "заботятся", definition: "care", score: 0},
+    {word: "арендованными", definition: "rented", score: 0},
+    {word: "образом", definition: "way", score: 0},
+    {word: "завсегдатаями", definition: "regulars", score: 0},
+    {word: "приходить", definition: "come", score: 0},
+    {word: "облегчением", definition: "relief", score: 0},
+    {word: "действительно", definition: "really", score: 0},
+    {word: "захотите", definition: "want", score: 0},
+    {word: "подмигивая", definition: "winking", score: 0},
+    {word: "последнее", definition: "last thing", score: 0},
+    {word: "заявление", definition: "statement", score: 0}
+];
+
+const definition = document.getElementById("definition");
+const word = document.getElementById("word");
+let wordOnDisplay = false;
+let currentWords = lessonWords.slice(0, 9);
+let currentIndex = 0;
+let setNum = 1;
+let setSize = 9;
+let dieRoll = 0;
+let tapCount = 0;
+//let timer;
+let translateButtonTapped = false;
+
+const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+let currentEx = 0; //Exclamatory at this index will be displayed next.
+init();
+
+function init() {
+    // Display the first word and definition
+    word.innerHTML = currentWords[0].word;
+    definition.innerHTML = currentWords[0].definition;
+    displaySetNum();
+    // Event listeners for the buttons
+    document.getElementById("left-button").addEventListener("touchstart", function () {
+        if (translateButtonTapped === false) {
+            translateButtonTapped = true;
+        } else {
+            translateButtonTapped = false;
+        }
+    });
+    document.getElementById("left-button").addEventListener("click", function () {
+        this.blur();
+
+        if (wordOnDisplay === true) {
+            // Move the current word back in the queue by 3 positions
+            // or to the back if there are less than 4 words in the queue
+            let currentWord = currentWords.shift();
+            if (currentWords.length < 4) {
+                currentWords.push(currentWord); //put it at the very end
+                console.log(currentWords);
+            } else {
+                currentWords.splice(3, 0, currentWord);
+                console.log(currentWords);
+            }
+            currentWord.score = -1;
+            definition.style.visibility = "hidden";
+            definition.style.textTransform = "lowercase";
+
+            displayDone();
+            displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
+            wordOnDisplay = false;
+        } else {
+            wordOnDisplay = true;
+            definition.style.visibility = "visible";
+            dieRoll = getRandomNumber();
+            //If dieRoll < 98, display "Again" instead of an exclamatory remark
+
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.getElementById("right-button").addEventListener("click", function () {
+        this.blur();
+        // Move the current word to the back of the queue
+        let currentWord = currentWords.shift();
+        currentWords.push(currentWord);
+        currentWord.score++;
+        // If the word's score is 2, remove it from the queue
+        if (currentWord.score === 2) {
+            currentWords = currentWords.filter((word) => word !== currentWord);
+        }
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+        document.getElementById("left-button").innerHTML = "Translate";
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.getElementById("next-button").addEventListener("click", function () {
+        this.blur();
+        // Load the next setSize words from the lessonWords array
+        currentIndex += setSize;
+        currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        setNum += 1;
+
+        displaySetNum();
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key === " ") {
+            const numInput = document.getElementById("set-num");
+            numInput.value = numInput.value.replaceAll(" ", "");
+            if (wordOnDisplay === false) {
+                displayDone();
+                definition.style.visibility = "visible";
+                wordOnDisplay = true;
+                dieRoll = getRandomNumber();
+                //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                } else {
+                    if (currentEx > 3) {
+                        currentEx = 0;
+                    }
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
+            } else {
+                let currentWord = currentWords.shift();
+                currentWords.push(currentWord);
+                currentWord.score++;
+                // If the word's score is 2, remove it from the queue
+                if (currentWord.score === 2) {
+                    currentWords = currentWords.filter((word) => word !== currentWord);
+                }
+                definition.style.visibility = "hidden";
+                definition.style.textTransform = "lowercase";
+                document.getElementById("left-button").innerHTML = "Translate";
+                displayDone();
+                displayNextWord();
+                wordOnDisplay = false;
+            }
+        }
+        if (event.key === "Enter") {
+            const numInput = document.getElementById("set-num");
+            numInput.blur();
+            displaySet();
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key !== "1") return;
+
+        let currentWord = currentWords.shift();
+        if (currentWords.length < 4) {
+            currentWords.push(currentWord);
+            console.log(currentWords);
+        } else {
+            currentWords.splice(3, 0, currentWord);
+            console.log(currentWords);
+        }
+        currentWord.score = -1;
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("touchend", (event) => {
+        // Check if the event target is an input or textarea
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        displayDone();
+        if (translateButtonTapped === true) {
+            translateButtonTapped = false;
+            return;
+        }
+        if (wordOnDisplay === false) {
+            displayDone();
+            definition.style.visibility = "visible";
+            wordOnDisplay = true;
+            dieRoll = getRandomNumber();
+            // If dieRoll < 98, display "Again" instead of an exclamatory remark
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.addEventListener("touchstart", (event) => {
+        tapCount++; // increment the tapCount variable when a tap is detected
+    });
+}
+function displaySet() {
+    const numInput = document.getElementById("set-num");
+    setNum = parseInt(numInput.value);
+    currentIndex = setNum * setSize - setSize;
+
+    currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+    currentWords.forEach((word) => (word.score = 0));
+    definition.style.visibility = "hidden";
+    definition.style.textTransform = "lowercase";
+
+    displaySetNum();
+
+    displayDone();
+    displayNextWord();
+}
+
+function displaySetNum() {
+    //Find input box
+    const numInput = document.getElementById("set-num");
+    numInput.value = setNum;
+}
+
+function displayNextWord() {
+    // Display the next word and definition
+    let currentWord = currentWords[0];
+    document.getElementById("word").innerHTML = currentWord.word;
+    definition.innerHTML = currentWord.definition;
+}
+
+function displayDone() {
+    if (currentWords.length !== 0) return;
+    const definition = document.getElementById("definition");
+    definition.style.visibility = "visible";
+    definition.innerHTML = "Set Done " + setNum;
+    //definition.style.textTransform = "capitalize";
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 100) + 1;
+}
+  </script>
+</body>
+</html>
