@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>DE 1 - Genie</title>
+  <link rel="stylesheet" href="flash-style.css" />
+</head>
+
+<body>
+<div id="container">
+  <div id="flashcard">
+    <h1 id="word" style="font-size: 40px; font-family: 'PingFang SC'">Word goes here</h1>
+    <h1 id="definition" style="font-family: 'Baloo Bhaina 2 Regular';">Definition goes here</h1>
+  </div>
+  <div id="button-container">
+    <button class="button" id="left-button">Translate</button>
+    <button class="button" id="right-button">I got it right</button>
+    <button class="button" id="next-button">Next words</button>
+    <input type="number" class="set-num" id="set-num" min="1" max="1000">
+  </div>
+
+</div>
+
+<script>
+  const lessonWords = [
+  {word: "fiecare", definition: "every", score: 0},
+{word: "dată", definition: "date", score: 0},
+{word: "când", definition: "When", score: 0},
+{word: "prietenul", definition: "the friend", score: 0},
+{word: "ei", definition: "They", score: 0},
+{word: "vine", definition: "it's coming", score: 0},
+{word: "vizită", definition: "visit", score: 0},
+{word: "aude", definition: "hears", score: 0},
+{word: "noaptea", definition: "the night", score: 0},
+{word: "gemete", definition: "groans", score: 0},
+{word: "puternice", definition: "STRONG", score: 0},
+{word: "prin", definition: "through", score: 0},
+{word: "pereții", definition: "the walls", score: 0},
+{word: "subțiri", definition: "thin", score: 0},
+{word: "uneori", definition: "sometimes", score: 0},
+{word: "timp", definition: "time", score: 0},
+{word: "ore", definition: "hours", score: 0},
+{word: "întregi", definition: "WHOLE", score: 0},
+{word: "își", definition: "would", score: 0},
+{word: "mereu", definition: "always", score: 0},
+{word: "cât", definition: "how", score: 0},
+{word: "minunat", definition: "wonderful", score: 0},
+{word: "trebuie", definition: "must", score: 0},
+{word: "să", definition: "to", score: 0},
+{word: "fie", definition: "OR", score: 0},
+{word: "i-o", definition: "and a", score: 0},
+{word: "tragă", definition: "fire", score: 0},
+{word: "corpul", definition: "the body", score: 0},
+{word: "frumos", definition: "beautiful", score: 0},
+{word: "să-i", definition: "let's", score: 0},
+{word: "înghesuie", definition: "cramped", score: 0},
+{word: "crăpătura", definition: "crack", score: 0},
+{word: "umedă", definition: "wet", score: 0},
+{word: "până", definition: "until", score: 0},
+{word: "la", definition: "TO", score: 0},
+{word: "extaz", definition: "ecstasy", score: 0},
+{word: "să-și", definition: "Let him", score: 0},
+{word: "împrăștie", definition: "spread", score: 0},
+{word: "pe", definition: "on", score: 0},
+{word: "toată", definition: "all", score: 0},
+{word: "fața", definition: "face", score: 0},
+{word: "perfectă", definition: "perfect", score: 0},
+{word: "Nici", definition: "ANY", score: 0},
+{word: "astăzi", definition: "today", score: 0},
+{word: "nu", definition: "not", score: 0},
+{word: "L-a", definition: "him", score: 0},
+{word: "salutat", definition: "welcomed, greeted", score: 0},
+{word: "ci", definition: "but", score: 0},
+{word: "doar", definition: "just", score: 0},
+{word: "i-a", definition: "takes", score: 0},
+{word: "zâmbit", definition: "grin", score: 0},
+{word: "puțin", definition: "little bit", score: 0},
+{word: "răutăcios", definition: "mischievous", score: 0},
+{word: "naiba", definition: "DAMMIT", score: 0},
+{word: "rochie", definition: "dress", score: 0},
+{word: "strâmtă", definition: "narrow", score: 0},
+{word: "scurtă", definition: "shorten", score: 0},
+{word: "poartă", definition: "BEARING", score: 0},
+{word: "tocurile", definition: "the heels", score: 0},
+{word: "alea", definition: "those", score: 0},
+{word: "înalte", definition: "high", score: 0},
+{word: "roșii", definition: "tomatoes", score: 0},
+{word: "Încă", definition: "still, yet", score: 0},
+{word: "o", definition: "a", score: 0},
+{word: "tot", definition: "all", score: 0},
+{word: "sângele", definition: "BLOOD", score: 0},
+{word: "se", definition: "it", score: 0},
+{word: "împușcă", definition: "shoot", score: 0},
+{word: "penisul", definition: "penis", score: 0},
+{word: "lui", definition: "his", score: 0},
+{word: "abia", definition: "only", score: 0},
+{word: "reușește", definition: "succeeds", score: 0},
+{word: "ajungă", definition: "arrive", score: 0},
+{word: "ușa", definition: "door", score: 0},
+{word: "din", definition: "FROM", score: 0},
+{word: "față", definition: "face", score: 0},
+{word: "vecinul", definition: "NEIGHBOR", score: 0},
+{word: "său", definition: "his", score: 0},
+{word: "vârstă", definition: "age", score: 0},
+{word: "deschide", definition: "open", score: 0},
+{word: "apartamentului", definition: "APARTMENT", score: 0},
+{word: "vizavi", definition: "opposite", score: 0},
+{word: "tinere", definition: "young man", score: 0},
+{word: "ar", definition: "It", score: 0},
+{word: "trebui", definition: "BE", score: 0},
+{word: "să-ți", definition: "to you", score: 0},
+{word: "găsești", definition: "FIND", score: 0},
+{word: "sfârșit", definition: "the end", score: 0},
+{word: "prietenă", definition: "girlfriend", score: 0},
+{word: "îi", definition: "THEM", score: 0},
+{word: "spune", definition: "say", score: 0},
+{word: "cu", definition: "with", score: 0},
+{word: "milă", definition: "mercy", score: 0},
+{word: "arătând", definition: "pointing", score: 0},
+{word: "spre", definition: "to", score: 0},
+{word: "umflătura", definition: "swelling", score: 0},
+{word: "mare", definition: "big", score: 0},
+{word: "pantalonii", definition: "pants", score: 0},
+{word: "încearcă", definition: "try", score: 0},
+{word: "acopere", definition: "cover", score: 0},
+{word: "comentariul", definition: "COMMENT", score: 0},
+{word: "un", definition: "a", score: 0},
+{word: "râs", definition: "laugh", score: 0},
+{word: "chinuit", definition: "overdone", score: 0},
+{word: "rapid", definition: "fast", score: 0},
+{word: "intrare", definition: "ENTRY", score: 0},
+{word: "Stai", definition: "Stay", score: 0},
+{word: "azi", definition: "today", score: 0},
+{word: "ți", definition: "to you", score: 0},
+{word: "s-a", definition: "to", score: 0},
+{word: "lăsat", definition: "dropped off", score: 0},
+{word: "colet", definition: "parcel", score: 0},
+{word: "adaugă", definition: "add", score: 0},
+{word: "Îți", definition: "You", score: 0},
+{word: "poți", definition: "You can", score: 0},
+{word: "seama", definition: "MIND", score: 0},
+{word: "că", definition: "that", score: 0},
+{word: "este", definition: "It is", score: 0},
+{word: "profesor", definition: "professor", score: 0},
+{word: "după", definition: "after", score: 0},
+{word: "felul", definition: "the kind", score: 0},
+{word: "care", definition: "which", score: 0},
+{word: "accentuează", definition: "STRESSES", score: 0},
+{word: "propozițiile", definition: "the sentences", score: 0},
+{word: "smulge", definition: "snatch", score: 0},
+{word: "micul", definition: "Breakfast", score: 0},
+{word: "mâini", definition: "hands", score: 0},
+{word: "bâiguie", definition: "dumbfounded", score: 0},
+{word: "fierbinte", definition: "hot", score: 0},
+{word: "vecinului", definition: "neighbor", score: 0},
+{word: "Apoi", definition: "Then", score: 0},
+{word: "închide", definition: "hang up", score: 0},
+{word: "smucitură", definition: "jerk", score: 0},
+{word: "acasă", definition: "the home", score: 0},
+{word: "gândește", definition: "think", score: 0},
+{word: "acum", definition: "now", score: 0},
+{word: "dă", definition: "Yes", score: 0},
+{word: "fapt", definition: "fact", score: 0},
+{word: "a", definition: "A", score: 0},
+{word: "comandat", definition: "ordered", score: 0},
+{word: "Îl", definition: "him", score: 0},
+{word: "Acolo", definition: "There", score: 0},
+{word: "află", definition: "find out", score: 0},
+{word: "lampă", definition: "lamp", score: 0},
+{word: "ulei", definition: "oil", score: 0},
+{word: "ciudată", definition: "weird", score: 0},
+{word: "învelită", definition: "wrapped", score: 0},
+{word: "ziar", definition: "newspaper", score: 0},
+{word: "Grozav", definition: "That's great", score: 0},
+{word: "ce-i", definition: "What", score: 0},
+{word: "asta", definition: "to stay", score: 0},
+{word: "Probabil", definition: "Probable", score: 0},
+{word: "alt", definition: "other", score: 0},
+{word: "cadou", definition: "gift", score: 0},
+{word: "doi", definition: "two", score: 0},
+{word: "bani", definition: "money", score: 0},
+{word: "al", definition: "of", score: 0},
+{word: "mamei", definition: "mother", score: 0},
+{word: "sale", definition: "its", score: 0},
+{word: "Supărat", definition: "Upset", score: 0},
+{word: "pune", definition: "put", score: 0},
+{word: "masă", definition: "table", score: 0},
+{word: "Priveliștea", definition: "The view", score: 0},
+{word: "excitantă", definition: "exciting", score: 0},
+{word: "încă", definition: "yet", score: 0},
+{word: "bântuie", definition: "haunt", score: 0},
+{word: "mintea", definition: "mentally", score: 0},
+{word: "chiar", definition: "even", score: 0},
+{word: "mă", definition: "me", score: 0},
+{word: "masturbez", definition: "masturbate", score: 0},
+{word: "voce", definition: "voice", score: 0},
+{word: "tare", definition: "loud", score: 0},
+{word: "pentru", definition: "for", score: 0},
+{word: "a-și", definition: "To", score: 0},
+{word: "elibera", definition: "ISSUE", score: 0},
+{word: "scula", definition: "TOOL", score: 0},
+{word: "țeapănă", definition: "stiff", score: 0},
+{word: "Caută", definition: "Search for", score: 0},
+{word: "frenetic", definition: "frantic", score: 0},
+{word: "sertarele", definition: "drawers", score: 0},
+{word: "biroului", definition: "BUREAU", score: 0},
+{word: "fotografia", definition: "the picture", score: 0},
+{word: "vecinei", definition: "neighbor", score: 0},
+{word: "am", definition: "I have", score: 0},
+{word: "găsit-o", definition: "Found", score: 0},
+{word: "sinea", definition: "Himself", score: 0},
+{word: "întinde", definition: "spread", score: 0},
+{word: "birou", definition: "office", score: 0},
+{word: "omule", definition: "man", score: 0},
+{word: "țâțe", definition: "tits", score: 0},
+{word: "câteva", definition: "some", score: 0},
+{word: "mișcări", definition: "movements", score: 0},
+{word: "masturbare", definition: "masturbation", score: 0},
+{word: "Fusese", definition: "was", score: 0},
+{word: "atât", definition: "BOTH", score: 0},
+{word: "excitat", definition: "excited", score: 0},
+{word: "încât", definition: "that", score: 0},
+{word: "uitase", definition: "forgot", score: 0},
+{word: "ia", definition: "takes", score: 0},
+{word: "șervețelele", definition: "wipes", score: 0},
+{word: "umede", definition: "Wet", score: 0},
+{word: "Așa", definition: "So", score: 0},
+{word: "biroul", definition: "the desk", score: 0},
+{word: "Câțiva", definition: "A few", score: 0},
+{word: "stropi", definition: "SPRINKLE", score: 0},
+{word: "au", definition: "have", score: 0},
+{word: "atins", definition: "reached", score: 0},
+{word: "strania", definition: "Curious", score: 0},
+{word: "liniștește", definition: "calm", score: 0},
+{word: "începe", definition: "you start", score: 0},
+{word: "curețe", definition: "clean", score: 0},
+{word: "mizeria", definition: "the mess", score: 0},
+{word: "deschiși", definition: "open", score: 0},
+{word: "Ultimul", definition: "Last one", score: 0},
+{word: "lucru", definition: "WORK", score: 0},
+{word: "îl", definition: "YOU", score: 0},
+{word: "face", definition: "do what", score: 0},
+{word: "reziduurile", definition: "WASTE", score: 0},
+{word: "Dintr-o", definition: "from a", score: 0},
+{word: "puternic", definition: "strong", score: 0},
+{word: "simte", definition: "feels", score: 0},
+{word: "lovitură", definition: "coup", score: 0},
+{word: "mână", definition: "hand", score: 0},
+{word: "el", definition: "he", score: 0},
+{word: "strigă", definition: "shout", score: 0},
+{word: "șocat", definition: "shocked", score: 0},
+{word: "recapătă", definition: "recover", score: 0},
+{word: "calmul", definition: "calm", score: 0},
+{word: "nu-i", definition: "I do not", score: 0},
+{word: "creadă", definition: "FEEL", score: 0},
+{word: "vede", definition: "SEES", score: 0},
+{word: "În", definition: "In the", score: 0},
+{word: "frumusețe", definition: "beauty", score: 0},
+{word: "orientală", definition: "Eastern", score: 0},
+{word: "Părul", definition: "The hair", score: 0},
+{word: "lung", definition: "long", score: 0},
+{word: "negru", definition: "black", score: 0},
+{word: "legat", definition: "bound", score: 0},
+{word: "într-o", definition: "in a, into a", score: 0},
+{word: "împletitură", definition: "braiding", score: 0},
+{word: "curbele", definition: "curves", score: 0},
+{word: "foarte", definition: "very", score: 0},
+{word: "feminine", definition: "female", score: 0},
+{word: "dar", definition: "but", score: 0},
+{word: "total", definition: "total", score: 0},
+{word: "piept", definition: "chest", score: 0},
+{word: "plinuț", definition: "full", score: 0},
+{word: "caracterizează", definition: "characterized", score: 0},
+{word: "Sânii", definition: "luge", score: 0},
+{word: "părțile", definition: "PARTIES", score: 0},
+{word: "intime", definition: "privacy", score: 0},
+{word: "acoperite", definition: "cover", score: 0},
+{word: "voaluri", definition: "veils", score: 0},
+{word: "orientale", definition: "Eastern", score: 0},
+{word: "strâns", definition: "tight", score: 0},
+{word: "legate", definition: "RELATED", score: 0},
+{word: "rest", definition: "change", score: 0},
+{word: "i", definition: "and", score: 0},
+{word: "decât", definition: "than", score: 0},
+{word: "pielea", definition: "SKIN", score: 0},
+{word: "goală", definition: "empty, bare", score: 0},
+{word: "cum", definition: "how", score: 0},
+{word: "ai", definition: "you", score: 0},
+{word: "intrat", definition: "came", score: 0},
+{word: "surprins", definition: "surprised", score: 0},
+{word: "numele", definition: "names", score: 0},
+{word: "m-ai", definition: "May", score: 0},
+{word: "sunat", definition: "call", score: 0},
+{word: "te", definition: "yourself", score: 0},
+{word: "pot", definition: "can", score: 0},
+{word: "ajuta", definition: "it helps", score: 0},
+{word: "răspunde", definition: "reply", score: 0},
+{word: "frumoasa", definition: "beautiful", score: 0},
+{word: "siluetă", definition: "silhouette", score: 0},
+{word: "frumoasă", definition: "beautiful", score: 0},
+{word: "dulce", definition: "sweet", score: 0},
+{word: "sau", definition: "or", score: 0},
+{word: "zâmbește", definition: "smile", score: 0},
+{word: "fertilității", definition: "fertility", score: 0},
+{word: "Sămânța", definition: "Seed", score: 0},
+{word: "m-a", definition: "me (has done sth to me)", score: 0},
+{word: "trezit", definition: "woken up", score: 0},
+{word: "servit", definition: "served", score: 0},
+{word: "împărații", definition: "kings, emperors", score: 0},
+{word: "regii", definition: "kings, monarchs", score: 0},
+{word: "secole", definition: "centuries", score: 0},
+{word: "le", definition: "they", score: 0},
+{word: "urmașii", definition: "followers", score: 0},
+{word: "neîncrezător", definition: "mistrustful", score: 0},
+{word: "Deci", definition: "so", score: 0},
+{word: "vrei", definition: "want", score: 0},
+{word: "slujești", definition: "serve", score: 0},
+{word: "atunci", definition: "then", score: 0},
+{word: "dorințele", definition: "DESIRES", score: 0},
+{word: "tale", definition: "your", score: 0},
+{word: "satisfăcute", definition: "satisfactory", score: 0},
+{word: "produci", definition: "produce", score: 0},
+{word: "urmași", definition: "descendants", score: 0},
+{word: "aceste", definition: "these", score: 0},
+{word: "dorințe", definition: "Wish", score: 0},
+{word: "fi", definition: "be", score: 0},
+{word: "înainte", definition: "before", score: 0},
+{word: "frumusețea", definition: "the beauty", score: 0},
+{word: "plină", definition: "full", score: 0},
+{word: "semnificație", definition: "meaning", score: 0},
+{word: "dorințe", definition: "Wish", score: 0},
+{word: "împlinite", definition: "fulfillment", score: 0},
+{word: "înainte", definition: "before", score: 0},
+{word: "frumusețea", definition: "the beauty", score: 0},
+{word: "plină", definition: "full", score: 0},
+{word: "sensa", definition: "meaning", score: 0}
+];
+
+const definition = document.getElementById("definition");
+const word = document.getElementById("word");
+let wordOnDisplay = false;
+let currentWords = lessonWords.slice(0, 9);
+let currentIndex = 0;
+let setNum = 1;
+let setSize = 9;
+let dieRoll = 0;
+let tapCount = 0;
+//let timer;
+let translateButtonTapped = false;
+
+const exclamatories = ["Oops", "I Forgor", "RIP Memory", "Uh-Oh"];
+let currentEx = 0; //Exclamatory at this index will be displayed next.
+init();
+
+function init() {
+    // Display the first word and definition
+    word.innerHTML = currentWords[0].word;
+    definition.innerHTML = currentWords[0].definition;
+    displaySetNum();
+    // Event listeners for the buttons
+    document.getElementById("left-button").addEventListener("touchstart", function () {
+        if (translateButtonTapped === false) {
+            translateButtonTapped = true;
+        } else {
+            translateButtonTapped = false;
+        }
+    });
+    document.getElementById("left-button").addEventListener("click", function () {
+        this.blur();
+
+        if (wordOnDisplay === true) {
+            // Move the current word back in the queue by 3 positions
+            // or to the back if there are less than 4 words in the queue
+            let currentWord = currentWords.shift();
+            if (currentWords.length < 4) {
+                currentWords.push(currentWord); //put it at the very end
+                console.log(currentWords);
+            } else {
+                currentWords.splice(3, 0, currentWord);
+                console.log(currentWords);
+            }
+            currentWord.score = -1;
+            definition.style.visibility = "hidden";
+            definition.style.textTransform = "lowercase";
+
+            displayDone();
+            displayNextWord();
+            document.getElementById("left-button").innerHTML = "Translate";
+            wordOnDisplay = false;
+        } else {
+            wordOnDisplay = true;
+            definition.style.visibility = "visible";
+            dieRoll = getRandomNumber();
+            //If dieRoll < 98, display "Again" instead of an exclamatory remark
+
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.getElementById("right-button").addEventListener("click", function () {
+        this.blur();
+        // Move the current word to the back of the queue
+        let currentWord = currentWords.shift();
+        currentWords.push(currentWord);
+        currentWord.score++;
+        // If the word's score is 2, remove it from the queue
+        if (currentWord.score === 2) {
+            currentWords = currentWords.filter((word) => word !== currentWord);
+        }
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+        document.getElementById("left-button").innerHTML = "Translate";
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.getElementById("next-button").addEventListener("click", function () {
+        this.blur();
+        // Load the next setSize words from the lessonWords array
+        currentIndex += setSize;
+        currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        setNum += 1;
+
+        displaySetNum();
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key === " ") {
+            const numInput = document.getElementById("set-num");
+            numInput.value = numInput.value.replaceAll(" ", "");
+            if (wordOnDisplay === false) {
+                displayDone();
+                definition.style.visibility = "visible";
+                wordOnDisplay = true;
+                dieRoll = getRandomNumber();
+                //If dieRoll < 98, display "Again" instead of an exclamatory remark
+                if (dieRoll < 98) {
+                    document.getElementById("left-button").innerHTML = "Again";
+                } else {
+                    if (currentEx > 3) {
+                        currentEx = 0;
+                    }
+                    document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                    currentEx += 1;
+                }
+            } else {
+                let currentWord = currentWords.shift();
+                currentWords.push(currentWord);
+                currentWord.score++;
+                // If the word's score is 2, remove it from the queue
+                if (currentWord.score === 2) {
+                    currentWords = currentWords.filter((word) => word !== currentWord);
+                }
+                definition.style.visibility = "hidden";
+                definition.style.textTransform = "lowercase";
+                document.getElementById("left-button").innerHTML = "Translate";
+                displayDone();
+                displayNextWord();
+                wordOnDisplay = false;
+            }
+        }
+        if (event.key === "Enter") {
+            const numInput = document.getElementById("set-num");
+            numInput.blur();
+            displaySet();
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        // Check if the key that was pressed is the space key
+        if (event.key !== "1") return;
+
+        let currentWord = currentWords.shift();
+        if (currentWords.length < 4) {
+            currentWords.push(currentWord);
+            console.log(currentWords);
+        } else {
+            currentWords.splice(3, 0, currentWord);
+            console.log(currentWords);
+        }
+        currentWord.score = -1;
+        definition.style.visibility = "hidden";
+        definition.style.textTransform = "lowercase";
+
+        displayDone();
+        displayNextWord();
+        wordOnDisplay = false;
+    });
+
+    document.addEventListener("touchend", (event) => {
+        // Check if the event target is an input or textarea
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        displayDone();
+        if (translateButtonTapped === true) {
+            translateButtonTapped = false;
+            return;
+        }
+        if (wordOnDisplay === false) {
+            displayDone();
+            definition.style.visibility = "visible";
+            wordOnDisplay = true;
+            dieRoll = getRandomNumber();
+            // If dieRoll < 98, display "Again" instead of an exclamatory remark
+            if (dieRoll < 98) {
+                document.getElementById("left-button").innerHTML = "Again";
+            } else {
+                if (currentEx > 3) {
+                    currentEx = 0;
+                }
+                document.getElementById("left-button").innerHTML = exclamatories[currentEx];
+                currentEx += 1;
+            }
+        }
+    });
+
+    document.addEventListener("touchstart", (event) => {
+        tapCount++; // increment the tapCount variable when a tap is detected
+    });
+}
+function displaySet() {
+    const numInput = document.getElementById("set-num");
+    setNum = parseInt(numInput.value);
+    currentIndex = setNum * setSize - setSize;
+
+    currentWords = lessonWords.slice(currentIndex, currentIndex + setSize);
+    currentWords.forEach((word) => (word.score = 0));
+    definition.style.visibility = "hidden";
+    definition.style.textTransform = "lowercase";
+
+    displaySetNum();
+
+    displayDone();
+    displayNextWord();
+}
+
+function displaySetNum() {
+    //Find input box
+    const numInput = document.getElementById("set-num");
+    numInput.value = setNum;
+}
+
+function displayNextWord() {
+    // Display the next word and definition
+    let currentWord = currentWords[0];
+    document.getElementById("word").innerHTML = currentWord.word;
+    definition.innerHTML = currentWord.definition;
+}
+
+function displayDone() {
+    if (currentWords.length !== 0) return;
+    const definition = document.getElementById("definition");
+    definition.style.visibility = "visible";
+    definition.innerHTML = "Set Done " + setNum;
+    //definition.style.textTransform = "capitalize";
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 100) + 1;
+}
+  </script>
+</body>
+</html>

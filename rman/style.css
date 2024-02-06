@@ -1,0 +1,112 @@
+body {
+  padding: 0 20%;
+}
+p{
+    font-family: "BBC Qalam", Bookerly;
+    font-size: 30px;
+}
+.tooltip {
+    position: relative;
+    border-bottom: 1px dotted black;
+    font-family: Bookerly, Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 35px;
+    
+  }
+  
+.lessontext {
+  width: 100%;
+  justify-content: center;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 330px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    font-size: 20px;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 110%;
+    left: 1%;
+  }
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+.tooltip:hover {
+    background-color: aquamarine;
+    border-radius: 5px;
+}
+
+.paragraph {
+    margin: 20px 0 0px 20px;
+    align-items: center;
+    
+}
+
+.literal {
+  font-style: italic;
+}
+
+.vocabword {
+  color:aquamarine;
+}
+
+h1 {
+  font-size: 50px;
+  font-family: Bookerly, Calibri;
+}
+
+
+
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100%;
+  background-color: white;
+  transition: width 0.5s ease;
+  
+}
+
+.sidebar.active {
+  width: 200px;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  /*background-color: transparent;*/
+  background-color: grey;
+  transition: background-color 0.5s ease;
+}
+
+.sidebar-toggle.active {
+  background-color: grey;
+}
+
+.main-content {
+  margin-left: 0;
+  transition: margin 0.5s ease;
+}
+
+.main-content.sidebar-active {
+  margin-left: 200px;
+}
+
+.highlight {
+  background-color: blue;
+  font-size: 100px;
+}

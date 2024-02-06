@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grey Tiles</title>
+    <style>
+        body {
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+
+        .tile {
+            background-color: rgba(60, 216, 182, 0.443);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 200px;
+            margin: 10px;
+            font-size: 30px;
+            font-family: 'Noto Sans SC Thin', 'Calibri Light';
+            position: relative;
+        }
+        .prelearn-link {
+            font-size: 20px;
+            position: absolute;
+            bottom: 0; /* Anchor it to the bottom of the container */
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tile" onclick="window.location='ro_1_text.html'">
+            <p>RO 1</p>
+            <a class ="prelearn-link" href="ro_1.html" style="left:50px;">R2E</a>
+            <a class ="prelearn-link" href="ro_1_r2e.html" style="right:50px;">E2R</a>
+        </div>
+        <div class="tile" onclick="window.location='ro_2_text.html'">
+            <p>RO 2</p>
+            <a class ="prelearn-link" href="ro_2.html" style="left:50px;">R2E</a>
+            <a class ="prelearn-link" href="ro_2_r2e.html" style="right:50px;">E2R</a>
+        </div>
+        <div class="tile" onclick="window.location='ro_3_text.html'">
+            <p>RO 3</p>
+            <a class ="prelearn-link" href="ro_3.html" style="left:50px;">R2E</a>
+            <a class ="prelearn-link" href="ro_3_r2e.html" style="right:50px;">E2R</a>
+        </div>
+    </div>
+</body>
+</html>
