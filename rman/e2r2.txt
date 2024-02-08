@@ -1,27 +1,27 @@
-{word: "Tell me!", definition: "Spune-mi!", score: 0},
-{word: "He sees an egg", definition: "Vede un ou", score: 0},
-{word: "He sees the egg", definition: "Vede oul", score: 0},
-{word: "An egg for you", definition: "Un ou pentru tine", score: 0},
-{word: "You eat it", definition: "Tu o mănânci", score: 0},
-{word: "My life", definition: "Viața mea", score: 0},
-{word: "Without you", definition: "Fără tine", score: 0},
-{word: "Without me", definition: "Fără mine", score: 0},
-{word: "I am happy", definition: "Sunt fericit", score: 0},
-{word: "always happy", definition: "mereu fericit", score: 0},
-{word: "Tom is sad", definition: "Tom este trist", score: 0},
-{word: "From America", definition: "Din America", score: 0},
-{word: "Maybe he is Tom", definition: "Poate el este Tom", score: 0},
-{word: "your teacher", definition: "profesorul tau", score: 0},
-{word: "smart man", definition: "om destept", score: 0},
-{word: "a smart teacher", definition: "un profesor inteligent", score: 0},
-{word: "I am in front", definition: "sunt in fata", score: 0},
-{word: "The front of the room", definition: "Fața camerei", score: 0},
-{word: "the teacher stands", definition: "profesorul stă în picioare", score: 0},
-{word: "I am here", definition: "Sunt aici", score: 0},
-{word: "I forgot you", definition: "te-am uitat", score: 0},
-{word: "to feed a man", definition: "a hrăni un bărbat", score: 0},
-{word: "cute dog", definition: "Caine dragut", score: 0},
-{word: "You forgot me", definition: "M-ai uitat", score: 0},
-{word: "A hot day", definition: "O zi fierbinte", score: 0},
-{word: "Long day", definition: "Zi lungă", score: 0},
-{word: "A long string", definition: "Un șir lung", score: 0}
+Tell me!
+He sees an egg
+He sees the egg
+An egg for you
+You eat it
+My life
+Without you
+Without me
+I am happy
+always happy
+Tom is sad
+From America
+Maybe he is Tom
+your teacher
+smart man
+a smart teacher
+I am in front
+The front of the room
+the teacher stands
+I am here
+I forgot you
+to feed a man
+cute dog
+You forgot me
+A hot day
+Long day
+A long string
