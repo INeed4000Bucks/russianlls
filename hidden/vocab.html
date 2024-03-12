@@ -18,11 +18,18 @@
     <ul id="wordList"></ul>
 
     <script>
+        // Load the stored words to remove from local storage
+        const storedRemoveWords = localStorage.getItem('removeWords') || '';
+        document.getElementById('removeWords').value = storedRemoveWords;
+
         function extractWords() {
             const inputText = document.getElementById('inputText').value;
             const ignoreCase = document.getElementById('ignoreCase').checked;
             const removeChars = document.getElementById('removeChars').value;
             const removeWords = document.getElementById('removeWords').value.split('\n').map(word => word.trim()).filter(word => word !== '');
+
+            // Store the words to remove in local storage
+            localStorage.setItem('removeWords', removeWords.join('\n'));
 
             // Remove specified characters from the input text
             const cleanedText = inputText.replace(new RegExp(`[${removeChars}]`, 'g'), '');
