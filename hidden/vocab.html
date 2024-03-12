@@ -15,7 +15,7 @@
     <textarea id="removeWords" rows="3" cols="50"></textarea><br>
     <button onclick="extractWords()">Extract Words</button>
     <h2>Extracted Words:</h2>
-    <ul id="wordList"></ul>
+    <ol id="wordList"></ol>
 
     <script>
         // Load the stored words to remove from local storage
@@ -53,9 +53,9 @@
             wordList.innerHTML = '';
 
             // Add each unique word to the word list
-            uniqueWords.forEach(word => {
+            uniqueWords.forEach((word, index) => {
                 const listItem = document.createElement('li');
-                listItem.textContent = word;
+                listItem.textContent = `${index + 1}. ${word}`;
                 wordList.appendChild(listItem);
             });
         }
