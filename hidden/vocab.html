@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Extractor</title>
+</head>
+<body>
+  <h1>Word Extractor</h1>
+  
+  <label for="inputText">Enter text:</label><br>
+  <textarea id="inputText" rows="5" cols="50"></textarea><br>
+  
+  <label for="ignoreCase">Ignore case:</label>
+  <input type="checkbox" id="ignoreCase"><br>
+  
+  <label for="removeChars">Characters to remove:</label><br>
+  <input type="text" id="removeChars" value=".,:;!?()[]{}"><br>
+  
+  <label for="removeWords">Words to remove:</label><br>
+  <input type="text" id="removeWords"><br>
+  
+  <button onclick="extractWords()">Extract Words</button>
+  
+  <h2>Extracted Words:</h2>
+  <ul id="wordList"></ul>
+  
+  <script>
+    function extractWords() {
+      const inputText = document.getElementById('inputText').value;
+      const ignoreCase = document.getElementById('ignoreCase').checked;
+      const removeChars = document.getElementById('removeChars').value;
+      const removeWords = document.getElementById('removeWords').value.split(',');
+      
+      // Remove specified characters from the input text
+      const cleanedText = inputText.replace(new RegExp(`[${removeChars}]`, 'g'), '');
+      
+      // Split the cleaned text into an array of words
+      let words = cleanedText.split(/\s+/);
+      
+      // Convert words to lowercase if ignoreCase is checked
+      if (ignoreCase) {
+        words = words.map(word => word.toLowerCase());
+      }
+      
+      // Remove specified words from the array
+      words = words.filter(word => !removeWords.includes(word.trim()));
+      
+      // Remove duplicate words
+      const uniqueWords = [...new Set(words)];
+      
+      // Clear the word list
+      const wordList = document.getElementById('wordList');
+      wordList.innerHTML = '';
+      
+      // Add each unique word to the word list
+      uniqueWords.forEach(word => {
+        const listItem = document.createElement('li');
+        listItem.textContent = word;
+        wordList.appendChild(listItem);
+      });
+    }
+  </script>
+</body>
+</html>
