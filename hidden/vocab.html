@@ -53,9 +53,9 @@
             wordList.innerHTML = '';
 
             // Add each unique word to the word list
-            uniqueWords.forEach((word, index) => {
+            uniqueWords.forEach(word => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${index + 1}. ${word}`;
+                listItem.textContent = word;
                 wordList.appendChild(listItem);
             });
         }
