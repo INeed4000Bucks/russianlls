@@ -208,8 +208,17 @@
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;
 
+        const prefersDarkMode = localStorage.getItem('prefersDarkMode') === 'true';
+
+        // Set the initial state of the dark mode toggle
+        darkModeToggle.checked = prefersDarkMode;
+        body.classList.toggle('dark-mode', prefersDarkMode);
+
+        // Event listener for the dark mode toggle
         darkModeToggle.addEventListener('change', () => {
             body.classList.toggle('dark-mode');
+            // Store the user's preference for dark mode in localStorage
+            localStorage.setItem('prefersDarkMode', body.classList.contains('dark-mode'));
         });
 
         function extractWords() {
