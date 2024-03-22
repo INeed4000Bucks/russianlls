@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Word Extractor</title>
+    <style>
+        .text-area-container {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
 </head>
+
 <body>
     <h1>Word Extractor</h1>
     <label for="inputText">Enter text:</label><br>
@@ -16,6 +24,23 @@
     <button onclick="extractWords()">Extract Words</button>
     <h2>Extracted Words:</h2>
     <ol id="wordList"></ol>
+
+    <div class="text-area-container">
+        <div>
+            <label for="keywords">Keywords:</label><br>
+            <textarea id="keywords" rows="5" cols="25"></textarea>
+        </div>
+        <div>
+            <label for="translations">Translations:</label><br>
+            <textarea id="translations" rows="5" cols="25"></textarea><br>
+        </div>
+    </div>
+
+    <label for="reverseOrder">Reverse Order:</label>
+    <input type="checkbox" id="reverseOrder"><br>
+    <button onclick="generateTranslatedList()">Generate Translated List</button>
+    <ul id="translatedList"></ul>
+    <button onclick="copyTranslatedList()">Copy Translated List</button>
 
     <script>
         // Load the stored words to remove from local storage
@@ -58,7 +83,47 @@
                 listItem.textContent = word;
                 wordList.appendChild(listItem);
             });
+
+            // Populate the keywords textarea
+            const keywordsTextarea = document.getElementById('keywords');
+            keywordsTextarea.value = uniqueWords.join('\n');
+        }
+
+        function generateTranslatedList() {
+            const words = document.getElementById('keywords').value.trim().split('\n');
+            const translations = document.getElementById('translations').value.trim().split('\n');
+            const reverseOrder = document.getElementById('reverseOrder').checked;
+            const translatedList = document.getElementById('translatedList');
+            translatedList.innerHTML = '';
+
+            for (let i = 0; i < words.length && i < translations.length; i++) {
+                const listItem = document.createElement('li');
+                if (reverseOrder) {
+                    listItem.textContent = `${translations[i]}\t\t\t${words[i]}`;
+                } else {
+                    listItem.textContent = `${words[i]}\t${translations[i]}`;
+                }
+                translatedList.appendChild(listItem);
+            }
+        }
+        function copyTranslatedList() {
+            const translatedList = document.getElementById('translatedList');
+            const listItems = translatedList.getElementsByTagName('li');
+            let textToCopy = '';
+
+            for (let i = 0; i < listItems.length; i++) {
+                textToCopy += listItems[i].textContent + '\n';
+            }
+
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    let x = 69;
+                })
+                .catch((err) => {
+                    console.error('Failed to copy text: ', err);
+                });
         }
     </script>
 </body>
+
 </html>
