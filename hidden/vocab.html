@@ -238,8 +238,8 @@
             localStorage.setItem('removeWords', removeWords.join('\n'));
             localStorage.setItem('removeChars', removeChars);
 
-            // Remove specified characters from the input text
-            const cleanedText = inputText.replace(new RegExp(`[${removeChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g'), '');
+            // Replace specified characters with spaces
+            const cleanedText = inputText.replace(new RegExp(`[${removeChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g'), ' ');
 
             // Split the cleaned text into an array of words
             let words = cleanedText.split(/\s+/);
@@ -269,7 +269,7 @@
             // Populate the keywords textarea
             const keywordsTextarea = document.getElementById('keywords');
             keywordsTextarea.value = uniqueWords.join('\n');
-        }
+            }
 
         function generateTranslatedList() {
             const words = document.getElementById('keywords').value.trim().split('\n');
