@@ -255,12 +255,15 @@
             // Remove duplicate words
             const uniqueWords = [...new Set(words)];
 
+            // Filter out empty strings
+            const nonEmptyWords = uniqueWords.filter(word => word.trim() !== '');
+
             // Clear the word list
             const wordList = document.getElementById('wordList');
             wordList.innerHTML = '';
 
             // Add each unique word to the word list
-            uniqueWords.forEach(word => {
+            nonEmptyWords.forEach(word => {
                 const listItem = document.createElement('li');
                 listItem.textContent = word;
                 wordList.appendChild(listItem);
@@ -268,8 +271,8 @@
 
             // Populate the keywords textarea
             const keywordsTextarea = document.getElementById('keywords');
-            keywordsTextarea.value = uniqueWords.join('\n');
-            }
+            keywordsTextarea.value = nonEmptyWords.join('\n');
+        }
 
         function generateTranslatedList() {
             const words = document.getElementById('keywords').value.trim().split('\n');
@@ -279,6 +282,11 @@
             translatedList.innerHTML = '';
 
             for (let i = 0; i < words.length && i < translations.length; i++) {
+                // Skip if either word or translation is empty
+                if (words[i].trim() === '' || translations[i].trim() === '') {
+                    continue;
+                }
+
                 const listItem = document.createElement('li');
                 if (reverseOrder) {
                     listItem.textContent = `${translations[i]}\t\t\t${words[i]}`;
