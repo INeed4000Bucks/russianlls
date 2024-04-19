@@ -1,319 +1,336 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>Word Extractor</title>
+        <style>
+            /* General Styles */
+            :root {
+                --primary-color: #6c63ff;
+                --secondary-color: #f5f5f5;
+                --dark-primary-color: #3f3f3f;
+                --dark-secondary-color: #222222;
+                --text-color: #333;
+                --dark-text-color: #f5f5f5;
+                --border-color: #ccc;
+                --dark-border-color: #777;
+                --bg-color: #ffffff;
+                --dark-bg-color: #333333;
+                --shadow-color: rgba(0, 0, 0, 0.1);
+                --dark-shadow-color: rgba(0, 0, 0, 0.5);
+            }
 
-<head>
-    <title>Word Extractor</title>
-    <style>
-        /* General Styles */
-        :root {
-            --primary-color: #6c63ff;
-            --secondary-color: #f5f5f5;
-            --dark-primary-color: #3f3f3f;
-            --dark-secondary-color: #222222;
-            --text-color: #333;
-            --dark-text-color: #f5f5f5;
-            --border-color: #ccc;
-            --dark-border-color: #777;
-            --bg-color: #ffffff;
-            --dark-bg-color: #333333;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --dark-shadow-color: rgba(0, 0, 0, 0.5);
-        }
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 0;
+                padding: 1rem;
+                box-sizing: border-box;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-            padding: 1rem;
-            box-sizing: border-box;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+            body.dark-mode {
+                background-color: var(--dark-bg-color);
+                color: var(--dark-text-color);
+            }
 
-        body.dark-mode {
-            background-color: var(--dark-bg-color);
-            color: var(--dark-text-color);
-        }
+            .container {
+                background-color: var(--secondary-color);
+                padding: 2rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
+                text-align: center;
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                max-width: 800px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow: auto;
+                flex: 1;
+                margin-left: auto;
+                margin-right: auto;
+            }
 
-        .container {
-            background-color: var(--secondary-color);
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
-            text-align: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            max-width: 800px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: auto;
-            flex: 1;
-            margin-left: auto;
-            margin-right: auto;
-        }
+            body.dark-mode .container {
+                background-color: var(--dark-secondary-color);
+                box-shadow: 0 0.25rem 0.5rem var(--dark-shadow-color);
+            }
 
-        body.dark-mode .container {
-            background-color: var(--dark-secondary-color);
-            box-shadow: 0 0.25rem 0.5rem var(--dark-shadow-color);
-        }
+            /* Text Input Styles */
+            input[type="text"],
+            textarea {
+                padding: 0.5rem;
+                border: 1px solid var(--border-color);
+                border-radius: 0.25rem;
+                font-size: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+                transition: border-color 0.3s ease;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
 
-        /* Text Input Styles */
-        input[type="text"],
-        textarea {
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            font-size: 1rem;
-            width: 100%;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
+            body.dark-mode input[type="text"],
+            body.dark-mode textarea {
+                border-color: var(--dark-border-color);
+                background-color: var(--dark-bg-color);
+                color: var(--dark-text-color);
+            }
 
-        body.dark-mode input[type="text"],
-        body.dark-mode textarea {
-            border-color: var(--dark-border-color);
-            background-color: var(--dark-bg-color);
-            color: var(--dark-text-color);
-        }
+            /* Button Styles */
+            button {
+                background-color: var(--primary-color);
+                color: var(--secondary-color);
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-top: 1rem;
+            }
 
-        /* Button Styles */
-        button {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 1rem;
-        }
+            button:hover {
+                background-color: var(--dark-primary-color);
+            }
 
-        button:hover {
-            background-color: var(--dark-primary-color);
-        }
+            /* Dark Mode Toggle Styles */
+            .toggle-container {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
 
-        /* Dark Mode Toggle Styles */
-        .toggle-container {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-        }
+            .toggle {
+                appearance: none;
+                width: 3rem;
+                height: 1.5rem;
+                background-color: var(--border-color);
+                border-radius: 0.75rem;
+                position: relative;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
-        .toggle {
-            appearance: none;
-            width: 3rem;
-            height: 1.5rem;
-            background-color: var(--border-color);
-            border-radius: 0.75rem;
-            position: relative;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .toggle::before {
+                content: "";
+                position: absolute;
+                width: 1.25rem;
+                height: 1.25rem;
+                background-color: var(--secondary-color);
+                border-radius: 50%;
+                top: 0.125rem;
+                left: 0.125rem;
+                transition: transform 0.3s ease;
+            }
 
-        .toggle::before {
-            content: "";
-            position: absolute;
-            width: 1.25rem;
-            height: 1.25rem;
-            background-color: var(--secondary-color);
-            border-radius: 50%;
-            top: 0.125rem;
-            left: 0.125rem;
-            transition: transform 0.3s ease;
-        }
+            .toggle:checked {
+                background-color: var(--dark-primary-color);
+            }
 
-        .toggle:checked {
-            background-color: var(--dark-primary-color);
-        }
+            .toggle:checked::before {
+                transform: translateX(1.5rem);
+            }
 
-        .toggle:checked::before {
-            transform: translateX(1.5rem);
-        }
+            body.dark-mode .toggle {
+                background-color: var(--dark-border-color);
+            }
 
-        body.dark-mode .toggle {
-            background-color: var(--dark-border-color);
-        }
+            body.dark-mode .toggle:checked {
+                background-color: var(--primary-color);
+            }
 
-        body.dark-mode .toggle:checked {
-            background-color: var(--primary-color);
-        }
+            body.dark-mode .toggle::before {
+                background-color: var(--dark-bg-color);
+            }
 
-        body.dark-mode .toggle::before {
-            background-color: var(--dark-bg-color);
-        }
+            /* Layout Styles */
+            .text-area-container {
+                display: flex;
+                gap: 20px;
+                margin-top: 1rem;
+            }
 
-        /* Layout Styles */
-        .text-area-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 1rem;
-        }
+            .text-area-container div {
+                flex: 1;
+            }
 
-        .text-area-container div {
-            flex: 1;
-        }
+            /* List Styles */
+            ol,
+            ul {
+                list-style-position: inside;
+                padding: 0;
+                text-align: left;
+            }
+        </style>
+    </head>
 
-        /* List Styles */
-        ol,
-        ul {
-            list-style-position: inside;
-            padding: 0;
-            text-align: left;
-        }
-    </style>
-</head>
+    <body>
+        <div class="toggle-container"><input type="checkbox" class="toggle" id="darkModeToggle" /></div>
+        <div class="container">
+            <h1>Word Extractor</h1>
+            <label for="inputText">Enter text:</label><br />
+            <textarea id="inputText" rows="5" cols="50"></textarea><br />
+            <label for="ignoreCase">Ignore case:</label> <input type="checkbox" id="ignoreCase" /><br />
+            <label for="chineseMode">Chinese mode:</label> <input type="checkbox" id="chineseMode" /><br />
+            <label for="removeChars">Characters to remove:</label><br />
+            <input type="text" id="removeChars" value=".,:;!?()\[\]{}" /><br />
+            <label for="removeWords">Words to remove:</label><br />
+            <textarea id="removeWords" rows="3" cols="50"></textarea><br />
+            <button onclick="extractWords()">Extract Words</button>
+            <h2>Extracted Words:</h2>
+            <ol id="wordList"></ol>
 
-<body>
-    <div class="toggle-container">
-        <input type="checkbox" class="toggle" id="darkModeToggle">
-    </div>
-    <div class="container">
-        <h1>Word Extractor</h1>
-        <label for="inputText">Enter text:</label><br>
-        <textarea id="inputText" rows="5" cols="50"></textarea><br>
-        <label for="ignoreCase">Ignore case:</label>
-        <input type="checkbox" id="ignoreCase"><br>
-        <label for="removeChars">Characters to remove:</label><br>
-        <input type="text" id="removeChars" value=".,:;!?()\[\]{}"><br>
-        <label for="removeWords">Words to remove:</label><br>
-        <textarea id="removeWords" rows="3" cols="50"></textarea><br>
-        <button onclick="extractWords()">Extract Words</button>
-        <h2>Extracted Words:</h2>
-        <ol id="wordList"></ol>
-
-        <div class="text-area-container">
-            <div>
-                <label for="keywords">Keywords:</label><br>
-                <textarea id="keywords" rows="5" cols="25"></textarea>
+            <div class="text-area-container">
+                <div>
+                    <label for="keywords">Keywords:</label><br />
+                    <textarea id="keywords" rows="5" cols="25"></textarea>
+                </div>
+                <div>
+                    <label for="translations">Translations:</label><br />
+                    <textarea id="translations" rows="5" cols="25"></textarea><br />
+                </div>
             </div>
-            <div>
-                <label for="translations">Translations:</label><br>
-                <textarea id="translations" rows="5" cols="25"></textarea><br>
-            </div>
+
+            <label for="reverseOrder">Reverse Order:</label>
+            <input type="checkbox" id="reverseOrder" /><br />
+            <button onclick="generateTranslatedList()">Generate Translated List</button>
+            <ul id="translatedList"></ul>
+            <button onclick="copyTranslatedList()">Copy Translated List</button>
         </div>
 
-        <label for="reverseOrder">Reverse Order:</label>
-        <input type="checkbox" id="reverseOrder"><br>
-        <button onclick="generateTranslatedList()">Generate Translated List</button>
-        <ul id="translatedList"></ul>
-        <button onclick="copyTranslatedList()">Copy Translated List</button>
-    </div>
+        <script>
+            // Load the stored words to remove and characters to remove from local storage
+            const storedRemoveWords = localStorage.getItem("removeWords") || "";
+            const storedRemoveChars = localStorage.getItem("removeChars") || ".,:;!?()\[\]{}";
+            document.getElementById("removeWords").value = storedRemoveWords;
+            document.getElementById("removeChars").value = storedRemoveChars;
 
-    <script>
-        // Load the stored words to remove and characters to remove from local storage
-        const storedRemoveWords = localStorage.getItem('removeWords') || '';
-        const storedRemoveChars = localStorage.getItem('removeChars') || '.,:;!?()\[\]{}';
-        document.getElementById('removeWords').value = storedRemoveWords;
-        document.getElementById('removeChars').value = storedRemoveChars;
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById("darkModeToggle");
+            const body = document.body;
 
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
+            const prefersDarkMode = localStorage.getItem("prefersDarkMode") === "true";
 
-        const prefersDarkMode = localStorage.getItem('prefersDarkMode') === 'true';
+            // Set the initial state of the dark mode toggle
+            darkModeToggle.checked = prefersDarkMode;
+            body.classList.toggle("dark-mode", prefersDarkMode);
 
-        // Set the initial state of the dark mode toggle
-        darkModeToggle.checked = prefersDarkMode;
-        body.classList.toggle('dark-mode', prefersDarkMode);
-
-        // Event listener for the dark mode toggle
-        darkModeToggle.addEventListener('change', () => {
-            body.classList.toggle('dark-mode');
-            // Store the user's preference for dark mode in localStorage
-            localStorage.setItem('prefersDarkMode', body.classList.contains('dark-mode'));
-        });
-
-        function extractWords() {
-            const inputText = document.getElementById('inputText').value;
-            const ignoreCase = document.getElementById('ignoreCase').checked;
-            const removeChars = document.getElementById('removeChars').value;
-            const removeWords = document.getElementById('removeWords').value.split('\n').map(word => word.trim()).filter(word => word !== '');
-
-            // Store the words to remove and characters to remove in local storage
-            localStorage.setItem('removeWords', removeWords.join('\n'));
-            localStorage.setItem('removeChars', removeChars);
-
-            // Replace specified characters with spaces
-            const cleanedText = inputText.replace(new RegExp(`[${removeChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}]`, 'g'), ' ');
-
-            // Split the cleaned text into an array of words
-            let words = cleanedText.split(/\s+/);
-
-            // Convert words to lowercase if ignoreCase is checked
-            if (ignoreCase) {
-                words = words.map(word => word.toLowerCase());
-            }
-
-            // Remove specified words from the array
-            words = words.filter(word => !removeWords.includes(word));
-
-            // Remove duplicate words
-            const uniqueWords = [...new Set(words)];
-
-            // Filter out empty strings
-            const nonEmptyWords = uniqueWords.filter(word => word.trim() !== '');
-
-            // Clear the word list
-            const wordList = document.getElementById('wordList');
-            wordList.innerHTML = '';
-
-            // Add each unique word to the word list
-            nonEmptyWords.forEach(word => {
-                const listItem = document.createElement('li');
-                listItem.textContent = word;
-                wordList.appendChild(listItem);
+            // Event listener for the dark mode toggle
+            darkModeToggle.addEventListener("change", () => {
+                body.classList.toggle("dark-mode");
+                // Store the user's preference for dark mode in localStorage
+                localStorage.setItem("prefersDarkMode", body.classList.contains("dark-mode"));
             });
 
-            // Populate the keywords textarea
-            const keywordsTextarea = document.getElementById('keywords');
-            keywordsTextarea.value = nonEmptyWords.join('\n');
-        }
+            function extractWords() {
+                const inputText = document.getElementById("inputText").value;
+                const ignoreCase = document.getElementById("ignoreCase").checked;
+                const chineseMode = document.getElementById("chineseMode").checked;
+                const removeChars = document.getElementById("removeChars").value;
+                const removeWords = document
+                    .getElementById("removeWords")
+                    .value.split("\n")
+                    .map((word) => word.trim())
+                    .filter((word) => word !== "");
 
-        function generateTranslatedList() {
-            const words = document.getElementById('keywords').value.trim().split('\n');
-            const translations = document.getElementById('translations').value.trim().split('\n');
-            const reverseOrder = document.getElementById('reverseOrder').checked;
-            const translatedList = document.getElementById('translatedList');
-            translatedList.innerHTML = '';
+                // Store the words/characters to remove and characters to remove in local storage
+                localStorage.setItem("removeWords", removeWords.join("\n"));
+                localStorage.setItem("removeChars", removeChars);
 
-            for (let i = 0; i < words.length && i < translations.length; i++) {
-                // Skip if either word or translation is empty
-                if (words[i].trim() === '' || translations[i].trim() === '') {
-                    continue;
-                }
+                let cleanedText = inputText;
 
-                const listItem = document.createElement('li');
-                if (reverseOrder) {
-                    listItem.textContent = `${translations[i]}\t\t\t${words[i]}`;
+                if (chineseMode) {
+                    // Remove specified characters from the input text
+                    cleanedText = cleanedText
+                        .split("")
+                        .filter((char) => !removeWords.includes(char))
+                        .join("");
                 } else {
-                    listItem.textContent = `${words[i]}\t${translations[i]}`;
+                    // Replace specified characters with spaces
+                    cleanedText = cleanedText.replace(new RegExp(`[${removeChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}]`, "g"), " ");
+
+                    // Split the cleaned text into an array of words
+                    let words = cleanedText.split(/\s+/);
+
+                    // Convert words to lowercase if ignoreCase is checked
+                    if (ignoreCase) {
+                        words = words.map((word) => word.toLowerCase());
+                    }
+
+                    // Remove specified words from the array
+                    words = words.filter((word) => !removeWords.includes(word));
+
+                    cleanedText = words.join(" ");
                 }
-                translatedList.appendChild(listItem);
-            }
-        }
-        function copyTranslatedList() {
-            const translatedList = document.getElementById('translatedList');
-            const listItems = translatedList.getElementsByTagName('li');
-            let textToCopy = '';
 
-            for (let i = 0; i < listItems.length; i++) {
-                textToCopy += listItems[i].textContent + '\n';
-            }
+                // Split the cleaned text into an array of characters/words
+                const extractedItems = chineseMode ? cleanedText.split("") : cleanedText.split(/\s+/);
 
-            navigator.clipboard.writeText(textToCopy)
-                .then(() => {
-                    let x = 69;
-                })
-                .catch((err) => {
-                    console.error('Failed to copy text: ', err);
+                // Remove duplicate characters/words
+                const uniqueItems = [...new Set(extractedItems)];
+
+                // Filter out empty strings
+                const nonEmptyItems = uniqueItems.filter((item) => item.trim() !== "");
+
+                // Clear the word list
+                const wordList = document.getElementById("wordList");
+                wordList.innerHTML = "";
+
+                // Add each unique character/word to the word list
+                nonEmptyItems.forEach((item) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = item;
+                    wordList.appendChild(listItem);
                 });
-        }
-    </script>
-</body>
 
+                // Populate the keywords textarea
+                const keywordsTextarea = document.getElementById("keywords");
+                keywordsTextarea.value = nonEmptyItems.join("\n");
+            }
+
+            function generateTranslatedList() {
+                const words = document.getElementById("keywords").value.trim().split("\n");
+                const translations = document.getElementById("translations").value.trim().split("\n");
+                const reverseOrder = document.getElementById("reverseOrder").checked;
+                const translatedList = document.getElementById("translatedList");
+                translatedList.innerHTML = "";
+
+                for (let i = 0; i < words.length && i < translations.length; i++) {
+                    // Skip if either word or translation is empty
+                    if (words[i].trim() === "" || translations[i].trim() === "") {
+                        continue;
+                    }
+
+                    const listItem = document.createElement("li");
+                    if (reverseOrder) {
+                        listItem.textContent = `${translations[i]}\t\t\t${words[i]}`;
+                    } else {
+                        listItem.textContent = `${words[i]}\t${translations[i]}`;
+                    }
+                    translatedList.appendChild(listItem);
+                }
+            }
+            function copyTranslatedList() {
+                const translatedList = document.getElementById("translatedList");
+                const listItems = translatedList.getElementsByTagName("li");
+                let textToCopy = "";
+
+                for (let i = 0; i < listItems.length; i++) {
+                    textToCopy += listItems[i].textContent + "\n";
+                }
+
+                navigator.clipboard
+                    .writeText(textToCopy)
+                    .then(() => {
+                        let x = 69;
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy text: ", err);
+                    });
+            }
+        </script>
+    </body>
 </html>
