@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Language Learning App</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                font-size: 20px;
+            }
+            #mainContent {
+                flex: 1;
+                padding-right: 20px;
+                transition: margin-right 0.3s ease-out;
+            }
+            textarea {
+                width: 100%;
+                height: 100px;
+            }
+            #learningArea {
+                margin-top: 20px;
+            }
+            #feedback,
+            #mnemonic {
+                margin-top: 10px;
+            }
+            #sidePanel {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 250px;
+                height: 100%;
+                background-color: white;
+                border-left: 1px solid #ccc;
+                padding: 20px;
+                box-sizing: border-box;
+                overflow-y: auto;
+                transition: transform 0.3s ease-out;
+                z-index: 1000;
+            }
+            #sidePanel.collapsed {
+                transform: translateX(100%);
+            }
+            #toggleSidePanel {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                z-index: 1001;
+                background-color: white;
+                border: 1px solid #ccc;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            .vocabList {
+                cursor: pointer;
+                padding: 5px;
+                border: 1px solid #ccc;
+                margin-top: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .vocabList:hover {
+                background-color: #f0f0f0;
+            }
+            .deleteBtn {
+                color: red;
+                cursor: pointer;
+            }
+            #toggleSidePanel.collapsed {
+                right: 10px;
+            }
+            #imageContainer img {
+                max-width: 100%;
+                margin-top: 20px;
+            }
+        </style>
+        <style>
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                z-index: 1000;
+            }
+
+            .overlay-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                width: 80%;
+                max-width: 600px;
+            }
+
+            .overlay-content textarea {
+                width: 100%;
+                height: 200px;
+                margin-bottom: 10px;
+            }
+
+            .overlay-controls {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .text-display {
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                background-color: white;
+                color: black;
+                padding: 10px;
+                border-radius: 10px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 999;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            body.dark-mode .text-display {
+                background-color: #333;
+                color: #f0f0f0;
+            }
+
+            body.dark-mode .highlight {
+                background-color: #666;
+                color: #fff;
+            }
+
+            .highlight {
+                background-color: yellow;
+                border-radius: 3px;
+                padding: 2px 0;
+            }
+
+            #helpButton {
+                position: fixed;
+                top: 10px;
+                right: 50px;
+                z-index: 1001;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+            .popup {
+                display: none;
+                position: fixed;
+                z-index: 1002;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .popup-content {
+                background-color: #fefefe;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 600px;
+                border-radius: 10px;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            body.dark-mode .popup-content {
+                background-color: #333;
+                color: #f0f0f0;
+            }
+
+            body.dark-mode .close {
+                color: #f0f0f0;
+            }
+
+            body.dark-mode .close:hover,
+            body.dark-mode .close:focus {
+                color: #fff;
+            }
+        </style>
+        <style>
+            /* Dark mode styles */
+            body.dark-mode {
+                background-color: #1a1a1a;
+                color: #f0f0f0;
+            }
+
+            body.dark-mode input[type="text"],
+            body.dark-mode input[type="number"],
+            body.dark-mode textarea {
+                background-color: #333;
+                color: #f0f0f0;
+                border-color: #555;
+            }
+
+            body.dark-mode button {
+                background-color: #444;
+                color: #f0f0f0;
+            }
+
+            body.dark-mode #sidePanel {
+                background-color: #222;
+                border-left-color: #444;
+            }
+
+            body.dark-mode .vocabList {
+                border-color: #444;
+            }
+
+            body.dark-mode .vocabList:hover {
+                background-color: #333;
+            }
+
+            /* Theme switch styles */
+            .theme-switch-wrapper {
+                display: flex;
+                align-items: center;
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 1001;
+            }
+
+            .theme-switch {
+                display: inline-block;
+                height: 34px;
+                position: relative;
+                width: 60px;
+            }
+
+            .theme-switch input {
+                display: none;
+            }
+
+            .slider {
+                background-color: #ccc;
+                bottom: 0;
+                cursor: pointer;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                transition: .4s;
+            }
+
+            .slider:before {
+                background-color: #fff;
+                bottom: 4px;
+                content: "";
+                height: 26px;
+                left: 4px;
+                position: absolute;
+                transition: .4s;
+                width: 26px;
+            }
+
+            input:checked + .slider {
+                background-color: #66bb6a;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+
+            .theme-switch-wrapper em {
+                margin-left: 10px;
+                font-size: 1rem;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    </head>
+    <body>
+        <h1>Language Learning App</h1>
+        <label for="vocabListName">Vocab List Name:</label>
+        <input type="text" id="vocabListName" placeholder="Enter list name" /><br />
+        <label for="wordList" style="font-size: 14px;">Enter words and translations (format: word;translation1;translation2;...:mnemonic):</label><br />
+        <textarea
+            id="wordList"
+            placeholder="Example:
+bonjour;hello;hi:Imagine a cheerful person saying 'Bonjour!'
+au revoir;goodbye;bye:Remember 'au revoir' sounds like 'on review'
+merci;thank you;thanks:Mercy is being thankful"
+        ></textarea>
+        <br />
+        <label for="requiredCorrect">Number of correct answers required:</label>
+        <input type="number" id="requiredCorrect" value="3" min="1" /><br />
+        <button onclick="startLearning()">Start Learning</button>
+        <button onclick="startQuizzing()">Start Quizzing</button>
+        <button onclick="saveVocabList()">Save List</button>
+        <button onclick="clearAll()">Clear All</button>
+
+        <div id="learningArea" style="display: none;">
+            <h2 id="prompt"></h2>
+            <input type="text" id="answer" style="display: none;" />
+            <button id="submitBtn" onclick="checkAnswer()" style="display: none;">Submit</button>
+            <button id="nextBtn" onclick="nextWord()" style="display: none;">Next</button>
+            <button id="ignoreBtn" onclick="ignoreWord()" style="display: none;">Ignore</button>
+            <div id="feedback"></div>
+            <div id="mnemonic"></div>
+            <div id="imageContainer"></div>
+        </div>
+
+        <button id="toggleSidePanel" onclick="toggleSidePanel()">≡</button>
+        <button id="helpButton" onclick="toggleHelpPopup()">?</button>
+
+        <div id="helpPopup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="toggleHelpPopup()">&times;</span>
+                <h2>How to Use This Language Learning App</h2>
+                <ol>
+                    <li>Enter your vocabulary list in the format: word;def1;def2:mnemonic. You can paste from a spreadsheet.</li>
+                    <li>Set the number of correct answers required to learn a word</li>
+                    <li>Click "Start Learning" to begin the learning phase</li>
+                    <li>Use arrow/enter keys or click buttons to navigate through words</li>
+                    <li>Type translations and press Enter to check your answer</li>
+                    <li>Use Ctrl+Enter to add new valid translations during learning</li>
+                    <li>Press Alt+B to associate a text with your word list</li>
+                    <li>Use Alt+N to show/hide associated text</li>
+                    <li>Use Alt+M to toggle word highlighting in the associated text</li>
+                    <li>All of your lists can be found at the button at the top right</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="sidePanel" class="collapsed">
+            <h3>Saved Vocab Lists</h3>
+            <div id="vocabLists"></div>
+            <h3>Upload Images/GIFs</h3>
+            <input type="file" id="imageUpload" multiple accept="image/*" />
+        </div>
+
+        <div id="textOverlay" class="overlay">
+            <div class="overlay-content" onclick="event.stopPropagation();">
+                <textarea id="associatedText" placeholder="Enter associated text here..."></textarea>
+                <div class="overlay-controls">
+                    <button id="saveTextBtn">Save Text</button>
+                    <button id="showHideTextBtn">Show/Hide Text</button>
+                    <button id="highlightWordsBtn">Highlight Words</button>
+                    <button id="closeOverlayBtn">Close</button>
+                </div>
+            </div>
+        </div>
+        <div id="textDisplay" class="text-display"></div>
+
+        <script>
+            let words = [];
+            let currentWords = [];
+            let learningWords = [];
+            let currentIndex = 0;
+            let teachingPhase = true;
+            let requiredCorrect;
+            let lastWordTime;
+            const enableMarkdown = true;
+            const images = [];
+            let isQuizMode = false;
+
+            let associatedText = "";
+            let showText = false;
+            let highlightWords = false;
+
+            let textOverlayVisible = false;
+
+            document.addEventListener("DOMContentLoaded", () => {
+                loadLastSession();
+                loadVocabLists();
+                document.getElementById("imageUpload").addEventListener("change", handleImageUpload);
+            });
+
+            function startLearning() {
+                setupWords();
+                requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
+                teachingPhase = true;
+                isQuizMode = false;
+                document.getElementById("learningArea").style.display = "block";
+                nextBatch();
+                saveSession();
+            }
+
+            function startQuizzing() {
+                setupWords();
+                requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
+                teachingPhase = false;
+                isQuizMode = true;
+                document.getElementById("learningArea").style.display = "block";
+                nextBatch();
+                saveSession();
+            }
+
+            function setupWords() {
+                const input = document.getElementById("wordList").value;
+                words = input.split("\n").map((line) => {
+                    const [wordAndTranslations, mnemonic] = line.split(":");
+                    const [word, ...translations] = wordAndTranslations.split(/[;\t]/);
+                    return { word, translations, mnemonic: mnemonic ? mnemonic.trim() : "", correct: 0 };
+                });
+                currentWords = [];
+                learningWords = [];
+                currentIndex = 0;
+            }
+
+            function goBackWord() {
+                if (teachingPhase && currentIndex > 0) {
+                    currentIndex--;
+                    const currentWord = learningWords[currentIndex];
+                    document.getElementById("prompt").textContent = `Learn: ${currentWord.word} - ${currentWord.translations.join(", ")}`;
+                }
+            }
+
+            function nextBatch() {
+                const remainingWords = words.filter((w) => w.correct < requiredCorrect && !currentWords.includes(w));
+                const batchSize = isQuizMode ? 10 : 3;
+                const newWords = remainingWords.slice(0, batchSize);
+                learningWords = newWords;
+                currentWords = [...currentWords.filter((w) => w.correct < requiredCorrect), ...newWords];
+                shuffleArray(currentWords);
+                currentIndex = 0;
+                if (!isQuizMode) {
+                    teachingPhase = true;
+                    nextWord();
+                } else {
+                    teachingPhase = false;
+                    document.getElementById("answer").style.display = "inline-block";
+                    document.getElementById("submitBtn").style.display = "inline-block";
+                    document.getElementById("ignoreBtn").style.display = "inline-block";
+                    document.getElementById("nextBtn").style.display = "none";
+                    nextWord();
+                }
+            }
+
+            function nextWord() {
+                document.getElementById("mnemonic").innerHTML = "";
+                imageContainer.innerHTML = "";
+                if (teachingPhase) {
+                    if (currentIndex >= learningWords.length) {
+                        teachingPhase = false;
+                        currentIndex = 0;
+                        document.getElementById("nextBtn").style.display = "none";
+                        document.getElementById("answer").style.display = "inline-block";
+                        document.getElementById("submitBtn").style.display = "inline-block";
+                        document.getElementById("ignoreBtn").style.display = "inline-block";
+                        nextWord();
+                        return;
+                    }
+                    const currentWord = learningWords[currentIndex];
+                    document.getElementById("prompt").textContent = `Learn: ${currentWord.word} - ${currentWord.translations.join(", ")}`;
+                    document.getElementById("nextBtn").style.display = "inline-block";
+                    document.getElementById("answer").style.display = "none";
+                    document.getElementById("submitBtn").style.display = "none";
+                    document.getElementById("ignoreBtn").style.display = "none";
+                    currentIndex++;
+                } else {
+                    if (currentIndex >= currentWords.length) {
+                        nextBatch();
+                        return;
+                    }
+                    const currentWord = currentWords[currentIndex];
+                    document.getElementById("prompt").textContent = `Translate: ${currentWord.word}`;
+                    const answerInput = document.getElementById("answer");
+                    answerInput.value = "";
+                    answerInput.style.display = "inline-block";
+                    document.getElementById("submitBtn").style.display = "inline-block";
+                    document.getElementById("ignoreBtn").style.display = "inline-block";
+                    document.getElementById("nextBtn").style.display = "none";
+                    lastWordTime = new Date().getTime();
+
+                    // Focus on the answer input
+                    setTimeout(() => answerInput.focus(), 0);
+                }
+                saveSession();
+            }
+
+            function checkAnswer() {
+                const currentTime = new Date().getTime();
+                const userAnswer = document.getElementById("answer").value.trim();
+
+                if (currentTime - lastWordTime < 1000) {
+                    if (userAnswer === "") {
+                        showFeedback("Please wait a moment before answering", "orange");
+                        return;
+                    }
+                }
+
+                const currentWord = currentWords[currentIndex];
+                const correctAnswers = currentWord.translations.map((t) => t.toLowerCase());
+
+                if (correctAnswers.includes(userAnswer.toLowerCase())) {
+                    currentWord.correct++;
+                    if (currentWord.correct >= requiredCorrect) {
+                        showFeedback("Correct! You've learned this word!", "green");
+                        currentWords = currentWords.filter((w) => w !== currentWord);
+                    } else {
+                        showFeedback("Correct!", "green");
+                    }
+                    currentIndex++;
+                    nextWord();
+                } else {
+                    showFeedback(`Incorrect. Correct answers: ${currentWord.translations.join(", ")}`, "red");
+                    if (currentWord.mnemonic) {
+                        showMnemonic(currentWord.mnemonic);
+                    }
+                    currentWord.correct = 0;
+                    showRandomImage();
+                }
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            function showFeedback(message, color) {
+                const feedback = document.getElementById("feedback");
+                feedback.textContent = message;
+                feedback.style.color = color;
+            }
+
+            function showMnemonic(mnemonic) {
+                const mnemonicElement = document.getElementById("mnemonic");
+                if (enableMarkdown) {
+                    mnemonicElement.innerHTML = marked.parse(mnemonic);
+                } else {
+                    mnemonicElement.textContent = mnemonic;
+                }
+            }
+
+            function saveSession() {
+                const sessionData = {
+                    wordList: document.getElementById("wordList").value,
+                    requiredCorrect: document.getElementById("requiredCorrect").value,
+                    words,
+                    currentWords,
+                    currentIndex,
+                    teachingPhase,
+                    lastWordTime,
+                    isQuizMode,
+                };
+                localStorage.setItem("languageLearningSession", JSON.stringify(sessionData));
+            }
+
+            function loadLastSession() {
+                const sessionData = JSON.parse(localStorage.getItem("languageLearningSession"));
+                if (sessionData) {
+                    document.getElementById("wordList").value = sessionData.wordList;
+                    document.getElementById("requiredCorrect").value = sessionData.requiredCorrect;
+                    words = sessionData.words;
+                    currentWords = sessionData.currentWords;
+                    currentIndex = sessionData.currentIndex;
+                    teachingPhase = sessionData.teachingPhase;
+                    lastWordTime = sessionData.lastWordTime;
+                    isQuizMode = sessionData.isQuizMode;
+                    if (words.length > 0) {
+                        document.getElementById("learningArea").style.display = "block";
+                        nextWord();
+                    }
+                }
+            }
+
+            function saveVocabList() {
+                const wordListTextarea = document.getElementById("wordList");
+                const vocabListName = document.getElementById("vocabListName").value.trim();
+
+                if (vocabListName) {
+                    const vocabLists = JSON.parse(localStorage.getItem("vocabLists")) || {};
+                    vocabLists[vocabListName] = {
+                        wordList: wordListTextarea.value,
+                        requiredCorrect: document.getElementById("requiredCorrect").value,
+                        associatedText: associatedText,
+                    };
+                    localStorage.setItem("vocabLists", JSON.stringify(vocabLists));
+                    loadVocabLists();
+                    showFeedback("Vocab list saved!", "green");
+                } else {
+                    showFeedback("Please enter a name for the vocab list before saving.", "orange");
+                }
+            }
+
+            function loadVocabLists() {
+                const vocabLists = JSON.parse(localStorage.getItem("vocabLists")) || {};
+                const vocabListsContainer = document.getElementById("vocabLists");
+                vocabListsContainer.innerHTML = "";
+                for (const [name, data] of Object.entries(vocabLists)) {
+                    const vocabListElement = document.createElement("div");
+                    vocabListElement.className = "vocabList";
+                    vocabListElement.innerHTML = `
+                    <span onclick="loadVocabList('${name}')">${name}</span>
+                    <span class="deleteBtn" onclick="deleteVocabList('${name}')">×</span>
+                `;
+                    vocabListsContainer.appendChild(vocabListElement);
+                }
+            }
+
+            function deleteVocabList(name) {
+                if (confirm(`Are you sure you want to delete the vocab list "${name}"?`)) {
+                    const vocabLists = JSON.parse(localStorage.getItem("vocabLists"));
+                    delete vocabLists[name];
+                    localStorage.setItem("vocabLists", JSON.stringify(vocabLists));
+                    loadVocabLists();
+                }
+            }
+
+            function toggleSidePanel() {
+                const sidePanel = document.getElementById("sidePanel");
+                sidePanel.classList.toggle("collapsed");
+            }
+
+            function loadVocabList(name) {
+                const vocabLists = JSON.parse(localStorage.getItem("vocabLists"));
+                if (vocabLists[name]) {
+                    document.getElementById("vocabListName").value = name;
+                    document.getElementById("wordList").value = vocabLists[name].wordList;
+                    document.getElementById("requiredCorrect").value = vocabLists[name].requiredCorrect;
+                    associatedText = vocabLists[name].associatedText || "";
+                    document.getElementById("associatedText").value = associatedText;
+                    updateTextDisplay();
+                    startLearning();
+                }
+            }
+
+            function clearAll() {
+                if (confirm("Are you sure you want to clear all data? This cannot be undone.")) {
+                    localStorage.clear();
+                    document.getElementById("vocabListName").value = "";
+                    document.getElementById("wordList").value = "";
+                    document.getElementById("requiredCorrect").value = 3;
+                    document.getElementById("learningArea").style.display = "none";
+                    loadVocabLists();
+                }
+            }
+
+            function handleImageUpload(event) {
+                const files = event.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        images.push(e.target.result);
+                    };
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+
+            function showRandomImage() {
+                if (images.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * images.length);
+                    const imageContainer = document.getElementById("imageContainer");
+                    imageContainer.innerHTML = `<img src="${images[randomIndex]}" alt="Random Image">`;
+                }
+            }
+            // Dark mode toggle
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const answerInput = document.getElementById("answer");
+                const nextBtn = document.getElementById("nextBtn");
+                const submitBtn = document.getElementById("submitBtn");
+
+                const textOverlay = document.getElementById("textOverlay");
+                const associatedTextArea = document.getElementById("associatedText");
+                const saveTextBtn = document.getElementById("saveTextBtn");
+                const showHideTextBtn = document.getElementById("showHideTextBtn");
+                const highlightWordsBtn = document.getElementById("highlightWordsBtn");
+                const closeOverlayBtn = document.getElementById("closeOverlayBtn");
+                const textDisplay = document.getElementById("textDisplay");
+
+                document.addEventListener("keydown", function (event) {
+                    const wordListTextarea = document.getElementById("wordList");
+                    // If the user is editing the word list, don't interfere with normal typing
+                    if (document.activeElement === wordListTextarea) {
+                        return;
+                    }
+                    if (event.key === "Enter") {
+                        event.preventDefault(); // Prevent default behavior
+                        if (event.ctrlKey) {
+                            addNewAnswer();
+                        } else if (teachingPhase) {
+                            if (nextBtn.style.display !== "none") {
+                                nextWord();
+                            }
+                        } else {
+                            if (submitBtn.style.display !== "none") {
+                                checkAnswer();
+                            }
+                        }
+                    } else if (event.key === "ArrowRight") {
+                        event.preventDefault();
+                        if (teachingPhase && nextBtn.style.display !== "none") {
+                            nextWord();
+                        } else if (!teachingPhase && submitBtn.style.display !== "none") {
+                            checkAnswer();
+                        }
+                    } else if (event.key === "ArrowLeft" && teachingPhase) {
+                        event.preventDefault();
+                        goBackWord();
+                    }
+                    if (event.ctrlKey && !event.altKey && event.key === "," || event.altKey && event.key === "b") {
+                        event.preventDefault();
+                        toggleTextOverlay();
+                    } else if (event.ctrlKey && !event.altKey && event.key === "." || event.altKey && event.key === "n") {
+                        event.preventDefault();
+                        showText = !showText;
+                        updateTextDisplay();
+                    } else if (event.ctrlKey && !event.altKey && event.key === "/" || event.altKey && event.key === "m") {
+                        event.preventDefault();
+                        highlightWords = !highlightWords;
+                        console.log("Highlight toggled. New value:", highlightWords);
+                        updateTextDisplay();
+                    }
+                    if (event.key === "Escape") {
+                        const popup = document.getElementById("helpPopup");
+                        if (popup.style.display === "block") {
+                            popup.style.display = "none";
+                        }
+                    }
+                });
+                textOverlay.addEventListener("click", function (event) {
+                    if (event.target === textOverlay) {
+                        toggleTextOverlay();
+                    }
+                });
+                function toggleTextOverlay() {
+                    textOverlayVisible = !textOverlayVisible;
+                    textOverlay.style.display = textOverlayVisible ? "block" : "none";
+                    if (textOverlayVisible) {
+                        associatedTextArea.focus();
+                    }
+                }
+                const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+
+                function switchTheme(e) {
+                    if (e.target.checked) {
+                        document.body.classList.add("dark-mode");
+                        localStorage.setItem("theme", "dark");
+                    } else {
+                        document.body.classList.remove("dark-mode");
+                        localStorage.setItem("theme", "light");
+                    }
+                }
+
+                toggleSwitch.addEventListener("change", switchTheme, false);
+
+                // Check for saved user preference, if any, on load of the website
+                const currentTheme = localStorage.getItem("theme");
+                if (currentTheme) {
+                    document.body.classList[currentTheme === "dark" ? "add" : "remove"]("dark-mode");
+
+                    if (currentTheme === "dark") {
+                        toggleSwitch.checked = true;
+                    }
+                }
+                function addNewAnswer() {
+                    const answerInput = document.getElementById("answer");
+                    const newAnswer = answerInput.value.trim();
+
+                    if (newAnswer) {
+                        let currentWord;
+                        if (teachingPhase) {
+                            currentWord = learningWords[currentIndex - 1]; // Because currentIndex is incremented in nextWord()
+                        } else {
+                            currentWord = currentWords[currentIndex];
+                        }
+
+                        if (!currentWord.translations.includes(newAnswer)) {
+                            currentWord.translations.push(newAnswer);
+                            updateWordList();
+                            showFeedback(`Added "${newAnswer}" as a valid answer for "${currentWord.word}"`, "green");
+                            answerInput.value = "";
+                        } else {
+                            showFeedback(`"${newAnswer}" is already a valid answer for "${currentWord.word}"`, "orange");
+                        }
+                    } else {
+                        showFeedback("Please enter an answer before adding", "orange");
+                    }
+                }
+
+                saveTextBtn.addEventListener("click", function () {
+                    associatedText = associatedTextArea.value;
+                    textOverlay.style.display = "none";
+                    updateTextDisplay();
+                });
+
+                showHideTextBtn.addEventListener("click", function () {
+                    showText = !showText;
+                    updateTextDisplay();
+                });
+
+                highlightWordsBtn.addEventListener("click", function () {
+                    highlightWords = !highlightWords;
+                    updateTextDisplay();
+                });
+
+                closeOverlayBtn.addEventListener("click", function () {
+                    toggleTextOverlay();
+                });
+            });
+            function escapeHTML(text) {
+                const div = document.createElement("div");
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function highlightWordsInText(text) {
+                const escapedText = escapeHTML(text);
+                const wordSet = new Set(words.map((w) => w.word.toLowerCase()));
+                const regex = new RegExp(`\\b(${Array.from(wordSet).join("|")})\\b`, "gi");
+                return escapedText.replace(regex, '<span class="highlight">$1</span>');
+            }
+            function updateTextDisplay() {
+                if (showText) {
+                    textDisplay.style.display = "block";
+                    if (highlightWords) {
+                        const highlightedText = highlightWordsInText(associatedText);
+                        textDisplay.innerHTML = highlightedText.split('\n').join('<br>');
+                    } else {
+                        textDisplay.innerText = associatedText;
+                    }
+                } else {
+                    textDisplay.style.display = "none";
+                }
+            }
+            function updateWordList() {
+                const wordListTextarea = document.getElementById("wordList");
+                const updatedWordList = words
+                    .map((word) => {
+                        const translations = word.translations.join(";");
+                        return `${word.word};${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
+                    })
+                    .join("\n");
+                wordListTextarea.value = updatedWordList;
+            }
+            function toggleHelpPopup() {
+                const popup = document.getElementById("helpPopup");
+                popup.style.display = popup.style.display === "block" ? "none" : "block";
+            }
+
+            // Close the popup when clicking outside of it
+            window.onclick = function (event) {
+                const popup = document.getElementById("helpPopup");
+                if (event.target === popup) {
+                    popup.style.display = "none";
+                }
+            };
+        </script>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+            <em>Dark Mode</em>
+        </div>
+    </body>
+</html>

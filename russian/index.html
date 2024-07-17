@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Learn Russian LLS</title>
+    <style>
+        @font-face {
+            font-family: 'Open Sans Regular';
+            src: url(./fonts/OpenSans-Regular-webfont.woff2);
+        }
+        @font-face {
+            font-family: 'Open Sans Bold';
+            src: url(./fonts/opensans-bold.woff2);
+        }
+        body {
+            background-color: rgb(255, 255, 255);
+        }
+
+        p {
+            color: white;
+        }
+        
+        h1 {
+            font-family: 'Open Sans Bold', 'Sans Serif';
+            font-weight: 700;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+            grid-gap: 10px;
+        }
+
+        .tile {
+            background-color: rgba(60, 216, 182, 0.443);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 200px;
+            margin: 10px;
+            font-size: 30px;
+            font-family: 'Open Sans Regular';
+            position: relative;
+        }
+
+        .A1::before {
+            width: 100%;
+            height: 100%;
+            content: "";
+            background: red;
+            position: absolute;
+            border-radius: 10px;
+            opacity: 0.3;
+            z-index: 2;
+        }
+
+        .A2::before {
+            width: 100%;
+            height: 100%;
+            content: "";
+            background: rgb(23, 109, 196);
+            position: absolute;
+            border-radius: 10px;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        .B1::before {
+            width: 100%;
+            height: 100%;
+            content: "";
+            background: rgb(190, 200, 210);
+            position: absolute;
+            border-radius: 10px;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        .A1 p {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .A2 p {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .B1 p {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .A1 a {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .A2 a {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .B1 a {
+            position: absolute;
+            z-index: 3;
+        }
+
+        .A1 {
+            background: rgb(184,97,20);
+            background: linear-gradient(135deg, rgba(184,97,20,1) 0%, rgba(226,155,122,1) 35%, rgba(175,100,20,1) 67%);
+        }
+
+        .A1:nth-child(1) {
+            background:rgb(146, 0, 0);
+            background-image: url("./images/stones-23417777.jpg");
+            background-size: cover;
+        }
+        .A1:nth-child(2) {
+            background: rgb(190, 30, 30);
+            background-image: url("./images/my-friend.jpg");
+            background-size: cover;
+        }
+        .A1:nth-child(3) {
+            background:rgb(255, 54, 54);
+            background-image: url("./images/my-teacher.jpg");
+            background-size: cover;
+        }
+        .A1:nth-child(4) {
+            background:rgb(250, 175, 175);
+            background-image: url("./images/free-time.webp");
+            background-size: cover;
+        }
+
+        .A2 a {
+            color: #FFF;
+        }
+
+        .A1 a {
+            color: #FFF;
+        }
+
+        .A2:nth-child(1){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-pet.jpg");
+            background-size: cover;
+        }
+        .A2:nth-child(2){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-usual-day.jpg");
+            background-size: cover;
+        }
+        .A2:nth-child(3){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-daily-routine.jpg");
+            background-size: cover;
+        }
+        .A2:nth-child(4){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-bedroom.jpg");
+            background-size: cover;
+        }
+
+        .B1:nth-child(1){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/seasons.webp");
+            background-size: cover;
+        }
+        .B1:nth-child(2){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/st-petersburg.jpg");
+            background-size: cover;
+        }
+        .B1:nth-child(3){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-city.jpg");
+            background-size: cover;
+        }
+        .B1:nth-child(4){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-morning.jpg");
+            background-size: cover;
+        }
+        .B1:nth-child(5){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/my-house.jpg");
+            background-size: cover;
+        }
+        .B1:nth-child(6){
+            background: center center rgb(146, 0, 0);
+            background-image: url("./images/about-self.jpg");
+            background-size: cover;
+        }
+
+        .B1 a {
+            color: rgb(255, 255, 255);
+        }
+
+        
+
+        .A2 {
+            background: rgb(201,218,218);
+            background: linear-gradient(135deg, rgba(201,218,218,1) 0%, rgba(255,255,255,1) 30%, rgba(201,219,219,1) 57%);
+            color: black;
+        }
+
+        .B1 {
+            background: rgb(238,220,159);
+background: linear-gradient(135deg, rgba(238,220,159,1) 0%, rgba(255,255,255,1) 30%, rgba(247,215,158,1) 57%);
+            color: rgb(11, 11, 11);
+        }
+
+        .prelearn-link {
+            font-size: 20px;
+            position: absolute;
+            bottom: 0; /* Anchor it to the bottom of the container */
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>A1</h1>
+    <div class="container">
+        <div class="tile A1" onclick="window.location='my_family.html'">
+            <p>Моя семья</p>
+            <a class ="prelearn-link" href="my_family_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A1" onclick="window.location='my_friend.html'">
+            <p>Мой друг</p>
+            <a class ="prelearn-link" href="my_friend_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A1" onclick="window.location='my_teacher.html'">
+            <p>Моя учительница</p>
+            <a class ="prelearn-link" href="my_teacher_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A1" onclick="window.location='free_time.html'">
+            <p>Свободное время</p>
+            <a class ="prelearn-link" href="free_time_prelearn.html">Prelearn</a>
+        </div>
+    </div>
+    <h1>A2</h1>
+    <div class="container">
+        <div class="tile A2" onclick="window.location='my_pet.html'">
+            <p>Мой домашний питомец</p>
+            <a class ="prelearn-link" href="my_pet_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A2" onclick="window.location='my_usual_day.html'">
+            <p>Мой обычный день</p>
+            <a class ="prelearn-link" href="my_usual_day_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A2" onclick="window.location='my_days_routine.html'">
+            <p>Мой распорядок дня</p>
+            <a class ="prelearn-link" href="my_days_routine_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile A2" onclick="window.location='my_bedroom.html'">
+            <p>Моя спальня</p>
+            <a class ="prelearn-link" href="my_bedroom_prelearn.html">Prelearn</a>
+        </div>
+    </div>
+    <h1>B1</h1>
+    <div class="container">
+        <div class="tile B1" onclick="window.location='seasons_of_year.html'">
+            <p>Времена года</p>
+            <a class ="prelearn-link" href="seasons_of_year_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile B1" onclick="window.location='st_petersburg.html'">
+            <p>Выходные в Санкт-Петербурге</p>
+            <a class ="prelearn-link" href="st_petersburg_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile B1" onclick="window.location='city_where_i_live.html'">
+            <p>Город, в котором я живу</p>
+            <a class ="prelearn-link" href="city_where_i_live_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile B1" onclick="window.location='my_morning.html'">
+            <p>Мое утро</p>
+            <a class ="prelearn-link" href="my_morning_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile B1" onclick="window.location='my_house.html'">
+            <p>Мой дом</p>
+            <a class ="prelearn-link" href="my_house_prelearn.html">Prelearn</a>
+        </div>
+        <div class="tile B1" onclick="window.location='about_self.html'">
+            <p>О себе</p>
+            <a class ="prelearn-link" href="about_self_prelearn.html">Prelearn</a>
+        </div>
+    </div>
+       
+</div>
+</body>
+</html>
