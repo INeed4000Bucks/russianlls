@@ -331,6 +331,7 @@ merci;thank you;thanks:Mercy is being thankful"
         <button onclick="startQuizzing()">Start Quizzing</button>
         <button onclick="saveVocabList()">Save List</button>
         <button onclick="clearAll()">Clear All</button>
+        <button onclick="startLearningHardWords()">Learn Hard Words</button>
 
         <div id="learningArea" style="display: none;">
             <h2 id="prompt"></h2>
@@ -338,6 +339,8 @@ merci;thank you;thanks:Mercy is being thankful"
             <button id="submitBtn" onclick="checkAnswer()" style="display: none;">Submit</button>
             <button id="nextBtn" onclick="nextWord()" style="display: none;">Next</button>
             <button id="ignoreBtn" onclick="ignoreWord()" style="display: none;">Ignore</button>
+            <button id="markHardBtn" onclick="markAsHard()" style="display: none;">Mark as Hard</button>
+            <button id="markEasyBtn" onclick="markAsEasy()" style="display: none;">Mark as Easy</button>
             <div id="feedback"></div>
             <div id="mnemonic"></div>
             <div id="imageContainer"></div>
@@ -415,6 +418,7 @@ merci;thank you;thanks:Mercy is being thankful"
                 teachingPhase = true;
                 isQuizMode = false;
                 document.getElementById("learningArea").style.display = "block";
+                document.getElementById("markEasyBtn").style.display = "none";
                 nextBatch();
                 saveSession();
             }
@@ -431,14 +435,32 @@ merci;thank you;thanks:Mercy is being thankful"
 
             function setupWords() {
                 const input = document.getElementById("wordList").value;
-                words = input.split("\n").map((line) => {
+                const newWords = input.split("\n").map((line) => {
                     const [wordAndTranslations, mnemonic] = line.split(":");
                     const [word, ...translations] = wordAndTranslations.split(/[;\t]/);
-                    return { word, translations, mnemonic: mnemonic ? mnemonic.trim() : "", correct: 0 };
+                    return { word, translations, mnemonic: mnemonic ? mnemonic.trim() : "", correct: 0, hard: false }; 
                 });
+
+                // Preserve 'hard' status
+                words = newWords.map(newWord => {
+                    const existingWord = words.find(w => w.word === newWord.word);
+                    return existingWord ? {...newWord, hard: existingWord.hard} : newWord;
+                });
+
                 currentWords = [];
                 learningWords = [];
                 currentIndex = 0;
+            }
+
+            function markAsHard() {
+                if (currentIndex >= 0 && currentIndex < currentWords.length) {
+                    const currentWord = currentWords[currentIndex];
+                    currentWord.hard = true;
+                    showFeedback(`Marked "${currentWord.word}" as hard`, "orange");
+                    saveSession();
+                } else {
+                    showFeedback("No word selected to mark as hard", "orange");
+                }
             }
 
             function goBackWord() {
@@ -453,10 +475,17 @@ merci;thank you;thanks:Mercy is being thankful"
                 const remainingWords = words.filter((w) => w.correct < requiredCorrect && !currentWords.includes(w));
                 const batchSize = isQuizMode ? Math.min(10, remainingWords.length) : Math.min(3, remainingWords.length);
                 const newWords = remainingWords.slice(0, batchSize);
+                
+                if (newWords.length === 0) {
+                    showFeedback("All words learned or no words left!", "green");
+                    return;
+                }
+                
                 learningWords = newWords;
                 currentWords = [...currentWords.filter((w) => w.correct < requiredCorrect), ...newWords];
                 shuffleArray(currentWords);
                 currentIndex = 0;
+                
                 if (!isQuizMode) {
                     teachingPhase = true;
                     nextWord();
@@ -471,44 +500,81 @@ merci;thank you;thanks:Mercy is being thankful"
             }
 
             function nextWord() {
+                // Clear mnemonic and image containers
                 document.getElementById("mnemonic").innerHTML = "";
-                imageContainer.innerHTML = "";
+                document.getElementById("imageContainer").innerHTML = "";
+
+                // Handle logic for transitioning from teaching to quiz phase
                 if (teachingPhase) {
                     if (currentIndex >= learningWords.length) {
                         teachingPhase = false;
                         currentIndex = 0;
+
+                        // Update button visibility for quiz phase
                         document.getElementById("nextBtn").style.display = "none";
                         document.getElementById("answer").style.display = "inline-block";
                         document.getElementById("submitBtn").style.display = "inline-block";
                         document.getElementById("ignoreBtn").style.display = "inline-block";
-                        nextWord();
+                        
+                        // Hide both "Mark as Hard/Easy" buttons in quiz phase initially
+                        document.getElementById("markHardBtn").style.display = "none";
+                        document.getElementById("markEasyBtn").style.display = "none"; 
+
+                        // Load next word or batch
+                        if (currentWords.length > 0) {
+                            nextWord(); 
+                        } else {
+                            nextBatch();
+                        }
                         return;
-                    }
+                    } 
+
+                    // Teaching phase word display logic
                     const currentWord = learningWords[currentIndex];
                     document.getElementById("prompt").textContent = `Learn: ${currentWord.word} - ${currentWord.translations.join(", ")}`;
+
+                    // Update button visibility for teaching phase
                     document.getElementById("nextBtn").style.display = "inline-block";
                     document.getElementById("answer").style.display = "none";
                     document.getElementById("submitBtn").style.display = "none";
                     document.getElementById("ignoreBtn").style.display = "none";
-                    currentIndex++;
-                } else {
+                    document.getElementById("markHardBtn").style.display = "none"; // Hide in teaching phase
+
+                    currentIndex++; 
+                } else { 
+                    // Quiz phase logic
                     if (currentIndex >= currentWords.length) {
                         nextBatch();
                         return;
                     }
+
                     const currentWord = currentWords[currentIndex];
                     document.getElementById("prompt").textContent = `Translate: ${currentWord.word}`;
+                    
+                    // Clear and display answer input
                     const answerInput = document.getElementById("answer");
                     answerInput.value = "";
                     answerInput.style.display = "inline-block";
+
+                    // Update button visibility for quiz phase
                     document.getElementById("submitBtn").style.display = "inline-block";
                     document.getElementById("ignoreBtn").style.display = "inline-block";
                     document.getElementById("nextBtn").style.display = "none";
-                    lastWordTime = new Date().getTime();
+                    
+                    // Logic for showing the correct "Mark as" button
+                    if (currentWord.hard) { 
+                        document.getElementById("markHardBtn").style.display = "none";
+                        document.getElementById("markEasyBtn").style.display = "inline-block"; 
+                    } else {
+                        document.getElementById("markHardBtn").style.display = "inline-block";
+                        document.getElementById("markEasyBtn").style.display = "none"; 
+                    }
 
-                    // Focus on the answer input
-                    setTimeout(() => answerInput.focus(), 0);
+                    // Set focus to answer input
+                    setTimeout(() => answerInput.focus(), 0); 
+                    lastWordTime = new Date().getTime(); 
                 }
+
                 saveSession();
             }
 
@@ -572,12 +638,15 @@ merci;thank you;thanks:Mercy is being thankful"
                 const sessionData = {
                     wordList: document.getElementById("wordList").value,
                     requiredCorrect: document.getElementById("requiredCorrect").value,
-                    words,
-                    currentWords,
+                    words: words.map(({ word, translations, mnemonic, correct, hard }) => 
+                        ({ word, translations, mnemonic, correct, hard })),
+                    currentWords: currentWords.map(({ word, translations, mnemonic, correct, hard }) => 
+                        ({ word, translations, mnemonic, correct, hard })),
                     currentIndex,
                     teachingPhase,
                     lastWordTime,
                     isQuizMode,
+                    associatedText,
                 };
                 localStorage.setItem("languageLearningSession", JSON.stringify(sessionData));
             }
@@ -607,10 +676,12 @@ merci;thank you;thanks:Mercy is being thankful"
                 if (vocabListName) {
                     const vocabLists = JSON.parse(localStorage.getItem("vocabLists")) || {};
                     vocabLists[vocabListName] = {
-                        wordList: wordListTextarea.value,
-                        requiredCorrect: document.getElementById("requiredCorrect").value,
-                        associatedText: associatedText,
-                    };
+                    wordList: wordListTextarea.value,
+                    requiredCorrect: document.getElementById("requiredCorrect").value,
+                    associatedText: associatedText,
+                    words: words.map(({ word, translations, mnemonic, hard }) => 
+                        ({ word, translations, mnemonic, hard })),
+                };
                     localStorage.setItem("vocabLists", JSON.stringify(vocabLists));
                     loadVocabLists();
                     showFeedback("Vocab list saved!", "green");
@@ -653,8 +724,20 @@ merci;thank you;thanks:Mercy is being thankful"
                 if (vocabLists[name]) {
                     document.getElementById("vocabListName").value = name;
                     document.getElementById("wordList").value = vocabLists[name].wordList;
-                    document.getElementById("requiredCorrect").value = vocabLists[name].requiredCorrect;
+                    document.getElementById("requiredCorrect").value = vocabLists[name].requiredCorrect || 3;
                     associatedText = vocabLists[name].associatedText || "";
+                    
+                    // Parse the wordList to create the words array if it doesn't exist
+                    if (!Array.isArray(vocabLists[name].words)) {
+                        words = vocabLists[name].wordList.split('\n').map(line => {
+                            const [wordAndTranslations, mnemonic] = line.split(":");
+                            const [word, ...translations] = wordAndTranslations.split(/[;\t]/);
+                            return { word, translations, mnemonic: mnemonic ? mnemonic.trim() : "", correct: 0, hard: false };
+                        });
+                    } else {
+                        words = vocabLists[name].words.map(w => ({...w, hard: w.hard || false, correct: 0}));
+                    }
+
                     document.getElementById("associatedText").value = associatedText;
                     updateTextDisplay();
                     startLearning();
@@ -881,6 +964,7 @@ merci;thank you;thanks:Mercy is being thankful"
                     popup.style.display = "none";
                 }
             };
+
             function ignoreWord() {
                 if (!teachingPhase) {
                     const currentWord = currentWords[currentIndex];
@@ -904,6 +988,39 @@ merci;thank you;thanks:Mercy is being thankful"
                     }
                     
                     saveSession();
+                }
+            }
+            function startLearningHardWords() {
+                setupWords();
+                words = words.filter(word => word.hard);
+                if (words.length === 0) {
+                    showFeedback("No hard words to learn.", "orange");
+                    return;
+                }
+                requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
+                teachingPhase = true;
+                isQuizMode = false;
+                document.getElementById("learningArea").style.display = "block";
+                nextBatch(); // This function now handles the button display
+                saveSession();
+                showFeedback(`Learning ${words.length} hard words`, "green");
+            }
+
+            function markAsEasy() {
+                if (currentIndex >= 0 && currentIndex < currentWords.length) {
+                    const currentWord = currentWords[currentIndex];
+                    currentWord.hard = false;
+                    showFeedback(`Marked "${currentWord.word}" as easy`, "green");
+                    // Remove the word from the current learning set
+                    currentWords = currentWords.filter((w) => w !== currentWord);
+                    // Move to the next word if available
+                    if (currentIndex >= currentWords.length) {
+                        currentIndex = 0;
+                    }
+                    nextWord();
+                    saveSession();
+                } else {
+                    showFeedback("No word selected to mark as easy", "orange");
                 }
             }
         </script>
