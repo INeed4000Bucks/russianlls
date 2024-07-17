@@ -550,8 +550,11 @@ merci;thank you;thanks:Mercy is being thankful"
                 const newWords = remainingWords.slice(0, batchSize);
                 
                 if (newWords.length === 0) {
-                    showFeedback("All words learned or no words left!", "green");
-                    return;
+                    // Check if ALL current words have been learned sufficiently
+                    if (currentWords.every(w => w.correct >= requiredCorrect)) {
+                        showFeedback("All words learned or no words left!", "green");
+                        return; 
+                    } 
                 }
                 
                 learningWords = newWords;
