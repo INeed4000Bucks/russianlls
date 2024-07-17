@@ -174,6 +174,7 @@
             <label for="inputText">Enter text:</label><br />
             <textarea id="inputText" rows="5" cols="50"></textarea><br />
             <label for="ignoreCase">Ignore case:</label> <input type="checkbox" id="ignoreCase" /><br />
+            <label for="hanziMode">Hanzi mode:</label> <input type="checkbox" id="hanziMode" />
             <label for="chineseMode">Chinese mode:</label> <input type="checkbox" id="chineseMode" /><br />
             <label for="removeChars">Characters to remove:</label><br />
             <input type="text" id="removeChars" /><br />
@@ -201,10 +202,11 @@
             <button onclick="copyTranslatedList()">Copy Translated List</button>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/segmentit@2.0.3/dist/umd/segmentit.min.js"></script>
         <script>
             // Load the stored words to remove and characters to remove from local storage
             const storedRemoveWords = localStorage.getItem("removeWords") || "";
-            const defaultRemoveChars = ",.:\\1234567890۰۱۲۳٤۵٥٦۷۸۹_-'';=!¡?¿@#$%^&*()\/——…'\"«»<>`~][{}|؟،–";
+            const defaultRemoveChars = ",.:\\1234567890۰۱۲۳٤۵٥٦۷۸۹_-'';=!¡?¿@#$%^&*()\/——…\"«»<>`~][{}|؟،–";
             const storedRemoveChars = localStorage.getItem("removeChars") || defaultRemoveChars;
             document.getElementById("removeWords").value = storedRemoveWords;
             document.getElementById("removeChars").value = storedRemoveChars;
@@ -225,10 +227,12 @@
                 // Store the user's preference for dark mode in localStorage
                 localStorage.setItem("prefersDarkMode", body.classList.contains("dark-mode"));
             });
+            const segmentit = Segmentit.useDefault(new Segmentit.Segment());
 
             function extractWords() {
                 const inputText = document.getElementById("inputText").value;
                 const ignoreCase = document.getElementById("ignoreCase").checked;
+                const hanziMode = document.getElementById("hanziMode").checked;
                 const chineseMode = document.getElementById("chineseMode").checked;
                 const removeChars = document.getElementById("removeChars").value;
                 const removeWords = document
@@ -237,57 +241,51 @@
                     .map((word) => word.trim())
                     .filter((word) => word !== "");
 
-                // Store the words/characters to remove and characters to remove in local storage
                 localStorage.setItem("removeWords", removeWords.join("\n"));
                 localStorage.setItem("removeChars", removeChars);
 
                 let cleanedText = inputText;
 
                 if (chineseMode) {
-                    // Remove specified characters from the input text
+                    // Use segmentit for Chinese word segmentation
+                    const segmentResult = segmentit.doSegment(cleanedText);
+                    cleanedText = segmentResult.map(item => item.w).join(' ');
+                } else if (hanziMode) {
+                    // Separate all Hanzi characters
                     cleanedText = cleanedText
                         .split("")
-                        .filter((char) => !removeWords.includes(char))
-                        .join("");
+                        .filter(char => {
+                            // Check if the character is a Chinese character and not in removeWords
+                            return /[\u4e00-\u9fa5]/.test(char) && !removeWords.includes(char);
+                        })
+                        .join(" "); // Join with spaces to treat each character as a separate word
                 } else {
-                    // Replace specified characters with spaces
                     cleanedText = cleanedText.replace(new RegExp(`[${removeChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}]`, "g"), " ");
-
-                    // Split the cleaned text into an array of words
-                    let words = cleanedText.split(/\s+/);
-
-                    // Convert words to lowercase if ignoreCase is checked
-                    if (ignoreCase) {
-                        words = words.map((word) => word.toLowerCase());
-                    }
-
-                    // Remove specified words from the array
-                    words = words.filter((word) => !removeWords.includes(word));
-
-                    cleanedText = words.join(" ");
                 }
 
-                // Split the cleaned text into an array of characters/words
-                const extractedItems = chineseMode ? cleanedText.split("") : cleanedText.split(/\s+/);
+                let words = cleanedText.split(/\s+/);
 
-                // Remove duplicate characters/words
-                const uniqueItems = [...new Set(extractedItems)];
+                if (ignoreCase) {
+                    words = words.map((word) => word.toLowerCase());
+                }
 
-                // Filter out empty strings
+                // For non-Hanzi mode, filter out removeWords
+                if (!hanziMode) {
+                    words = words.filter((word) => !removeWords.includes(word));
+                }
+
+                const uniqueItems = [...new Set(words)];
                 const nonEmptyItems = uniqueItems.filter((item) => item.trim() !== "");
 
-                // Clear the word list
                 const wordList = document.getElementById("wordList");
                 wordList.innerHTML = "";
 
-                // Add each unique character/word to the word list
                 nonEmptyItems.forEach((item) => {
                     const listItem = document.createElement("li");
                     listItem.textContent = item;
                     wordList.appendChild(listItem);
                 });
 
-                // Populate the keywords textarea
                 const keywordsTextarea = document.getElementById("keywords");
                 keywordsTextarea.value = nonEmptyItems.join("\n");
             }
