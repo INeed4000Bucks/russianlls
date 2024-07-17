@@ -1180,7 +1180,14 @@ merci;thank you;thanks:Mercy is being thankful"
                     termItem.dataset.word = word.word;
                     termItem.addEventListener("dragover", allowDrop);
                     termItem.addEventListener("drop", drop);
-                    termsList.appendChild(termItem);
+
+                    // Load and display associated images for the term
+                    const associatedImages = images.filter(img => img.associations.includes(word.word));
+                    associatedImages.forEach(image => {
+                        addImageToTermItem(termItem, image.src);
+                    });
+
+                    termsList.appendChild(termItem); 
                 });
 
                 // Populate images
@@ -1215,20 +1222,26 @@ merci;thank you;thanks:Mercy is being thankful"
             function drop(event) {
                 event.preventDefault();
                 event.target.classList.remove("dragover");
-                const imageIndex = event.dataTransfer.getData("text");
+                const imageIndex = parseInt(event.dataTransfer.getData("text"), 10); // Parse as integer
                 const word = event.target.dataset.word;
-                
-                // Associate image with word
-                images[imageIndex].associations.push(word);
-                
-                // Update the term item to show the associated image
+
+                // Associate image with word in the 'images' array
+                images[imageIndex].associations.push(word); 
+
+                // Update the term item to show the associated image (visual feedback)
+                addImageToTermItem(event.target, images[imageIndex].src); 
+
+                saveSession(); // Save the updated associations
+            }
+
+            function addImageToTermItem(termItem, imageSrc) {
                 const img = document.createElement("img");
-                img.src = images[imageIndex].src;
+                img.src = imageSrc;
                 img.style.width = "50px";
                 img.style.height = "50px";
                 img.style.objectFit = "cover";
                 img.style.marginRight = "5px";
-                event.target.appendChild(img);
+                termItem.appendChild(img);
             }
         </script>
         <div class="theme-switch-wrapper">
