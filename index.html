@@ -1,7 +1,5 @@
-<head>
-    <title>Russian Learning Resources</title>
-    <style>
-        @font-face {
+<style>
+    @font-face {
             font-family: 'Open Sans Regular';
             src: url(./fonts/OpenSans-Regular-webfont.woff2);
         }
@@ -29,63 +27,66 @@
             max-width: 800px;
             margin: 0 auto;
         }
-
         .tile {
-            background-color: rgba(60, 216, 182, 0.443);
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 200px;
-            font-size: 30px;
-            font-family: 'Open Sans Regular';
-            position: relative;
-            overflow: hidden;
-        }
+        background-color: rgba(60, 216, 182, 0.443);
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 200px;
+        font-size: 30px;
+        font-family: 'Open Sans Regular';
+        position: relative;
+        overflow: hidden;
+    }
 
-        .tile::before {
-            width: 100%;
-            height: 100%;
-            content: "";
-            background: red;
-            position: absolute;
-            border-radius: 10px;
-            opacity: 0.3;
-            z-index: 2;
-        }
+    .tile p {
+        position: relative;
+        z-index: 3;
+        margin: 0;
+        color: white;
+    }
 
-        .tile2::before {
-            width: 100%;
-            height: 100%;
-            content: "";
-            background: rgb(90, 85, 233);
-            position: absolute;
-            border-radius: 10px;
-            opacity: 0.3;
-            z-index: 2;
-        }
+    /* Target only the tiles in the first container */
+    .container:first-of-type .tile::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: red;
+        opacity: 0.3;
+        z-index: 2;
+    }
 
-        .tile p {
-            position: absolute;
-            z-index: 3;
-            margin: 0;
-        }
+    .container:first-of-type .tile:nth-child(1) {
+        background-image: url("./images/german-word-lists-small-faded.png");
+        background-size: cover;
+    }
+    .container:first-of-type .tile:nth-child(2) {
+        background-image: url("./images/my-friend.jpg");
+        background-size: cover;
+    }
 
-        .tile:nth-child(1) {
-            background-image: url("./images/german-word-lists-small-faded.png");
-            background-size: cover;
-        }
-        .tile:nth-child(2) {
-            background-image: url("./images/my-friend.jpg");
-            background-size: cover;
-        }
-        .tile2:nth-child(1) {
-            background-image: url("./images/st-pete-beach-florida.jpg");
-            background-size: cover;
-        }
-    </style>
+    .rus {
+        background-color: rgb(90, 85, 233);
+    }
+    .rus::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("./images/st-pete-beach-florida.jpg");
+        background-size: cover;
+        opacity: 0.3;
+        z-index: 2;
+    }
+</style>
 </head>
 <body>
     <h1>Learning Resources</h1>
@@ -99,7 +100,7 @@
     </div>
     <br />
     <div class="container">
-        <div class="tile2" onclick="window.location='russian/index.html'">
+        <div class="tile rus" onclick="window.location='russian/index.html'">
             <p>Learn Russian</p>
         </div>
     </div>
