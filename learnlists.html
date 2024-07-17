@@ -1168,11 +1168,10 @@ merci;thank you;thanks:Mercy is being thankful"
                 const termsList = document.getElementById("termsList");
                 const imageGrid = document.getElementById("imageGrid");
 
-                // Clear existing content
                 termsList.innerHTML = "";
                 imageGrid.innerHTML = "";
 
-                // Populate terms
+                // Populate terms and load associated images
                 words.forEach(word => {
                     const termItem = document.createElement("div");
                     termItem.className = "term-item";
@@ -1181,25 +1180,67 @@ merci;thank you;thanks:Mercy is being thankful"
                     termItem.addEventListener("dragover", allowDrop);
                     termItem.addEventListener("drop", drop);
 
-                    // Load and display associated images for the term
+                    // Load and display associated images for the term (updated)
                     const associatedImages = images.filter(img => img.associations.includes(word.word));
-                    associatedImages.forEach(image => {
-                        addImageToTermItem(termItem, image.src);
+                    associatedImages.forEach((image, index) => {
+                        addImageToTermItem(termItem, image.src, index); 
                     });
 
-                    termsList.appendChild(termItem); 
+                    termsList.appendChild(termItem);
                 });
 
-                // Populate images
+                // Populate images with checkboxes for bulk delete
                 images.forEach((image, index) => {
+                    const imageWrapper = document.createElement("div"); // Wrapper for image & checkbox
+                    imageWrapper.className = "image-item";
+                    imageWrapper.style.position = "relative"; // For checkbox positioning
+
                     const img = document.createElement("img");
                     img.src = image.src;
-                    img.className = "image-item";
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.objectFit = "cover";
                     img.draggable = true;
                     img.dataset.index = index;
                     img.addEventListener("dragstart", drag);
-                    imageGrid.appendChild(img);
+
+                    const deleteCheckbox = document.createElement("input");
+                    deleteCheckbox.type = "checkbox";
+                    deleteCheckbox.dataset.imageIndex = index; 
+                    deleteCheckbox.style.position = "absolute";
+                    deleteCheckbox.style.top = "5px"; 
+                    deleteCheckbox.style.left = "5px"; 
+                    
+                    imageWrapper.appendChild(deleteCheckbox); 
+                    imageWrapper.appendChild(img); 
+                    imageGrid.appendChild(imageWrapper); 
                 });
+
+                // Add a "Delete Selected" button
+                const deleteSelectedButton = document.createElement("button");
+                deleteSelectedButton.textContent = "Delete Selected Images";
+                deleteSelectedButton.addEventListener("click", () => {
+                    const checkboxes = imageGrid.querySelectorAll("input[type='checkbox']");
+                    const imagesToDelete = [];
+                    checkboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            imagesToDelete.push(parseInt(checkbox.dataset.imageIndex, 10));
+                        }
+                    });
+
+                    // Delete images and their associations (from the end of the array)
+                    imagesToDelete.sort((a, b) => b - a).forEach(index => {
+                        images = images.filter((_, i) => i !== index);
+                        // Update associations in words array
+                        words.forEach(word => {
+                            word.associations = word.associations.filter(imgIndex => imgIndex !== index);
+                        });
+                    });
+
+                    saveSession(); 
+                    updateImageAssociationPopup(); 
+                });
+                imageGrid.appendChild(deleteSelectedButton); 
             }
 
             // Close popup when clicking outside
@@ -1234,14 +1275,42 @@ merci;thank you;thanks:Mercy is being thankful"
                 saveSession(); // Save the updated associations
             }
 
-            function addImageToTermItem(termItem, imageSrc) {
+            function addImageToTermItem(termItem, imageSrc, imageIndex) {
+                const imageWrapper = document.createElement("div"); // Wrapper for image and delete button
+                imageWrapper.style.display = "inline-block";
+                imageWrapper.style.position = "relative"; // For positioning the delete button
+
                 const img = document.createElement("img");
                 img.src = imageSrc;
                 img.style.width = "50px";
                 img.style.height = "50px";
                 img.style.objectFit = "cover";
                 img.style.marginRight = "5px";
-                termItem.appendChild(img);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "X"; 
+                deleteButton.style.position = "absolute";
+                deleteButton.style.top = "0";
+                deleteButton.style.right = "0";
+                deleteButton.style.fontSize = "10px";
+                deleteButton.style.padding = "2px";
+                deleteButton.style.cursor = "pointer";
+
+                deleteButton.addEventListener("click", () => {
+                    // Remove association from data
+                    const word = termItem.dataset.word;
+                    const imageToRemoveIndex = images.findIndex(img => img.src === imageSrc && img.associations.includes(word));
+                    if (imageToRemoveIndex !== -1) {
+                        images[imageToRemoveIndex].associations = images[imageToRemoveIndex].associations.filter(w => w !== word);
+                        saveSession(); // Save the changes
+                    }
+                    // Remove image from the term item (visual)
+                    imageWrapper.remove(); 
+                });
+
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(deleteButton);
+                termItem.appendChild(imageWrapper);
             }
         </script>
         <div class="theme-switch-wrapper">
