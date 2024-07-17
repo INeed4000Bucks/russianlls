@@ -921,6 +921,8 @@ merci;thank you;thanks:Mercy is being thankful"
                         highlightWords = !highlightWords;
                         console.log("Highlight toggled. New value:", highlightWords);
                         updateTextDisplay();
+                    } else if (event.ctrlKey && event.key === "i") {
+                        ignoreWord();
                     }
                     if (event.key === "Escape") {
                         const popup = document.getElementById("helpPopup");
