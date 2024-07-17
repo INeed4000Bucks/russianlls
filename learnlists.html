@@ -451,7 +451,7 @@ merci;thank you;thanks:Mercy is being thankful"
 
             function nextBatch() {
                 const remainingWords = words.filter((w) => w.correct < requiredCorrect && !currentWords.includes(w));
-                const batchSize = isQuizMode ? 10 : 3;
+                const batchSize = isQuizMode ? Math.min(10, remainingWords.length) : Math.min(3, remainingWords.length);
                 const newWords = remainingWords.slice(0, batchSize);
                 learningWords = newWords;
                 currentWords = [...currentWords.filter((w) => w.correct < requiredCorrect), ...newWords];
@@ -884,15 +884,22 @@ merci;thank you;thanks:Mercy is being thankful"
             function ignoreWord() {
                 if (!teachingPhase) {
                     const currentWord = currentWords[currentIndex];
-                    showFeedback(`Skipped: ${currentWord.word} - ${currentWord.translations.join(", ")}`, "blue");
+                    showFeedback(`Removed from session: ${currentWord.word}`, "blue");
                     
-                    // Move the current word to the end of the currentWords array
-                    currentWords.push(currentWords.splice(currentIndex, 1)[0]);
+                    // Remove the word from both currentWords and words arrays
+                    currentWords.splice(currentIndex, 1);
+                    words = words.filter(w => w !== currentWord);
                     
-                    // If we've reached the end of the current batch, get a new batch
-                    if (currentIndex >= currentWords.length) {
+                    // If all current words have been ignored, start teaching the next set
+                    if (currentWords.length === 0) {
+                        teachingPhase = true;
                         nextBatch();
+                    } else if (currentIndex >= currentWords.length) {
+                        // If we've reached the end of the current batch, reset the index
+                        currentIndex = 0;
+                        nextWord();
                     } else {
+                        // Otherwise, just move to the next word
                         nextWord();
                     }
                     
