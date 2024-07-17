@@ -180,7 +180,7 @@
                 padding: 20px;
                 border: 1px solid #888;
                 width: 80%;
-                max-width: 600px;
+                max-width: 800px;
                 border-radius: 10px;
             }
 
@@ -211,6 +211,39 @@
             body.dark-mode .close:hover,
             body.dark-mode .close:focus {
                 color: #fff;
+            }
+
+            
+
+            #termsList {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .term-item {
+                border: 1px solid #ccc;
+                padding: 10px;
+                min-width: 150px;
+                min-height: 100px;
+            }
+
+            #imageGrid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+
+            .image-item {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                cursor: move;
+            }
+
+            .term-item.dragover {
+                background-color: #e0e0e0;
             }
         </style>
         <style>
@@ -345,6 +378,14 @@ merci;thank you;thanks:Mercy is being thankful"
             <div id="mnemonic"></div>
             <div id="imageContainer"></div>
         </div>
+        <div id="imageAssociationPopup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="toggleImageAssociationPopup()">&times;</span>
+                <h2>Associate Images with Terms</h2>
+                <div id="termsList"></div>
+                <div id="imageGrid"></div>
+            </div>
+        </div>
 
         <button id="toggleSidePanel" onclick="toggleSidePanel()">≡</button>
         <button id="helpButton" onclick="toggleHelpPopup()">?</button>
@@ -373,6 +414,7 @@ merci;thank you;thanks:Mercy is being thankful"
             <div id="vocabLists"></div>
             <h3>Upload Images/GIFs</h3>
             <input type="file" id="imageUpload" multiple accept="image/*" />
+            <button onclick="toggleImageAssociationPopup()">Associate Images with Terms</button>
         </div>
 
         <div id="textOverlay" class="overlay">
@@ -398,7 +440,7 @@ merci;thank you;thanks:Mercy is being thankful"
             let requiredCorrect;
             let lastWordTime;
             const enableMarkdown = true;
-            const images = [];
+            let images = [];
             let isQuizMode = false;
 
             let associatedText = "";
@@ -510,6 +552,8 @@ merci;thank you;thanks:Mercy is being thankful"
                 // Clear mnemonic and image containers
                 document.getElementById("mnemonic").innerHTML = "";
                 document.getElementById("imageContainer").innerHTML = "";
+                const imageContainer = document.getElementById("imageContainer");
+                imageContainer.innerHTML = "";
 
                 // Handle logic for transitioning from teaching to quiz phase
                 if (teachingPhase) {
@@ -575,6 +619,21 @@ merci;thank you;thanks:Mercy is being thankful"
                     } else {
                         document.getElementById("markHardBtn").style.display = "inline-block";
                         document.getElementById("markEasyBtn").style.display = "none"; 
+                    }
+
+                    // Display associated images
+                    if (!teachingPhase) {
+                        const currentWord = currentWords[currentIndex];
+                        const associatedImages = images.filter(img => img.associations.includes(currentWord.word));
+                        associatedImages.forEach(img => {
+                            const imgElement = document.createElement("img");
+                            imgElement.src = img.src;
+                            imgElement.style.width = "300px";
+                            imgElement.style.height = "300px";
+                            imgElement.style.objectFit = "cover";
+                            imgElement.style.marginRight = "10px";
+                            imageContainer.appendChild(imgElement);
+                        });
                     }
 
                     // Set focus to answer input
@@ -654,6 +713,7 @@ merci;thank you;thanks:Mercy is being thankful"
                     lastWordTime,
                     isQuizMode,
                     associatedText,
+                    images: images.map(img => ({src: img.src, associations: img.associations})),
                 };
                 localStorage.setItem("languageLearningSession", JSON.stringify(sessionData));
             }
@@ -672,6 +732,9 @@ merci;thank you;thanks:Mercy is being thankful"
                     if (words.length > 0) {
                         document.getElementById("learningArea").style.display = "block";
                         nextWord();
+                    }
+                    if (sessionData.images) {
+                        images = sessionData.images;
                     }
                 }
             }
@@ -767,7 +830,8 @@ merci;thank you;thanks:Mercy is being thankful"
                 for (let i = 0; i < files.length; i++) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        images.push(e.target.result);
+                        images.push({src: e.target.result, associations: []});
+                        updateImageAssociationPopup();
                     };
                     reader.readAsDataURL(files[i]);
                 }
@@ -1034,6 +1098,72 @@ merci;thank you;thanks:Mercy is being thankful"
                 } else {
                     showFeedback("No word selected to mark as easy", "orange");
                 }
+            }
+
+            // IMAGE DRAG AND DROP
+            function toggleImageAssociationPopup() {
+                const popup = document.getElementById("imageAssociationPopup");
+                popup.style.display = popup.style.display === "block" ? "none" : "block";
+                updateImageAssociationPopup();
+            }
+
+            function updateImageAssociationPopup() {
+                const termsList = document.getElementById("termsList");
+                const imageGrid = document.getElementById("imageGrid");
+
+                // Clear existing content
+                termsList.innerHTML = "";
+                imageGrid.innerHTML = "";
+
+                // Populate terms
+                words.forEach(word => {
+                    const termItem = document.createElement("div");
+                    termItem.className = "term-item";
+                    termItem.innerHTML = `<strong>${word.word}</strong>: ${word.translations.join(", ")}`;
+                    termItem.dataset.word = word.word;
+                    termItem.addEventListener("dragover", allowDrop);
+                    termItem.addEventListener("drop", drop);
+                    termsList.appendChild(termItem);
+                });
+
+                // Populate images
+                images.forEach((image, index) => {
+                    const img = document.createElement("img");
+                    img.src = image.src;
+                    img.className = "image-item";
+                    img.draggable = true;
+                    img.dataset.index = index;
+                    img.addEventListener("dragstart", drag);
+                    imageGrid.appendChild(img);
+                });
+            }
+
+            function allowDrop(event) {
+                event.preventDefault();
+                event.target.classList.add("dragover");
+            }
+
+            function drag(event) {
+                event.dataTransfer.setData("text", event.target.dataset.index);
+            }
+
+            function drop(event) {
+                event.preventDefault();
+                event.target.classList.remove("dragover");
+                const imageIndex = event.dataTransfer.getData("text");
+                const word = event.target.dataset.word;
+                
+                // Associate image with word
+                images[imageIndex].associations.push(word);
+                
+                // Update the term item to show the associated image
+                const img = document.createElement("img");
+                img.src = images[imageIndex].src;
+                img.style.width = "50px";
+                img.style.height = "50px";
+                img.style.objectFit = "cover";
+                img.style.marginRight = "5px";
+                event.target.appendChild(img);
             }
         </script>
         <div class="theme-switch-wrapper">
