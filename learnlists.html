@@ -1043,9 +1043,15 @@ merci;thank you;thanks:Mercy is being thankful"
                     const index = currentWordList.findIndex(line => 
                         line.startsWith(word.word + ";") || line.startsWith(word.word + "\t"));
                     if (index !== -1) {
-                        const separator = currentWordList[index].includes("\t") ? "\t" : ";";
-                        const translations = word.translations.join(separator);
-                        currentWordList[index] = `${word.word}${separator}${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
+                        let [originalWord, ...originalTranslations] = currentWordList[index].split(/[;\t]/);
+                        const mnemonic = originalTranslations.pop().split(":")[1] || "";
+                        
+                        // Combine original translations with new ones, removing duplicates
+                        const allTranslations = [...new Set([...originalTranslations, ...word.translations])];
+                        
+                        // Always join with semicolons for new answers
+                        const newLine = `${originalWord};${allTranslations.join(";")}${mnemonic ? ":" + mnemonic : ""}`;
+                        currentWordList[index] = newLine;
                     }
                 });
                 
