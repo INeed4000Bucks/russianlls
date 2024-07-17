@@ -176,7 +176,7 @@
             <label for="ignoreCase">Ignore case:</label> <input type="checkbox" id="ignoreCase" /><br />
             <label for="chineseMode">Chinese mode:</label> <input type="checkbox" id="chineseMode" /><br />
             <label for="removeChars">Characters to remove:</label><br />
-            <input type="text" id="removeChars" value=".,:;!?()\[\]{}" /><br />
+            <input type="text" id="removeChars" /><br />
             <label for="removeWords">Words to remove:</label><br />
             <textarea id="removeWords" rows="3" cols="50"></textarea><br />
             <button onclick="extractWords()">Extract Words</button>
@@ -204,7 +204,8 @@
         <script>
             // Load the stored words to remove and characters to remove from local storage
             const storedRemoveWords = localStorage.getItem("removeWords") || "";
-            const storedRemoveChars = localStorage.getItem("removeChars") || ".,:;!?()\[\]{}";
+            const defaultRemoveChars = ",.:\\1234567890۰۱۲۳٤۵٥٦۷۸۹_-'';=!¡?¿@#$%^&*()\/——…'\"«»<>`~][{}|؟،–";
+            const storedRemoveChars = localStorage.getItem("removeChars") || defaultRemoveChars;
             document.getElementById("removeWords").value = storedRemoveWords;
             document.getElementById("removeChars").value = storedRemoveChars;
 
