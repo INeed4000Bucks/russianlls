@@ -392,6 +392,7 @@ merci;thank you;thanks:Mercy is being thankful"
             let words = [];
             let currentWords = [];
             let learningWords = [];
+            let ignoredWords = [];
             let currentIndex = 0;
             let teachingPhase = true;
             let requiredCorrect;
@@ -417,6 +418,7 @@ merci;thank you;thanks:Mercy is being thankful"
                 requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
                 teachingPhase = true;
                 isQuizMode = false;
+                ignoredWords = []; // Reset ignored words
                 document.getElementById("learningArea").style.display = "block";
                 document.getElementById("markEasyBtn").style.display = "none";
                 nextBatch();
@@ -428,6 +430,7 @@ merci;thank you;thanks:Mercy is being thankful"
                 requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
                 teachingPhase = false;
                 isQuizMode = true;
+                ignoredWords = []; // Reset ignored words
                 document.getElementById("learningArea").style.display = "block";
                 nextBatch();
                 saveSession();
@@ -472,7 +475,11 @@ merci;thank you;thanks:Mercy is being thankful"
             }
 
             function nextBatch() {
-                const remainingWords = words.filter((w) => w.correct < requiredCorrect && !currentWords.includes(w));
+                const remainingWords = words.filter((w) => 
+                    w.correct < requiredCorrect && 
+                    !currentWords.includes(w) && 
+                    !ignoredWords.includes(w.word)
+                );
                 const batchSize = isQuizMode ? Math.min(10, remainingWords.length) : Math.min(3, remainingWords.length);
                 const newWords = remainingWords.slice(0, batchSize);
                 
@@ -944,13 +951,17 @@ merci;thank you;thanks:Mercy is being thankful"
             }
             function updateWordList() {
                 const wordListTextarea = document.getElementById("wordList");
-                const updatedWordList = words
-                    .map((word) => {
+                const currentWordList = wordListTextarea.value.split("\n");
+                
+                words.forEach((word) => {
+                    const index = currentWordList.findIndex(line => line.startsWith(word.word + ";"));
+                    if (index !== -1) {
                         const translations = word.translations.join(";");
-                        return `${word.word};${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
-                    })
-                    .join("\n");
-                wordListTextarea.value = updatedWordList;
+                        currentWordList[index] = `${word.word};${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
+                    }
+                });
+                
+                wordListTextarea.value = currentWordList.join("\n");
             }
             function toggleHelpPopup() {
                 const popup = document.getElementById("helpPopup");
@@ -970,13 +981,14 @@ merci;thank you;thanks:Mercy is being thankful"
                     const currentWord = currentWords[currentIndex];
                     showFeedback(`Removed from session: ${currentWord.word}`, "blue");
                     
-                    // Remove the word from both currentWords and words arrays
+                    // Add the word to ignoredWords array
+                    ignoredWords.push(currentWord.word);
+                    
+                    // Remove the word only from currentWords array
                     currentWords.splice(currentIndex, 1);
-                    words = words.filter(w => w !== currentWord);
                     
                     // If all current words have been ignored, start teaching the next set
                     if (currentWords.length === 0) {
-                        teachingPhase = true;
                         nextBatch();
                     } else if (currentIndex >= currentWords.length) {
                         // If we've reached the end of the current batch, reset the index
@@ -986,8 +998,6 @@ merci;thank you;thanks:Mercy is being thankful"
                         // Otherwise, just move to the next word
                         nextWord();
                     }
-                    
-                    saveSession();
                 }
             }
             function startLearningHardWords() {
@@ -1000,6 +1010,8 @@ merci;thank you;thanks:Mercy is being thankful"
                 requiredCorrect = parseInt(document.getElementById("requiredCorrect").value);
                 teachingPhase = true;
                 isQuizMode = false;
+                document.getElementById("markEasyBtn").style.display = "none";
+                document.getElementById("markHardBtn").style.display = "none";
                 document.getElementById("learningArea").style.display = "block";
                 nextBatch(); // This function now handles the button display
                 saveSession();
