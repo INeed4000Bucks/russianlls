@@ -1,0 +1,85 @@
+<head>
+    <title>Russian Learning Resources</title>
+    <style>
+        @font-face {
+            font-family: 'Open Sans Regular';
+            src: url(./fonts/OpenSans-Regular-webfont.woff2);
+        }
+        @font-face {
+            font-family: 'Open Sans Bold';
+            src: url(./fonts/opensans-bold.woff2);
+        }
+        body {
+            background-color: rgb(255, 255, 255);
+        }
+
+        p {
+            color: white;
+        }
+        
+        h1 {
+            font-family: 'Open Sans Bold', 'Sans Serif';
+            font-weight: 700;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tile {
+            background-color: rgba(60, 216, 182, 0.443);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 200px;
+            font-size: 30px;
+            font-family: 'Open Sans Regular';
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tile::before {
+            width: 100%;
+            height: 100%;
+            content: "";
+            background: red;
+            position: absolute;
+            border-radius: 10px;
+            opacity: 0.3;
+            z-index: 2;
+        }
+
+        .tile p {
+            position: absolute;
+            z-index: 3;
+            margin: 0;
+        }
+
+        .tile:nth-child(1) {
+            background-image: url("./images/german-word-lists-small-faded.png");
+            background-size: cover;
+        }
+        .tile:nth-child(2) {
+            background-image: url("./images/my-friend.jpg");
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>Learning Resources</h1>
+    <div class="container">
+        <div class="tile" onclick="window.location='learnlists.html'">
+            <p>Learn Lists</p>
+        </div>
+        <div class="tile" onclick="window.location='vocab.html'">
+            <p>Vocab List Maker</p>
+        </div>
+    </div>
+</body>
