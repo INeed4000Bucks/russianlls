@@ -176,12 +176,14 @@
 
             .popup-content {
                 background-color: #fefefe;
-                margin: 15% auto;
+                margin: 5% auto;
                 padding: 20px;
                 border: 1px solid #888;
-                width: 80%;
-                max-width: 800px;
+                width: 90%;
+                max-width: 1200px;
                 border-radius: 10px;
+                max-height: 80vh;
+                overflow: hidden;
             }
 
             .close {
@@ -215,18 +217,29 @@
 
             
 
+            .association-container {
+                display: flex;
+                height: calc(80vh - 100px);
+            }
+
+            .scrollable-container {
+                flex: 1;
+                overflow-y: auto;
+                padding: 10px;
+                border: 1px solid #ccc;
+                margin: 0 10px;
+            }
+
             #termsList {
                 display: flex;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 10px;
-                margin-bottom: 20px;
             }
 
             .term-item {
                 border: 1px solid #ccc;
                 padding: 10px;
-                min-width: 150px;
-                min-height: 100px;
+                min-height: 20px;
             }
 
             #imageGrid {
@@ -382,8 +395,16 @@ merci;thank you;thanks:Mercy is being thankful"
             <div class="popup-content">
                 <span class="close" onclick="toggleImageAssociationPopup()">&times;</span>
                 <h2>Associate Images with Terms</h2>
-                <div id="termsList"></div>
-                <div id="imageGrid"></div>
+                <div class="association-container">
+                    <div class="scrollable-container">
+                        <h3>Terms</h3>
+                        <div id="termsList"></div>
+                    </div>
+                    <div class="scrollable-container">
+                        <h3>Images</h3>
+                        <div id="imageGrid"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1104,7 +1125,9 @@ merci;thank you;thanks:Mercy is being thankful"
             function toggleImageAssociationPopup() {
                 const popup = document.getElementById("imageAssociationPopup");
                 popup.style.display = popup.style.display === "block" ? "none" : "block";
-                updateImageAssociationPopup();
+                if (popup.style.display === "block") {
+                    updateImageAssociationPopup();
+                }
             }
 
             function updateImageAssociationPopup() {
@@ -1137,6 +1160,14 @@ merci;thank you;thanks:Mercy is being thankful"
                     imageGrid.appendChild(img);
                 });
             }
+
+            // Close popup when clicking outside
+            window.addEventListener('click', function(event) {
+                const popup = document.getElementById("imageAssociationPopup");
+                if (event.target === popup) {
+                    toggleImageAssociationPopup();
+                }
+            });
 
             function allowDrop(event) {
                 event.preventDefault();
