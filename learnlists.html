@@ -979,6 +979,7 @@ merci;thank you;thanks:Mercy is being thankful"
                         if (!currentWord.translations.includes(newAnswer)) {
                             currentWord.translations.push(newAnswer);
                             updateWordList();
+                            saveSession();
                             showFeedback(`Added "${newAnswer}" as a valid answer for "${currentWord.word}"`, "green");
                             answerInput.value = "";
                         } else {
@@ -1039,10 +1040,12 @@ merci;thank you;thanks:Mercy is being thankful"
                 const currentWordList = wordListTextarea.value.split("\n");
                 
                 words.forEach((word) => {
-                    const index = currentWordList.findIndex(line => line.startsWith(word.word + ";"));
+                    const index = currentWordList.findIndex(line => 
+                        line.startsWith(word.word + ";") || line.startsWith(word.word + "\t"));
                     if (index !== -1) {
-                        const translations = word.translations.join(";");
-                        currentWordList[index] = `${word.word};${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
+                        const separator = currentWordList[index].includes("\t") ? "\t" : ";";
+                        const translations = word.translations.join(separator);
+                        currentWordList[index] = `${word.word}${separator}${translations}${word.mnemonic ? ":" + word.mnemonic : ""}`;
                     }
                 });
                 
