@@ -421,12 +421,14 @@ merci;thank you;thanks:Mercy is being thankful"
                     <li>Click "Start Learning" to begin the learning phase</li>
                     <li>Use arrow/enter keys or click buttons to navigate through words</li>
                     <li>Type your answer and press Enter to check your answer</li>
-                    <li>Use Ctrl+Enter to add new valid answers during learning</li>
-                    <li>Press Alt+B to associate a text with your word list</li>
-                    <li>Use Alt+N to show/hide associated text</li>
-                    <li>Use Alt+M to toggle word highlighting in the associated text</li>
                     <li>All of your lists can be found at the button at the top right</li>
-                    <li>Hit Ctrl+I while being quizzed to ignore a word for the session</li>
+                    <br />
+                    <li>Use <span style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Ctrl+Enter</span> to add new valid answers during learning</li>
+                    <li>Press <span style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Alt+B</span> to associate a text with your word list</li>
+                    <li>Use <span style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Alt+N</span> to show/hide associated text</li>
+                    <li>Use <span style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Alt+N</span> to toggle word highlighting in the associated text</li>
+                    <li>Hit <span style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Ctrl+I</span> while being quizzed to ignore a word for the session</li>
+                    <li style="font-size:18px">Add mnemonics during learning by starting the entry with a colon (:) and pressing Ctrl+Enter. Mnemonics support markdown styling.</li>
                 </ol>
             </div>
         </div>
@@ -969,27 +971,36 @@ merci;thank you;thanks:Mercy is being thankful"
                 }
                 function addNewAnswer() {
                     const answerInput = document.getElementById("answer");
-                    const newAnswer = answerInput.value.trim();
+                    const newInput = answerInput.value.trim();
 
-                    if (newAnswer) {
+                    if (newInput) {
                         let currentWord;
                         if (teachingPhase) {
-                            currentWord = learningWords[currentIndex - 1]; // Because currentIndex is incremented in nextWord()
+                            currentWord = learningWords[currentIndex - 1];
                         } else {
                             currentWord = currentWords[currentIndex];
                         }
 
-                        if (!currentWord.translations.includes(newAnswer)) {
-                            currentWord.translations.push(newAnswer);
+                        if (newInput.startsWith(':')) {
+                            // Treat as new mnemonic
+                            currentWord.mnemonic = newInput.slice(1).trim();
                             updateWordList();
-                            saveSession();
-                            showFeedback(`Added "${newAnswer}" as a valid answer for "${currentWord.word}"`, "green");
-                            answerInput.value = "";
+                            showFeedback(`Added mnemonic for "${currentWord.word}": ${currentWord.mnemonic}`, "green");
                         } else {
-                            showFeedback(`"${newAnswer}" is already a valid answer for "${currentWord.word}"`, "orange");
+                            // Treat as new translation
+                            if (!currentWord.translations.includes(newInput)) {
+                                currentWord.translations.push(newInput);
+                                updateWordList();
+                                showFeedback(`Added "${newInput}" as a valid answer for "${currentWord.word}"`, "green");
+                            } else {
+                                showFeedback(`"${newInput}" is already a valid answer for "${currentWord.word}"`, "orange");
+                            }
                         }
+                        
+                        answerInput.value = "";
+                        saveSession();
                     } else {
-                        showFeedback("Please enter an answer before adding", "orange");
+                        showFeedback("Please enter an answer or mnemonic before adding", "orange");
                     }
                 }
 
@@ -1048,13 +1059,20 @@ merci;thank you;thanks:Mercy is being thankful"
                     if (index !== -1) {
                         let parts = currentWordList[index].split(":");
                         let [originalWord, ...originalTranslations] = parts[0].split(/[;\t]/);
-                        const mnemonic = parts[1] ? ":" + parts[1] : "";
-
+                        
                         // Find new translations
                         const newTranslations = word.translations.filter(t => !originalTranslations.includes(t));
                         
                         // Append new translations with semicolons
-                        const updatedLine = parts[0] + (newTranslations.length > 0 ? ";" + newTranslations.join(";") : "") + mnemonic;
+                        let updatedLine = parts[0] + (newTranslations.length > 0 ? ";" + newTranslations.join(";") : "");
+                        
+                        // Add or update mnemonic
+                        if (word.mnemonic) {
+                            updatedLine += ":" + word.mnemonic;
+                        } else if (parts[1]) {
+                            updatedLine += ":" + parts[1].trim();
+                        }
+                        
                         currentWordList[index] = updatedLine;
                     }
                 });
