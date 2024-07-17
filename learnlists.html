@@ -881,6 +881,24 @@ merci;thank you;thanks:Mercy is being thankful"
                     popup.style.display = "none";
                 }
             };
+            function ignoreWord() {
+                if (!teachingPhase) {
+                    const currentWord = currentWords[currentIndex];
+                    showFeedback(`Skipped: ${currentWord.word} - ${currentWord.translations.join(", ")}`, "blue");
+                    
+                    // Move the current word to the end of the currentWords array
+                    currentWords.push(currentWords.splice(currentIndex, 1)[0]);
+                    
+                    // If we've reached the end of the current batch, get a new batch
+                    if (currentIndex >= currentWords.length) {
+                        nextBatch();
+                    } else {
+                        nextWord();
+                    }
+                    
+                    saveSession();
+                }
+            }
         </script>
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
