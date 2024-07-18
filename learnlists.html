@@ -742,12 +742,17 @@ merci;thank you;thanks:Mercy is being thankful"
                     associatedText,
                     images: images.map(img => ({src: img.src, associations: img.associations})),
                 };
+                sessionData.images = images.map(img => ({
+                    src: img.src,
+                    associations: img.associations
+                }));
                 localStorage.setItem("languageLearningSession", JSON.stringify(sessionData));
             }
 
             function loadLastSession() {
-                const sessionData = JSON.parse(localStorage.getItem("languageLearningSession"));
-                if (sessionData) {
+                const savedSession = localStorage.getItem("languageLearningSession");
+                if (savedSession) {
+                    const sessionData = JSON.parse(savedSession);
                     document.getElementById("wordList").value = sessionData.wordList;
                     document.getElementById("requiredCorrect").value = sessionData.requiredCorrect;
                     words = sessionData.words;
@@ -756,13 +761,23 @@ merci;thank you;thanks:Mercy is being thankful"
                     teachingPhase = sessionData.teachingPhase;
                     lastWordTime = sessionData.lastWordTime;
                     isQuizMode = sessionData.isQuizMode;
+                    associatedText = sessionData.associatedText || "";
+
+                    if (sessionData.images) {
+                        images = sessionData.images.map(imgData => ({
+                            src: imgData.src,
+                            associations: imgData.associations || []
+                        }));
+                    } else {
+                        images = [];
+                    }
+
                     if (words.length > 0) {
                         document.getElementById("learningArea").style.display = "block";
                         nextWord();
                     }
-                    if (sessionData.images) {
-                        images = sessionData.images;
-                    }
+
+                    updateImageAssociationPopup(); // Update the image association popup
                 }
             }
 
@@ -855,22 +870,16 @@ merci;thank you;thanks:Mercy is being thankful"
             function handleImageUpload(event) {
                 const files = event.target.files;
                 for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
                     const reader = new FileReader();
-                    reader.onload = (e) => {
-                        images.push({src: e.target.result, associations: []});
+                    reader.onload = function(e) {
+                        images.push({ src: e.target.result, associations: [] });
                         updateImageAssociationPopup();
                     };
-                    reader.readAsDataURL(files[i]);
+                    reader.readAsDataURL(file);
                 }
+                saveSession(); // Save the session after uploading images
             }
-
-            // function showRandomImage() {
-            //     if (images.length > 0) {
-            //         const randomIndex = Math.floor(Math.random() * images.length);
-            //         const imageContainer = document.getElementById("imageContainer");
-            //         imageContainer.innerHTML = `<img src="${images[randomIndex]}" alt="Random Image">`;
-            //     }
-            // }
             // Dark mode toggle
             document.addEventListener("DOMContentLoaded", (event) => {
                 const answerInput = document.getElementById("answer");
@@ -1182,9 +1191,9 @@ merci;thank you;thanks:Mercy is being thankful"
 
                     // Load and display associated images for the term (updated)
                     const associatedImages = images.filter(img => img.associations.includes(word.word));
-                    associatedImages.forEach((image, index) => {
-                        addImageToTermItem(termItem, image.src, index); 
-                    });
+                        associatedImages.forEach(image => {
+                            addImageToTermItem(termItem, image.src);
+                        });
 
                     termsList.appendChild(termItem);
                 });
@@ -1267,7 +1276,7 @@ merci;thank you;thanks:Mercy is being thankful"
                 const word = event.target.dataset.word;
 
                 // Associate image with word in the 'images' array
-                images[imageIndex].associations.push(word); 
+                images[imageIndex].associations.push(word);
 
                 // Update the term item to show the associated image (visual feedback)
                 addImageToTermItem(event.target, images[imageIndex].src); 
