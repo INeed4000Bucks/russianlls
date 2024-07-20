@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #4a4a4a;
+    font-family: Arial, sans-serif;
+}
+
+.page-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.content-container {
+    width: 90%;
+    max-width: 900px;
+    background-color: #777;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.comic-content {
+    background-color: #aaa;
+    padding: 20px;
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.next-link {
+    display: block;
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 26px;
+}
+
+.navigation {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.navigation a {
+    color: #333;
+    text-decoration: none;
+}
