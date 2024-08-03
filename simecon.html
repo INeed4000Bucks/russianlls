@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Solutions Universe Simulator</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(0, 50, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #0f0;
+        }
+        h1 {
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+        }
+        #result, #action {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #001100;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #0f0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(145deg, #003300, #006600);
+            box-shadow: 0 0 10px #0f0;
+            color: #0f0;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        button:hover {
+            background: linear-gradient(145deg, #006600, #009900);
+        }
+        button:active {
+            box-shadow: inset 0 0 10px #0f0;
+        }
+        #inputArea {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #001100;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #0f0;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            background-color: #000;
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+        input[type="number"] {
+            width: 100%;
+            margin-bottom: 10px;
+            background-color: #000;
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+        #statInputArea {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #001100;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #0f0;
+        }
+        #statInputArea div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        #statInputArea input {
+            width: 50px;
+            background-color: #000;
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Linear Solutions Universe Simulator</h1>
+        <div id="result">Initializing quantum fluctuations...</div>
+        <div id="action">Awaiting multiversal input...</div>
+        <button id="generateBtn">Generate Quantum State</button>
+        <button id="revealBtn" style="display:none;">Reveal Multiversal Outcome</button>
+    </div>
+
+    <div id="inputArea">
+        <textarea id="actionInput" placeholder="Enter possible outcomes, one per line..."></textarea>
+        <input type="number" id="modifierInput" placeholder="Enter quantum modifier (positive or negative)">
+        <button id="submitBtn">Submit Quantum Possibilities</button>
+    </div>
+
+    <div id="statInputArea">
+        <div><span>Suspicious:</span><input type="number" id="suspicious" min="1" max="10"></div>
+        <div><span>Sympathy-inducing:</span><input type="number" id="sympathy" min="1" max="10"></div>
+        <div><span>Intimidating:</span><input type="number" id="intimidating" min="1" max="10"></div>
+        <div><span>Humorous:</span><input type="number" id="humorous" min="1" max="10"></div>
+        <div><span>Standard:</span><input type="number" id="standard" min="1" max="10"></div>
+        <div><span>Dramatic:</span><input type="number" id="dramatic" min="1" max="10"></div>
+        <div><span>Efficient:</span><input type="number" id="efficient" min="1" max="10"></div>
+        <div><span>Thorough:</span><input type="number" id="thorough" min="1" max="10"></div>
+        <div><span>Clumsy:</span><input type="number" id="clumsy" min="1" max="10"></div>
+        <div><span>Creative:</span><input type="number" id="creative" min="1" max="10"></div>
+        <button id="submitStats">Submit Stats</button>
+    </div>
+
+    <script>
+        const apiKey = 'b08d11a6-4e62-4c91-bfd9-06d902f6ec96';
+        const apiUrl = 'https://api.random.org/json-rpc/4/invoke';
+
+        let actions = [];
+        let generatedNumber = null;
+        let quantumModifier = 0;
+
+        let stats = {
+            suspicious: 0, sympathy: 0, intimidating: 0, humorous: 0, standard: 0,
+            dramatic: 0, efficient: 0, thorough: 0, clumsy: 0, creative: 0
+        };
+
+        document.getElementById('generateBtn').addEventListener('click', generateRandomNumber);
+        document.getElementById('revealBtn').addEventListener('click', revealAction);
+        document.getElementById('submitBtn').addEventListener('click', submitActions);
+
+        document.addEventListener('keydown', function(event) {
+            if (event.altKey && event.key === 'b') {
+                document.getElementById('inputArea').style.display = 'block';
+            }
+
+            if (event.altKey && event.key === 'n') {
+                document.getElementById('statInputArea').style.display = 'block';
+            }
+        });
+
+        document.getElementById('submitStats').addEventListener('click', submitStats);
+
+        function submitStats() {
+            for (let stat in stats) {
+                stats[stat] = parseInt(document.getElementById(stat).value) || 0;
+            }
+            document.getElementById('statInputArea').style.display = 'none';
+            console.log('Stats submitted:', stats);
+        }
+
+        async function generateRandomNumber() {
+            if (actions.length === 0) {
+                alert('Please input quantum possibilities first (Alt+B)');
+                return;
+            }
+
+            const requestBody = {
+                jsonrpc: '2.0',
+                method: 'generateIntegers',
+                params: {
+                    apiKey: apiKey,
+                    n: 1,
+                    min: 1,
+                    max: actions.length,
+                    replacement: true
+                },
+                id: 1
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (data.result && data.result.random && data.result.random.data) {
+                    generatedNumber = data.result.random.data[0];
+                    
+                    // Apply quantum modifier
+                    let modifiedNumber = generatedNumber + quantumModifier;
+                    modifiedNumber = Math.max(1, Math.min(modifiedNumber, actions.length));
+                    
+                    document.getElementById('result').textContent = `Original Quantum State: ${generatedNumber}, Modified State: ${modifiedNumber}`;
+                    document.getElementById('revealBtn').style.display = 'inline-block';
+                    document.getElementById('action').textContent = 'Multiversal outcome ready to be revealed...';
+                    generatedNumber = modifiedNumber;
+                    generateQuantumStats();
+                } else {
+                    document.getElementById('result').textContent = 'Error in quantum calculations';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = 'Multiversal communication failure';
+            }
+        }
+
+        function revealAction() {
+            if (generatedNumber !== null && actions[generatedNumber - 1]) {
+                document.getElementById('action').textContent = `Multiversal Outcome: ${actions[generatedNumber - 1]}`;
+                document.getElementById('revealBtn').style.display = 'none';
+            }
+        }
+
+        function submitActions() {
+            const input = document.getElementById('actionInput').value;
+            actions = input.split('\n').filter(line => line.trim() !== '');
+            quantumModifier = parseInt(document.getElementById('modifierInput').value) || 0;
+            document.getElementById('inputArea').style.display = 'none';
+            document.getElementById('result').textContent = `${actions.length} quantum possibilities loaded. Quantum modifier: ${quantumModifier}`;
+        }
+
+        function generateQuantumStats() {
+            let chosenStats = Object.keys(stats).sort(() => 0.5 - Math.random()).slice(0, 5);
+            let quantumResults = {};
+
+            chosenStats.forEach(stat => {
+                let roll = Math.floor(Math.random() * 10) + 1;
+                quantumResults[stat] = {
+                    roll: roll,
+                    success: roll <= stats[stat]
+                };
+            });
+
+            console.log('Quantum Stat Results:', quantumResults);
+        }
+    </script>
+</body>
+</html>
