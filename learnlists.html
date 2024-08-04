@@ -471,8 +471,9 @@ merci;thank you;thanks:Mercy is being thankful"
             let associatedText = "";
             let showText = false;
             let highlightWords = false;
-
             let textOverlayVisible = false;
+
+            let wordsToSkip = 0;
 
             document.addEventListener("DOMContentLoaded", () => {
                 loadLastSession();
@@ -511,8 +512,8 @@ merci;thank you;thanks:Mercy is being thankful"
                     return { word, translations, mnemonic: mnemonic ? mnemonic.trim() : "", correct: 0, hard: false }; 
                 });
 
-                // Preserve 'hard' status
-                words = newWords.map(newWord => {
+                // Skip the specified number of words
+                words = newWords.slice(wordsToSkip).map(newWord => {
                     const existingWord = words.find(w => w.word === newWord.word);
                     return existingWord ? {...newWord, hard: existingWord.hard} : newWord;
                 });
@@ -1322,6 +1323,32 @@ merci;thank you;thanks:Mercy is being thankful"
                 imageWrapper.appendChild(deleteButton);
                 termItem.appendChild(imageWrapper);
             }
+            function handleAltV(event) {
+                if (event.altKey && event.key === 'v') {
+                    const input = prompt(`Enter number of words to skip (current: ${wordsToSkip}, leave blank to reset):`);
+                    if (input === null) return; // User cancelled
+                    if (input === '') {
+                        wordsToSkip = 0; // Reset to 0 if input is blank
+                    } else {
+                        const num = parseInt(input);
+                        if (!isNaN(num) && num >= 0) {
+                            wordsToSkip = num;
+                        }
+                    }
+                    updateWordsToSkipDisplay();
+                    setupWords(); // Reapply the skip to the current word list
+                }
+            }
+            function updateWordsToSkipDisplay() {
+                const display = document.getElementById('wordsToSkipDisplay');
+                if (!display) {
+                    const div = document.createElement('div');
+                    div.id = 'wordsToSkipDisplay';
+                    document.body.insertBefore(div, document.body.firstChild);
+                }
+                document.getElementById('wordsToSkipDisplay').textContent = wordsToSkip > 0 ? `Words to skip: ${wordsToSkip}` : 'No words skipped';
+            }
+            document.addEventListener('keydown', handleAltV);
         </script>
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
