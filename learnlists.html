@@ -437,6 +437,9 @@ merci;thank you;thanks:Mercy is being thankful"
         <div id="sidePanel">
             <h3>Saved Vocab Lists</h3>
             <div id="vocabLists"></div>
+            <button onclick="exportAllData()">Export All Data</button>
+            <input type="file" id="importData" style="display: none;" onchange="importAllData(event)">
+            <button onclick="document.getElementById('importData').click()">Import Data</button>
             <h3>Upload Images/GIFs</h3>
             <input type="file" id="imageUpload" multiple accept="image/*" />
             <button onclick="toggleImageAssociationPopup()">Associate Images with Terms</button>
@@ -743,11 +746,10 @@ merci;thank you;thanks:Mercy is being thankful"
                     isQuizMode,
                     associatedText,
                     images: images.map(img => ({src: img.src, associations: img.associations})),
+                    ignoredWords,
+                    wordsToSkip,
+                    // Add any other relevant data here
                 };
-                sessionData.images = images.map(img => ({
-                    src: img.src,
-                    associations: img.associations
-                }));
                 localStorage.setItem("languageLearningSession", JSON.stringify(sessionData));
             }
 
@@ -764,6 +766,8 @@ merci;thank you;thanks:Mercy is being thankful"
                     lastWordTime = sessionData.lastWordTime;
                     isQuizMode = sessionData.isQuizMode;
                     associatedText = sessionData.associatedText || "";
+                    ignoredWords = sessionData.ignoredWords || [];
+                    wordsToSkip = sessionData.wordsToSkip || 0;
 
                     if (sessionData.images) {
                         images = sessionData.images.map(imgData => ({
@@ -779,7 +783,8 @@ merci;thank you;thanks:Mercy is being thankful"
                         nextWord();
                     }
 
-                    updateImageAssociationPopup(); // Update the image association popup
+                    updateImageAssociationPopup();
+                    updateWordsToSkipDisplay();
                 }
             }
 
@@ -1352,6 +1357,52 @@ merci;thank you;thanks:Mercy is being thankful"
                 document.getElementById('wordsToSkipDisplay').textContent = wordsToSkip > 0 ? `Words to skip: ${wordsToSkip}` : 'No words skipped';
             }
             document.addEventListener('keydown', handleAltV);
+            function exportAllData() {
+                const allData = {
+                    vocabLists: JSON.parse(localStorage.getItem("vocabLists") || "{}"),
+                    currentSession: JSON.parse(localStorage.getItem("languageLearningSession") || "{}"),
+                    images: images,
+                    // Add any other relevant data here
+                };
+
+                const dataStr = JSON.stringify(allData);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = 'vocab_learning_data.json';
+
+                let linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+
+            function importAllData(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedData = JSON.parse(e.target.result);
+                            
+                            // Import vocab lists
+                            localStorage.setItem("vocabLists", JSON.stringify(importedData.vocabLists));
+                            
+                            // Import current session
+                            localStorage.setItem("languageLearningSession", JSON.stringify(importedData.currentSession));
+                            
+                            // Import images
+                            images = importedData.images;
+                            
+                            // Reload the page to reflect the imported data
+                            location.reload();
+                        } catch (error) {
+                            console.error("Error importing data:", error);
+                            alert("There was an error importing the data. Please make sure you've selected a valid export file.");
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
         </script>
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
