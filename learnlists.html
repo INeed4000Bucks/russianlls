@@ -1047,7 +1047,10 @@ merci;thank you;thanks:Mercy is being thankful"
             function highlightWordsInText(text) {
                 const escapedText = escapeHTML(text);
                 const wordSet = new Set(words.map((w) => w.word.toLowerCase()));
-                const regex = new RegExp(`\\b(${Array.from(wordSet).join("|")})\\b`, "gi");
+                const escapedWords = Array.from(wordSet).map(word => 
+                    word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape special regex characters
+                );
+                const regex = new RegExp(`(${escapedWords.join("|")})`, "gi");
                 return escapedText.replace(regex, '<span class="highlight">$1</span>');
             }
             function updateTextDisplay() {
