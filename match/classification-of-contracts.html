@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Fundamentals Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contract Fundamentals Quiz</h1>
+        <h2>Drag items to their correct categories</h2>
+        <div class="quiz-area">
+            <div class="items" id="items"></div>
+            <div class="categories" id="categories"></div>
+        </div>
+        <button class="submit-btn" id="submit">Check Answers</button>
+    </div>
+
+    <script src="quiz-script.js"></script>
+    <script>
+        const quizData = {
+            categories: [
+                {
+                    name: "A contract in which all of the terms have been specifically stated between the parties, either verbally or in writing.",
+                    items: [
+                        "Expressed Contract"
+                    ]
+                },
+                {
+                    name: "A contract created from the actions or conduct of the parties. Such as a tenant continuing to pay rent and the landlord continues to accept the payment after the lease has expired.",
+                    items: [
+                        "Implied Contract"
+                    ]
+                },
+                {
+                    name: "A contract in which all the terms and conditions have not been fully performed. For example, prior to closing, a signed purchase contract is executory.",
+                    items: [
+                        "Executory Contract"
+                    ]
+                },
+                {
+                    name: "A contract in which all terms have been fully performed by the parties.",
+                    items: [
+                        "Executed Contract"
+                    ]
+                },
+                {
+                    name: "A contract in which one party makes a promise to induce another party into action. For example, options and rights of first refusal and open listings.",
+                    items: [
+                        "Unilateral Contract"
+                    ]
+                },
+                {
+                    name: "A contract in which a promise is made by one party in return for the promise of another. For example, purchase contracts and leases.",
+                    items: [
+                        "Bilateral Contract"
+                    ]
+                },
+                {
+                    name: "Contrac that contains all of the essential elements required for a court to enforce the contract.",
+                    items: [
+                        "Valid Contract"
+                    ]
+                },
+                {
+                    name: "No contract at all. For example, a contract containing illegal consideration would be void as the contract may not legally exist.",
+                    items: [
+                        "Void Contract"
+                    ]
+                },
+                {
+                    name: "A contract that appears to be valid and enforceable but is missing an essential element therefore the court cannot enforce it. For example, a missing spouse's signature on a contract when the property is community property.",
+                    items: [
+                        "Voidable Contract"
+                    ]
+                },
+                {
+                    name: "A contract that appears to be valid but because of a defect could be voided by one of the parties returning both to their original position A contract may be voidable due to: Incompetent parties, duress, misrepresentation, and fraud.",
+                    items: [
+                        "Voidable Contract"
+                    ]
+                }
+            ]
+        };
+
+        initializeQuiz(quizData);
+    </script>
+</body>
+
+</html>

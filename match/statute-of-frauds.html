@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Fundamentals Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contract Fundamentals Quiz</h1>
+        <h2>Drag items to their correct categories</h2>
+        <div class="quiz-area">
+            <div class="items" id="items"></div>
+            <div class="categories" id="categories"></div>
+        </div>
+        <button class="submit-btn" id="submit">Check Answers</button>
+    </div>
+
+    <script src="quiz-script.js"></script>
+    <script>
+        const quizData = {
+            categories: [
+                {
+                    name: "Must Be in Writing", items: [
+                        "Employment agreement for a broker",
+                        "Transfer or sale of real property",
+                        "Lease for more than one year",
+                        "Any agreement not performed within one year"
+                    ]
+                },
+                {
+                    name: "Exceptions to Statute of Frauds", items: [
+                        "Leases of one year or less",
+                        "Broker to Broker verbal compensation agreements"
+                    ]
+                },
+                {
+                    name: "A legally enforceable agreement to do or not to do a specific thing", items: [
+                        "Contract"
+                    ]
+                },
+                {
+                    name: "Requires certain contracts to be in writing to be enforceable", items: [
+                        "Statute of Frauds"
+                    ]
+                },
+                {
+                    name: "Written contract has precedence over verbal agreement", items: [
+                        "Parol Evidence rule"
+                    ]
+                }
+            ]
+        };
+
+        initializeQuiz(quizData);
+    </script>
+</body>
+
+</html>

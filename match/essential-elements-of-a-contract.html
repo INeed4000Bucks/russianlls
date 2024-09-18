@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Fundamentals Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contract Fundamentals Quiz</h1>
+        <h2>Drag items to their correct categories</h2>
+        <div class="quiz-area">
+            <div class="items" id="items"></div>
+            <div class="categories" id="categories"></div>
+        </div>
+        <button class="submit-btn" id="submit">Check Answers</button>
+    </div>
+
+    <script src="quiz-script.js"></script>
+    <script>
+        const quizData = {
+            categories: [
+                {
+                    name: "Essential Element",
+                    items: [
+                        "Competent Parties",
+                        "Legal Consideration",
+                        "Offer and Acceptance",
+                        "Legal Object or Purpose",
+                        "Be in Writing",
+                        "Full Description of Property"
+                    ]
+                },
+                {
+                    name: "Competent Parties",
+                    items: [
+                        "Legally capable to engage in contracts",
+                        "Under 18 or under the influence of drugs as per local law",
+                        "Incapacitated due to illness or mental condition",
+                        "Contracts voidable when made by those lacking legal capacity"
+                    ]
+                },
+                {
+                    name: "Legal Consideration",
+                    items: [
+                        "An essential element involving something of value exchanged between parties",
+                        "Required declaration in real estate dealings",
+                        "Includes assets or services exchanged",
+                        "Often involves non-tangible assets in personal agreements"
+                    ]
+                },
+                {
+                    name: "Offer and Acceptance",
+                    items: [
+                        "Mutual consensus must be reached on terms",
+                        "Agreements should not be influenced by deceit or coercion",
+                        "All parties fully agreeing to terms without any misrepresentation"
+                    ]
+                },
+                {
+                    name: "Legal Object or Purpose",
+                    items: [
+                        "The agreement's aim must be lawful",
+                        "Contracts without a legal goal are considered void"
+                    ]
+                },
+                {
+                    name: "Requirement to be in Writing",
+                    items: [
+                        "Necessary for most real estate agreements under certain laws",
+                        "Helps prevent disputes over spoken agreements"
+                    ]
+                },
+                {
+                    name: "Proper Description of the Property",
+                    items: [
+                        "Must adequately identify the property involved",
+                        "Legal language used to define specific boundaries"
+                    ]
+                }
+            ]
+        };
+
+        initializeQuiz(quizData);
+    </script>
+</body>
+
+</html>
