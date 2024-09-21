@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Fundamentals Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contract Fundamentals Quiz</h1>
+        <h2>Drag items to their correct categories</h2>
+        <div class="quiz-area">
+            <div class="items" id="items"></div>
+            <div class="categories" id="categories"></div>
+        </div>
+        <button class="submit-btn" id="submit">Check Answers</button>
+    </div>
+
+    <script src="quiz-script.js"></script>
+    <script>
+        const quizData = {
+            categories: [
+                {
+                    name: "Trigger Term", items: [
+                        "Down Payment",
+                        "Number of Payments",
+                        "Amount of any payment",
+                        "Period of Payments (monthly, quarterly, etc.)",
+                        "Amount of any finance charge"
+                    ]
+                },
+                {
+                    name: "Not a Trigger Term", items: [
+                        "APR"
+                    ]
+                },
+            ]
+        };
+
+        initializeQuiz(quizData);
+    </script>
+</body>
+
+</html>
