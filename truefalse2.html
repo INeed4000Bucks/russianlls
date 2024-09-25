@@ -42,7 +42,7 @@
         }
 
         .correct-soft {
-            color: lightgreen;
+            color: rgb(67, 210, 67);
         }
 
         .incorrect-hard {
@@ -209,13 +209,13 @@
                 const questionDiv = document.createElement('div');
                 questionDiv.innerHTML = `
                     <p>${index + 1}. ${q.statement}</p>
-                    <input type="radio" name="q${index}" value="true_hard" id="q${index}TrueHard">
+                    <input type="radio" name="q${index}" value="definitely_true" id="q${index}TrueHard">
                     <label for="q${index}TrueHard">True</label>
                     <input type="radio" name="q${index}" value="true_soft" id="q${index}TrueSoft">
                     <label for="q${index}TrueSoft">Why not</label>
                     <input type="radio" name="q${index}" value="false_soft" id="q${index}FalseSoft">
                     <label for="q${index}FalseSoft">Guess not</label>
-                    <input type="radio" name="q${index}" value="false_hard" id="q${index}FalseHard">
+                    <input type="radio" name="q${index}" value="definitely_false" id="q${index}FalseHard">
                     <label for="q${index}FalseHard">False</label>
                 `;
                 quizContainer.appendChild(questionDiv);
@@ -240,16 +240,16 @@
                 let isCorrect = false;
                 let answerClass = '';
 
-                if (userAnswer === 'true_hard' || userAnswer === 'true_soft') {
+                if (userAnswer === 'definitely_true' || userAnswer === 'true_soft') {
                     isCorrect = q.isTrue;
-                    answerClass = q.isTrue ? 
-                        (userAnswer === 'true_hard' ? 'correct-hard' : 'correct-soft') : 
-                        (userAnswer === 'true_hard' ? 'incorrect-hard' : 'incorrect-soft');
-                } else if (userAnswer === 'false_hard' || userAnswer === 'false_soft') {
+                    answerClass = q.isTrue ?
+                        (userAnswer === 'definitely_true' ? 'correct-hard' : 'correct-soft') :
+                        (userAnswer === 'definitely_true' ? 'incorrect-hard' : 'incorrect-soft');
+                } else if (userAnswer === 'definitely_false' || userAnswer === 'false_soft') {
                     isCorrect = !q.isTrue;
-                    answerClass = !q.isTrue ? 
-                        (userAnswer === 'false_hard' ? 'correct-hard' : 'correct-soft') : 
-                        (userAnswer === 'false_hard' ? 'incorrect-hard' : 'incorrect-soft');
+                    answerClass = !q.isTrue ?
+                        (userAnswer === 'definitely_false' ? 'correct-hard' : 'correct-soft') :
+                        (userAnswer === 'definitely_false' ? 'incorrect-hard' : 'incorrect-soft');
                 }
 
                 if (isCorrect) {
@@ -349,7 +349,7 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const importedQuizzes = JSON.parse(e.target.result);
                         savedQuizzes = { ...savedQuizzes, ...importedQuizzes };
