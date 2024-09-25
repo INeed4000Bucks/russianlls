@@ -4,16 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Quiz Generator with Quiz Management</title>
+    <title>Correct Structured Random Quiz Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
@@ -36,125 +31,50 @@
             margin-bottom: 10px;
         }
 
-        .correct-hard {
+        .correct {
             color: green;
-            font-weight: bold;
         }
 
-        .correct-soft {
-            color: rgb(67, 210, 67);
-        }
-
-        .incorrect-hard {
+        .incorrect {
             color: red;
-            font-weight: bold;
-        }
-
-        .incorrect-soft {
-            color: orange;
         }
 
         #quiz,
         #results {
             display: none;
         }
-
-        /* Side menu styles */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100%;
-            background-color: #f4f4f4;
-            transition: right 0.3s ease-in-out;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .side-menu.open {
-            right: 0;
-        }
-
-        .side-menu-content {
-            padding: 20px;
-        }
-
-        .menu-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .quiz-list-item {
-            border: 1px solid black;
-            margin-bottom: 10px;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .quiz-list-item button {
-            margin-left: 10px;
-        }
     </style>
 </head>
 
 <body>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1>Correct Structured Random Quiz Generator</h1>
 
-    <div class="side-menu" id="sideMenu">
-        <div class="side-menu-content">
-            <h2>Saved Quizzes</h2>
-            <div id="quizList"></div>
-            <button onclick="saveCurrentQuiz()">Save Current Quiz</button>
-            <button onclick="exportQuizzes()">Export Quizzes</button>
-            <input type="file" id="importFile" style="display: none;" onchange="importQuizzes(event)">
-            <button onclick="document.getElementById('importFile').click()">Import Quizzes</button>
-        </div>
+    <div id="setup">
+        <h2>Create Quiz Questions</h2>
+        <div id="statement-areas"></div>
+        <button onclick="addStatementArea()">Add Statement Area</button>
+        <button onclick="startQuiz()">Start Quiz</button>
     </div>
 
-    <div class="container">
-        <h1>Enhanced Quiz Generator with Quiz Management</h1>
+    <div id="quiz">
+        <h2>Quiz</h2>
+        <div id="quiz-questions"></div>
+        <button onclick="submitQuiz()">Submit Quiz</button>
+    </div>
 
-        <div id="setup">
-            <h2>Create Quiz Questions</h2>
-            <div id="statement-areas"></div>
-            <button onclick="addStatementArea()">Add Statement Area</button>
-            <button onclick="startQuiz()">Start Quiz</button>
-        </div>
-
-        <div id="quiz">
-            <h2>Quiz</h2>
-            <div id="quiz-questions"></div>
-            <button onclick="submitQuiz()">Submit Quiz</button>
-        </div>
-
-        <div id="results">
-            <h2>Quiz Results</h2>
-            <p>Your score: <span id="score"></span></p>
-            <div id="review"></div>
-            <button onclick="resetQuiz()">Create New Quiz</button>
-        </div>
+    <div id="results">
+        <h2>Quiz Results</h2>
+        <p>Your score: <span id="score"></span></p>
+        <div id="review"></div>
+        <button onclick="resetQuiz()">Create New Quiz</button>
     </div>
 
     <script>
         let quizQuestions = [];
         let userAnswers = [];
-        let savedQuizzes = JSON.parse(localStorage.getItem('savedQuizzes')) || {};
-
-        function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-        }
 
         function addStatementArea() {
-            const areaId = Date.now();
+            const areaId = Date.now(); // Unique ID for each area
             const areaDiv = document.createElement('div');
             areaDiv.className = 'statement-area';
             areaDiv.innerHTML = `
@@ -209,14 +129,10 @@
                 const questionDiv = document.createElement('div');
                 questionDiv.innerHTML = `
                     <p>${index + 1}. ${q.statement}</p>
-                    <input type="radio" name="q${index}" value="definitely_true" id="q${index}TrueHard">
-                    <label for="q${index}TrueHard">True</label>
-                    <input type="radio" name="q${index}" value="true_soft" id="q${index}TrueSoft">
-                    <label for="q${index}TrueSoft">Why not</label>
-                    <input type="radio" name="q${index}" value="false_soft" id="q${index}FalseSoft">
-                    <label for="q${index}FalseSoft">Guess not</label>
-                    <input type="radio" name="q${index}" value="definitely_false" id="q${index}FalseHard">
-                    <label for="q${index}FalseHard">False</label>
+                    <input type="radio" name="q${index}" value="true" id="q${index}True">
+                    <label for="q${index}True">True</label>
+                    <input type="radio" name="q${index}" value="false" id="q${index}False">
+                    <label for="q${index}False">False</label>
                 `;
                 quizContainer.appendChild(questionDiv);
             });
@@ -228,46 +144,29 @@
         function submitQuiz() {
             userAnswers = quizQuestions.map((_, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                return selected ? selected.value : null;
+                return selected ? selected.value === 'true' : null;
             });
 
-            let score = 0;
+            const score = userAnswers.reduce((acc, answer, index) => {
+                return acc + (answer === quizQuestions[index].isTrue ? 1 : 0);
+            }, 0);
+
+            document.getElementById('score').textContent = `${score} / ${quizQuestions.length}`;
+
             const reviewContainer = document.getElementById('review');
             reviewContainer.innerHTML = '';
-
             quizQuestions.forEach((q, index) => {
-                const userAnswer = userAnswers[index];
-                let isCorrect = false;
-                let answerClass = '';
-
-                if (userAnswer === 'definitely_true' || userAnswer === 'true_soft') {
-                    isCorrect = q.isTrue;
-                    answerClass = q.isTrue ?
-                        (userAnswer === 'definitely_true' ? 'correct-hard' : 'correct-soft') :
-                        (userAnswer === 'definitely_true' ? 'incorrect-hard' : 'incorrect-soft');
-                } else if (userAnswer === 'definitely_false' || userAnswer === 'false_soft') {
-                    isCorrect = !q.isTrue;
-                    answerClass = !q.isTrue ?
-                        (userAnswer === 'definitely_false' ? 'correct-hard' : 'correct-soft') :
-                        (userAnswer === 'definitely_false' ? 'incorrect-hard' : 'incorrect-soft');
-                }
-
-                if (isCorrect) {
-                    score += (userAnswer.endsWith('_hard') ? 1 : 0.5);
-                }
-
                 const reviewItem = document.createElement('div');
+                const isCorrect = userAnswers[index] === q.isTrue;
                 reviewItem.innerHTML = `
-                    <p class="${answerClass}">
+                    <p class="${isCorrect ? 'correct' : 'incorrect'}">
                         ${index + 1}. ${q.statement}<br>
-                        Your answer: ${userAnswer ? userAnswer.replace('_', ' ') : 'Not answered'}<br>
-                        Correct answer: ${q.isTrue ? 'True' : 'False'}
+                        Your answer: ${userAnswers[index] === null ? 'Not answered' : userAnswers[index]}<br>
+                        Correct answer: ${q.isTrue}
                     </p>
                 `;
                 reviewContainer.appendChild(reviewItem);
             });
-
-            document.getElementById('score').textContent = `${score} / ${quizQuestions.length}`;
 
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('results').style.display = 'block';
@@ -282,91 +181,8 @@
             addStatementArea(); // Add one statement area by default
         }
 
-        function saveCurrentQuiz() {
-            const quizName = prompt("Enter a name for this quiz:");
-            if (quizName) {
-                const quizData = {
-                    name: quizName,
-                    areas: Array.from(document.querySelectorAll('.statement-area')).map(area => ({
-                        statements: area.querySelector('textarea').value,
-                        isTrue: area.querySelector('input[type="checkbox"]').checked
-                    }))
-                };
-                savedQuizzes[quizName] = quizData;
-                localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
-                updateQuizList();
-            }
-        }
-
-        function updateQuizList() {
-            const quizList = document.getElementById('quizList');
-            quizList.innerHTML = '';
-            Object.keys(savedQuizzes).forEach(quizName => {
-                const quizItem = document.createElement('div');
-                quizItem.className = 'quiz-list-item';
-                quizItem.innerHTML = `
-                    ${quizName}
-                    <div>
-                        <button onclick="loadQuiz('${quizName}')">Load</button>
-                        <button onclick="deleteQuiz('${quizName}')">Delete</button>
-                    </div>
-                `;
-                quizList.appendChild(quizItem);
-            });
-        }
-
-        function loadQuiz(quizName) {
-            const quizData = savedQuizzes[quizName];
-            document.getElementById('statement-areas').innerHTML = '';
-            quizData.areas.forEach(area => {
-                addStatementArea();
-                const newArea = document.querySelector('.statement-area:last-child');
-                newArea.querySelector('textarea').value = area.statements;
-                newArea.querySelector('input[type="checkbox"]').checked = area.isTrue;
-            });
-            toggleMenu();
-        }
-
-        function deleteQuiz(quizName) {
-            if (confirm(`Are you sure you want to delete the quiz "${quizName}"?`)) {
-                delete savedQuizzes[quizName];
-                localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
-                updateQuizList();
-            }
-        }
-
-        function exportQuizzes() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedQuizzes));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "quizzes.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        function importQuizzes(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    try {
-                        const importedQuizzes = JSON.parse(e.target.result);
-                        savedQuizzes = { ...savedQuizzes, ...importedQuizzes };
-                        localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
-                        updateQuizList();
-                        alert("Quizzes imported successfully!");
-                    } catch (error) {
-                        alert("Error importing quizzes. Please make sure the file is a valid JSON.");
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        // Initialize
+        // Initialize with one statement area
         addStatementArea();
-        updateQuizList();
     </script>
 </body>
 
