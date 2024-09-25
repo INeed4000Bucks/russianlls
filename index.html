@@ -1,33 +1,36 @@
 <style>
     @font-face {
-            font-family: 'Open Sans Regular';
-            src: url(./fonts/OpenSans-Regular-webfont.woff2);
-        }
-        @font-face {
-            font-family: 'Open Sans Bold';
-            src: url(./fonts/opensans-bold.woff2);
-        }
-        body {
-            background-color: rgb(255, 255, 255);
-        }
+        font-family: 'Open Sans Regular';
+        src: url(./fonts/OpenSans-Regular-webfont.woff2);
+    }
 
-        p {
-            color: white;
-        }
-        
-        h1 {
-            font-family: 'Open Sans Bold', 'Sans Serif';
-            font-weight: 700;
-        }
+    @font-face {
+        font-family: 'Open Sans Bold';
+        src: url(./fonts/opensans-bold.woff2);
+    }
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .tile {
+    body {
+        background-color: rgb(255, 255, 255);
+    }
+
+    p {
+        color: white;
+    }
+
+    h1 {
+        font-family: 'Open Sans Bold', 'Sans Serif';
+        font-weight: 700;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .tile {
         background-color: rgba(60, 216, 182, 0.443);
         border-radius: 10px;
         cursor: pointer;
@@ -66,6 +69,7 @@
         background-image: url("./images/german-word-lists-small-faded.png");
         background-size: cover;
     }
+
     .container:first-of-type .tile:nth-child(2) {
         background-image: url("./images/my-friend.jpg");
         background-size: cover;
@@ -74,6 +78,7 @@
     .rus {
         background-color: rgb(90, 85, 233);
     }
+
     .rus::before {
         content: "";
         position: absolute;
@@ -90,6 +95,7 @@
     .kus {
         background-color: rgb(90, 85, 233);
     }
+
     .kus::before {
         content: "";
         position: absolute;
@@ -104,6 +110,7 @@
     }
 </style>
 </head>
+
 <body>
     <h1>Learning Resources</h1>
     <div class="container">
@@ -122,5 +129,6 @@
         <div class="tile kus" onclick="window.location='keemgame/page-1.html'">
             <p>KeemGame</p>
         </div>
+        <a href="truefalse2.html">True or False Quiz Maker</a>
     </div>
 </body>
