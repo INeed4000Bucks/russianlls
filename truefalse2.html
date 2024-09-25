@@ -4,11 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Structured Random Quiz Generator</title>
+    <title>Enhanced Quiz Generator with Quiz Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
@@ -37,7 +42,7 @@
         }
 
         .correct-soft {
-            color: #34d534;
+            color: lightgreen;
         }
 
         .incorrect-hard {
@@ -53,35 +58,100 @@
         #results {
             display: none;
         }
+
+        /* Side menu styles */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: #f4f4f4;
+            transition: right 0.3s ease-in-out;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .side-menu-content {
+            padding: 20px;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .quiz-list-item {
+            border: 1px solid black;
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-list-item button {
+            margin-left: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Enhanced Structured Random Quiz Generator</h1>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-    <div id="setup">
-        <h2>Create Quiz Questions</h2>
-        <div id="statement-areas"></div>
-        <button onclick="addStatementArea()">Add Statement Area</button>
-        <button onclick="startQuiz()">Start Quiz</button>
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-content">
+            <h2>Saved Quizzes</h2>
+            <div id="quizList"></div>
+            <button onclick="saveCurrentQuiz()">Save Current Quiz</button>
+            <button onclick="exportQuizzes()">Export Quizzes</button>
+            <input type="file" id="importFile" style="display: none;" onchange="importQuizzes(event)">
+            <button onclick="document.getElementById('importFile').click()">Import Quizzes</button>
+        </div>
     </div>
 
-    <div id="quiz">
-        <h2>Quiz</h2>
-        <div id="quiz-questions"></div>
-        <button onclick="submitQuiz()">Submit Quiz</button>
-    </div>
+    <div class="container">
+        <h1>Enhanced Quiz Generator with Quiz Management</h1>
 
-    <div id="results">
-        <h2>Quiz Results</h2>
-        <p>Your score: <span id="score"></span></p>
-        <div id="review"></div>
-        <button onclick="resetQuiz()">Create New Quiz</button>
+        <div id="setup">
+            <h2>Create Quiz Questions</h2>
+            <div id="statement-areas"></div>
+            <button onclick="addStatementArea()">Add Statement Area</button>
+            <button onclick="startQuiz()">Start Quiz</button>
+        </div>
+
+        <div id="quiz">
+            <h2>Quiz</h2>
+            <div id="quiz-questions"></div>
+            <button onclick="submitQuiz()">Submit Quiz</button>
+        </div>
+
+        <div id="results">
+            <h2>Quiz Results</h2>
+            <p>Your score: <span id="score"></span></p>
+            <div id="review"></div>
+            <button onclick="resetQuiz()">Create New Quiz</button>
+        </div>
     </div>
 
     <script>
         let quizQuestions = [];
         let userAnswers = [];
+        let savedQuizzes = JSON.parse(localStorage.getItem('savedQuizzes')) || {};
+
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+        }
 
         function addStatementArea() {
             const areaId = Date.now();
@@ -172,13 +242,13 @@
 
                 if (userAnswer === 'true_hard' || userAnswer === 'true_soft') {
                     isCorrect = q.isTrue;
-                    answerClass = q.isTrue ?
-                        (userAnswer === 'true_hard' ? 'correct-hard' : 'correct-soft') :
+                    answerClass = q.isTrue ? 
+                        (userAnswer === 'true_hard' ? 'correct-hard' : 'correct-soft') : 
                         (userAnswer === 'true_hard' ? 'incorrect-hard' : 'incorrect-soft');
                 } else if (userAnswer === 'false_hard' || userAnswer === 'false_soft') {
                     isCorrect = !q.isTrue;
-                    answerClass = !q.isTrue ?
-                        (userAnswer === 'false_hard' ? 'correct-hard' : 'correct-soft') :
+                    answerClass = !q.isTrue ? 
+                        (userAnswer === 'false_hard' ? 'correct-hard' : 'correct-soft') : 
                         (userAnswer === 'false_hard' ? 'incorrect-hard' : 'incorrect-soft');
                 }
 
@@ -212,8 +282,91 @@
             addStatementArea(); // Add one statement area by default
         }
 
-        // Initialize with one statement area
+        function saveCurrentQuiz() {
+            const quizName = prompt("Enter a name for this quiz:");
+            if (quizName) {
+                const quizData = {
+                    name: quizName,
+                    areas: Array.from(document.querySelectorAll('.statement-area')).map(area => ({
+                        statements: area.querySelector('textarea').value,
+                        isTrue: area.querySelector('input[type="checkbox"]').checked
+                    }))
+                };
+                savedQuizzes[quizName] = quizData;
+                localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
+                updateQuizList();
+            }
+        }
+
+        function updateQuizList() {
+            const quizList = document.getElementById('quizList');
+            quizList.innerHTML = '';
+            Object.keys(savedQuizzes).forEach(quizName => {
+                const quizItem = document.createElement('div');
+                quizItem.className = 'quiz-list-item';
+                quizItem.innerHTML = `
+                    ${quizName}
+                    <div>
+                        <button onclick="loadQuiz('${quizName}')">Load</button>
+                        <button onclick="deleteQuiz('${quizName}')">Delete</button>
+                    </div>
+                `;
+                quizList.appendChild(quizItem);
+            });
+        }
+
+        function loadQuiz(quizName) {
+            const quizData = savedQuizzes[quizName];
+            document.getElementById('statement-areas').innerHTML = '';
+            quizData.areas.forEach(area => {
+                addStatementArea();
+                const newArea = document.querySelector('.statement-area:last-child');
+                newArea.querySelector('textarea').value = area.statements;
+                newArea.querySelector('input[type="checkbox"]').checked = area.isTrue;
+            });
+            toggleMenu();
+        }
+
+        function deleteQuiz(quizName) {
+            if (confirm(`Are you sure you want to delete the quiz "${quizName}"?`)) {
+                delete savedQuizzes[quizName];
+                localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
+                updateQuizList();
+            }
+        }
+
+        function exportQuizzes() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedQuizzes));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "quizzes.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importQuizzes(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedQuizzes = JSON.parse(e.target.result);
+                        savedQuizzes = { ...savedQuizzes, ...importedQuizzes };
+                        localStorage.setItem('savedQuizzes', JSON.stringify(savedQuizzes));
+                        updateQuizList();
+                        alert("Quizzes imported successfully!");
+                    } catch (error) {
+                        alert("Error importing quizzes. Please make sure the file is a valid JSON.");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Initialize
         addStatementArea();
+        updateQuizList();
     </script>
 </body>
 
