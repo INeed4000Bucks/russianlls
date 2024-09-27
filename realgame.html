@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Checkpoint</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>License Checkpoint</h1>
+
+    <button id="menuButton">☰</button>
+
+    <div id="menu" style="display: none;">
+        <h2>Module Management</h2>
+        <button id="createModuleButton">Create New Module</button>
+        <button id="exportModulesButton">Export Modules</button>
+        <input type="file" id="importModulesInput" accept=".json">
+        <button id="addStatementButton">Add Statements to Current Module</button>
+        <h3>Modules:</h3>
+        <ul id="moduleList"></ul>
+    </div>
+
+    <div id="statementInputDiv" style="display: none;">
+        <h3>Add Statements to Current Module</h3>
+        <div>
+            <h4>True Statements</h4>
+            <textarea id="trueStatementsInput" rows="5" cols="50"></textarea>
+        </div>
+        <div>
+            <h4>False Statements</h4>
+            <textarea id="falseStatementsInput" rows="5" cols="50"></textarea>
+        </div>
+        <button id="submitStatementsButton">Submit Statements</button>
+        <button id="closeStatementInputButton">Close</button>
+    </div>
+
+    <div id="faceContainer">
+        <div class="face"></div>
+    </div>
+
+    <div id="characterInfo"></div>
+
+    <div id="characterStatement"></div>
+
+    <button id="approveButton">Approve</button>
+    <button id="rejectButton">Reject</button>
+
+    <div id="outcome"></div>
+
+    <script src="game.js"></script>
+</body>
+
+</html>

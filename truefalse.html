@@ -253,7 +253,7 @@
                 }
 
                 if (isCorrect) {
-                    score += (userAnswer.endsWith('_hard') ? 1 : 0.5);
+                    score += (userAnswer.startsWith('definitely_') ? 1 : 0.5);
                 }
 
                 const reviewItem = document.createElement('div');

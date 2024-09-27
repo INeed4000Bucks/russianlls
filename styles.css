@@ -1,0 +1,159 @@
+body {
+    background-color: #333;
+    color: #ccc;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+h1 {
+    color: #f0f0f0;
+}
+
+button {
+    background-color: #555;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(3px);
+}
+
+#characterInfo,
+#characterStatement,
+#outcome {
+    margin: 20px;
+    font-size: 20px;
+}
+
+#faceContainer {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 50%;
+    background-color: #444;
+    transition: all 1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: -100%;
+}
+
+.face.active {
+    left: 0;
+}
+
+.face.approve {
+    left: 100%;
+}
+
+.face.reject {
+    left: -100%;
+}
+
+.eye {
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50px;
+}
+
+.eye.left {
+    left: 60px;
+}
+
+.eye.right {
+    left: 120px;
+}
+
+.mouth {
+    width: 40px;
+    height: 20px;
+    background-color: #000;
+    border-radius: 50%/100%;
+    position: absolute;
+    top: 100px;
+    left: 80px;
+}
+
+#menuButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+#menu {
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+#moduleList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#moduleList li {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#moduleList li:hover {
+    color: #fff;
+}
+
+#importModulesInput {
+    display: block;
+    margin-top: 10px;
+}
+
+#statementInputDiv {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #444;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+#statementInputDiv textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #333;
+    color: #ccc;
+    border: 1px solid #555;
+}
+
+#statementInputDiv h3,
+#statementInputDiv h4 {
+    color: #f0f0f0;
+}
