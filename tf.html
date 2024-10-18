@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #root {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .exercise-mode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .word-display {
+            font-size: 2rem;
+            margin: 2rem 0;
+        }
+        .button-container {
+            display: flex;
+            gap: 1rem;
+        }
+        .button-container button {
+            width: 100px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 0.5rem;
+        }
+        .feedback {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            height: 2rem;
+        }
+        .delete-button {
+            background-color: #f44336;
+            margin-left: 10px;
+        }
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+        .counters {
+            margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root">
+        <!-- The application will be rendered here -->
+    </div>
+    <script>
+        (function() {
+            const root = document.getElementById('root');
+            let modules = [];
+            let currentModuleIndex = null;
+            let exerciseMode = false;
+            let requiredConsecutiveCorrect = 1;
+            let currentModule = null;
+            let progress = {};
+            let currentWords = [];
+            let currentIndex = 0;
+            let currentPair = {};
+            let feedbackTimeout = null;
+            let wordSets = [];
+            let currentSetIndex = 0;
+            let wordsInCurrentSet = [];
+            let presentedWordsInSet = [];
+
+
+            function saveModules() {
+                localStorage.setItem('languageLearningModules', JSON.stringify(modules));
+            }
+
+            function loadModules() {
+                const storedModules = localStorage.getItem('languageLearningModules');
+                if (storedModules) {
+                    modules = JSON.parse(storedModules);
+                }
+            }
+
+            function render() {
+                root.innerHTML = '';
+                if (!exerciseMode) {
+                    renderMainMenu();
+                } else {
+                    renderExerciseMode();
+                }
+            }
+
+            function renderMainMenu() {
+                const title = createElement('h1', {}, 'Language Learning Website');
+                const moduleSelector = renderModuleSelector();
+                const moduleCreator = renderModuleCreator();
+                const dataManagement = renderDataManagement();
+                root.appendChild(title);
+                root.appendChild(moduleSelector);
+                root.appendChild(moduleCreator);
+                root.appendChild(dataManagement);
+            }
+
+            function renderModuleCreator() {
+                const container = createElement('div', {});
+                const heading = createElement('h2', {}, 'Create a New Module');
+                const moduleNameInput = createElement('input', { type: 'text', placeholder: 'Module Name', id: 'module-name' });
+                const wordListTextarea = createElement('textarea', { id: 'word-list', placeholder: 'Enter words and translations separated by tab, space, or semicolon' });
+                const createButton = createElement('button', {}, 'Create Module');
+                createButton.addEventListener('click', handleCreateModule);
+
+                container.appendChild(heading);
+                container.appendChild(moduleNameInput);
+                container.appendChild(wordListTextarea);
+                container.appendChild(createButton);
+
+                return container;
+            }
+
+            function renderModuleSelector() {
+                const container = createElement('div', {});
+                const heading = createElement('h2', {}, 'Select a Module');
+                const moduleList = createElement('ul', {});
+                modules.forEach((module, index) => {
+                    const listItem = createElement('li', {});
+                    const selectButton = createElement('button', {}, module.name);
+                    selectButton.addEventListener('click', () => {
+                        currentModuleIndex = index;
+                        currentModule = JSON.parse(JSON.stringify(modules[currentModuleIndex]));
+                        render();
+                    });
+                    listItem.appendChild(selectButton);
+
+                    const deleteButton = createElement('button', { class: 'delete-button' }, 'Delete');
+                    deleteButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Are you sure you want to delete the module "${module.name}"?`)) {
+                            modules.splice(index, 1);
+                            saveModules();
+                            render();
+                        }
+                    });
+                    listItem.appendChild(deleteButton);
+
+                    const editButton = createElement('button', {}, 'Edit');
+                    editButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openEditModuleForm(index);
+                    });
+                    listItem.appendChild(editButton);
+
+
+                    if (currentModuleIndex === index) {
+                        listItem.appendChild(document.createTextNode(' (Selected)'));
+                    }
+                    moduleList.appendChild(listItem);
+                });
+
+                const requiredCorrectInputLabel = createElement('label', {}, 'Required Consecutive Correct Answers:');
+                const requiredCorrectInput = createElement('input', { type: 'number', min: '1', value: requiredConsecutiveCorrect });
+                requiredCorrectInput.addEventListener('change', (e) => {
+                    requiredConsecutiveCorrect = parseInt(e.target.value);
+                });
+
+                const startButton = createElement('button', {}, 'Start Exercise');
+                startButton.addEventListener('click', () => {
+                    if (currentModuleIndex !== null) {
+                        exerciseMode = true;
+                        initializeExercise();
+                        render();
+                    } else {
+                        alert('Please select a module to start the exercise.');
+                    }
+                });
+
+                container.appendChild(heading);
+                container.appendChild(moduleList);
+                container.appendChild(requiredCorrectInputLabel);
+                container.appendChild(requiredCorrectInput);
+                container.appendChild(startButton);
+                return container;
+            }
+
+            function openEditModuleForm(index) {
+                const module = modules[index];
+                root.innerHTML = ''; // Clear the root element
+
+                const container = createElement('div', {});
+                const heading = createElement('h2', {}, `Edit Module: ${module.name}`);
+                const moduleNameInput = createElement('input', { type: 'text', value: module.name, id: 'edit-module-name' });
+                const wordListTextarea = createElement('textarea', { id: 'edit-word-list' }, module.words.map(word => `${word.target}\t${word.translation}`).join('\n'));
+
+                const saveButton = createElement('button', {}, 'Save Changes');
+                saveButton.addEventListener('click', () => handleSaveModuleEdit(index));
+
+                const cancelButton = createElement('button', {}, 'Cancel');
+                cancelButton.addEventListener('click', render);
+
+                container.appendChild(heading);
+                container.appendChild(moduleNameInput);
+                container.appendChild(wordListTextarea);
+                container.appendChild(saveButton);
+                container.appendChild(cancelButton);
+
+                root.appendChild(container);
+            }
+
+            function handleSaveModuleEdit(index) {
+                const moduleNameInput = document.getElementById('edit-module-name');
+                const wordListTextarea = document.getElementById('edit-word-list');
+
+                const moduleName = moduleNameInput.value || `Module ${Date.now()}`;
+                const wordListText = wordListTextarea.value;
+
+                const lines = wordListText.split('\n');
+                const words = lines.map((line) => {
+                    const separators = ['\t', ';', ' '];
+                    let parts = [line];
+                    for (let sep of separators) {
+                        if (line.includes(sep)) {
+                            parts = line.split(sep);
+                            break;
+                        }
+                    }
+                    if (parts.length >= 2) {
+                        return {
+                            target: parts[0].trim(),
+                            translation: parts[1].trim(),
+                            consecutiveCorrect: 0,
+                            mastered: false,
+                        };
+                    } else {
+                        return null;
+                    }
+                }).filter(word => word !== null);
+
+                if (words.length === 0) {
+                    alert('Please enter valid word pairs to update the module.');
+                    return;
+                }
+
+                modules[index] = {
+                    name: moduleName,
+                    words,
+                };
+
+                saveModules();
+                render();
+            }
+
+
+            function renderDataManagement() {
+                const container = createElement('div', {});
+                const heading = createElement('h2', {}, 'Data Management');
+                
+                const exportButton = createElement('button', {}, 'Export Data');
+                exportButton.addEventListener('click', exportData);
+                
+                const importLabel = createElement('label', { for: 'import-file' }, 'Import Data:');
+                const importInput = createElement('input', { type: 'file', id: 'import-file', accept: '.json' });
+                importInput.addEventListener('change', importData);
+                
+                container.appendChild(heading);
+                container.appendChild(exportButton);
+                container.appendChild(importLabel);
+                container.appendChild(importInput);
+                
+                return container;
+            }
+
+            function renderExerciseMode() {
+                const container = createElement('div', { class: 'exercise-mode' });
+                const countersDiv = createElement('div', { class: 'counters' });
+
+                const totalCorrect = Object.values(progress).reduce((sum, p) => sum + p.consecutiveCorrect, 0);
+                const wordsMastered = Object.values(progress).filter(p => p.mastered).length;
+
+                const totalCorrectDisplay = createElement('div', {}, `Total Correct Answers: ${totalCorrect}`);
+                const wordsMasteredDisplay = createElement('div', {}, `Words Mastered: ${wordsMastered} / ${currentModule.words.length}`);
+
+                countersDiv.appendChild(totalCorrectDisplay);
+                countersDiv.appendChild(wordsMasteredDisplay);
+                container.appendChild(countersDiv);
+
+
+                if (Object.keys(progress).length === currentModule.words.length && isAllMastered()) {
+                    const congratsMessage = createElement('h2', {}, 'Congratulations! You have mastered all words in this module.');
+                    const exitButton = createElement('button', {}, 'Exit Exercise Mode');
+                    exitButton.addEventListener('click', () => {
+                        exerciseMode = false;
+                        render();
+                    });
+                    container.appendChild(congratsMessage);
+                    container.appendChild(exitButton);
+                    root.appendChild(container);
+                    return;
+                }
+
+                if (!currentPair || !currentPair.word) {
+                    // No word to display, exit exercise mode
+                    exerciseMode = false;
+                    render();
+                    return;
+                }
+
+                const wordDisplay = createElement('div', { class: 'word-display' }, currentPair.word.target);
+                const translationDisplay = createElement('div', { class: 'word-display' }, currentPair.displayedTranslation);
+
+                const buttonContainer = createElement('div', { class: 'button-container' });
+                const yesButton = createElement('button', {}, 'Yes');
+                const noButton = createElement('button', {}, 'No');
+
+                yesButton.addEventListener('click', () => handleAnswer(true));
+                noButton.addEventListener('click', () => handleAnswer(false));
+
+                buttonContainer.appendChild(yesButton);
+                buttonContainer.appendChild(noButton);
+
+                const feedbackDiv = createElement('div', { class: 'feedback' }, currentPair.feedback || '');
+
+                const exitButton = createElement('button', {}, 'Exit Exercise Mode');
+                exitButton.addEventListener('click', () => {
+                    exerciseMode = false;
+                    render();
+                });
+
+                container.appendChild(wordDisplay);
+                container.appendChild(translationDisplay);
+                container.appendChild(buttonContainer);
+                container.appendChild(feedbackDiv);
+                container.appendChild(exitButton);
+
+                root.appendChild(container);
+
+                document.addEventListener('keydown', handleKeyDown);
+            }
+
+            function createElement(tag, attributes, textContent) {
+                const element = document.createElement(tag);
+                for (let key in attributes) {
+                    element.setAttribute(key, attributes[key]);
+                }
+                if (textContent) {
+                    element.textContent = textContent;
+                }
+                return element;
+            }
+
+            function handleCreateModule() {
+                const moduleNameInput = document.getElementById('module-name');
+                const wordListTextarea = document.getElementById('word-list');
+
+                const moduleName = moduleNameInput.value || `Module ${Date.now()}`;
+                const wordListText = wordListTextarea.value;
+
+                const lines = wordListText.split('\n');
+                const words = lines.map((line) => {
+                    const separators = ['\t', ';', ' '];
+                    let parts = [line];
+                    for (let sep of separators) {
+                        if (line.includes(sep)) {
+                            parts = line.split(sep);
+                            break;
+                        }
+                    }
+                    if (parts.length >= 2) {
+                        return {
+                            target: parts[0].trim(),
+                            translation: parts[1].trim(),
+                            consecutiveCorrect: 0,
+                            mastered: false,
+                        };
+                    } else {
+                        return null;
+                    }
+                }).filter(word => word !== null);
+
+                if (words.length === 0) {
+                    alert('Please enter valid word pairs to create a module.');
+                    return;
+                }
+
+                const module = {
+                    name: moduleName,
+                    words,
+                };
+
+                modules.push(module);
+                saveModules();
+                moduleNameInput.value = '';
+                wordListTextarea.value = '';
+                render();
+            }
+
+            function initializeExercise() {
+                progress = {};
+                currentIndex = 0;
+                currentSetIndex = 0;
+                presentedWordsInSet = [];
+                
+                // Create word sets of up to 10 words each
+                const totalWords = currentModule.words.length;
+                wordSets = [];
+                for (let i = 0; i < totalWords; i += 10) {
+                    const set = [];
+                    for (let j = i; j < i + 10 && j < totalWords; j++) {
+                        set.push(j);
+                    }
+                    wordSets.push(set);
+                }
+                
+                // Start with the first set
+                wordsInCurrentSet = [...wordSets[currentSetIndex]];
+                // Shuffle the words in the current set
+                shuffleArray(wordsInCurrentSet);
+                
+                selectNextWord();
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+
+
+            function selectNextWord() {
+                // Check if all words are mastered
+                if (isAllMastered()) {
+                    render();
+                    return;
+                }
+
+                // Filter out mastered words and words already presented in the current set
+                let availableWords = wordsInCurrentSet.filter(index => 
+                    !presentedWordsInSet.includes(index) && 
+                    !currentModule.words[index].mastered
+                );
+
+                // If no available words in current set, move to next set
+                while (availableWords.length === 0) {
+                    currentSetIndex++;
+                    if (currentSetIndex >= wordSets.length) {
+                        // Reset to the first set and allow repeats
+                        currentSetIndex = 0;
+                        presentedWordsInSet = [];
+                        wordsInCurrentSet = [...wordSets[currentSetIndex]];
+                        shuffleArray(wordsInCurrentSet);
+                        break;
+                    } else {
+                        // Move to the next set
+                        wordsInCurrentSet = [...wordSets[currentSetIndex]];
+                        shuffleArray(wordsInCurrentSet);
+                    }
+
+                    presentedWordsInSet = [];
+
+                    availableWords = wordsInCurrentSet.filter(index => 
+                        !presentedWordsInSet.includes(index) && 
+                        !currentModule.words[index].mastered
+                    );
+
+                    // If all words are mastered, exit
+                    if (isAllMastered()) {
+                        render();
+                        return;
+                    }
+                }
+
+                // If still no available words after checking all sets, exit
+                if (availableWords.length === 0) {
+                    render();
+                    return;
+                }
+
+                // Proceed to select a random word from available words
+                const randomIndex = availableWords[Math.floor(Math.random() * availableWords.length)];
+                const word = currentModule.words[randomIndex];
+
+                presentedWordsInSet.push(randomIndex);
+
+                // Decide if the translation should be correct or incorrect
+                const isCorrectPair = Math.random() < 0.5;
+                let displayedTranslation;
+                if (isCorrectPair) {
+                    displayedTranslation = word.translation;
+                } else {
+                    // Get a random incorrect translation
+                    const otherWords = currentModule.words.filter((w, idx) => idx !== randomIndex);
+                    const randomOtherWord = otherWords[Math.floor(Math.random() * otherWords.length)];
+                    displayedTranslation = randomOtherWord.translation;
+                }
+
+                currentPair = {
+                    word,
+                    displayedTranslation,
+                    isCorrectPair: displayedTranslation === word.translation,
+                    feedback: '',
+                    index: randomIndex,
+                };
+                render();
+            }
+
+
+
+            function handleAnswer(isMatch) {
+                clearTimeout(feedbackTimeout);
+                const wordIndex = currentPair.index;
+
+                if (isMatch === currentPair.isCorrectPair) {
+                    currentPair.feedback = 'Correct!';
+                    if (!progress[wordIndex]) {
+                        progress[wordIndex] = {
+                            consecutiveCorrect: 1,
+                            mastered: false,
+                        };
+                    } else {
+                        progress[wordIndex].consecutiveCorrect += 1;
+                    }
+
+                    if (progress[wordIndex].consecutiveCorrect >= requiredConsecutiveCorrect) {
+                        progress[wordIndex].mastered = true;
+                        currentModule.words[wordIndex].mastered = true;
+                    }
+                } else {
+                    currentPair.feedback = 'Incorrect!';
+                    if (!progress[wordIndex]) {
+                        progress[wordIndex] = {
+                            consecutiveCorrect: 0,
+                            mastered: false,
+                        };
+                    } else {
+                        progress[wordIndex].consecutiveCorrect = 0;
+                    }
+                }
+
+                render();
+                feedbackTimeout = setTimeout(() => {
+                    selectNextWord();
+                }, 250);
+            }
+
+
+            function handleKeyDown(e) {
+                if (exerciseMode) {
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'y') {
+                        handleAnswer(true);
+                    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key.toLowerCase() === 'n') {
+                        handleAnswer(false);
+                    }
+                }
+            }
+
+            function isAllMastered() {
+                const progressValues = Object.values(progress);
+                if (progressValues.length === 0) {
+                    return false;
+                }
+                return progressValues.every((p) => p.mastered);
+            }
+
+
+            function exportData() {
+                const data = JSON.stringify(modules);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'language_learning_modules.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            function importData(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importedModules = JSON.parse(e.target.result);
+                            if (Array.isArray(importedModules)) {
+                                modules = importedModules;
+                                saveModules();
+                                render();
+                                alert('Modules imported successfully!');
+                            } else {
+                                throw new Error('Invalid data format');
+                            }
+                        } catch (error) {
+                            alert('Error importing modules. Please check the file format.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+
+            // Initialize the application
+            loadModules();
+            render();
+        })();
+    </script>
+</body>
+</html>
