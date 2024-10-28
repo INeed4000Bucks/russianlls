@@ -10,6 +10,58 @@
         .hidden {
             display: none;
         }
+        #motivationalBlurb {
+            font-size: 1rem;
+            text-align: center;
+            color: #ffffff; /* Solid white text */
+            max-width: 300px; /* Modest width */
+            margin: 0 auto; /* Center horizontally */
+            opacity: 1;
+        }
+
+        .motivational-background {
+            opacity: 0.5; /* Background opacity */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Outer Golden Rectangle */
+        .motivational-container {
+            max-width: 300px; /* Modest width */
+            margin: 1rem auto;
+            background: linear-gradient(145deg, #FFD700, #FFC107); /* Gold gradient */
+            border-radius: 0.75rem; /* Rounded corners */
+            position: relative;
+            overflow: hidden; /* Clip the diagonal shine */
+            padding: 1rem 0; /* Ensures equal height with the black rectangle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Inner Black Rectangle */
+        .motivational-inner {
+            background-color: #000000; /* Solid black */
+            color: #ffffff; /* Solid white text */
+            max-width: 90%; /* Less wide than outer container */
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0; /* Sharp corners */
+            z-index: 1; /* Ensures it stays above the shine */
+        }
+
+        /* Diagonal Shine */
+        .motivational-container::before {
+            content: "";
+            position: absolute;
+            top: -50%; 
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3); /* Light overlay */
+            transform: rotate(45deg); /* Diagonal angle */
+            z-index: 0; /* Behind everything else */
+        }
     </style>
 </head>
 
@@ -49,6 +101,11 @@
             <div id="numberDisplay" class="text-xl mb-4"></div>
             <div id="questionDisplay" class="text-xl mb-4"></div>
             <div id="answerDisplay" class="text-lg mb-4 hidden"></div>
+            <div id="motivationalBlurb" class="motivational-container hidden">
+                <div class="motivational-inner">
+                    <span id="motivationalText"></span>
+                </div>
+            </div>            
             <button id="backToModule" class="bg-gray-500 text-white px-4 py-2 rounded">Back to Module</button>
         </div>
 
@@ -199,14 +256,18 @@
                 showView('congratsView');
                 return;
             }
+            
             const [question, answer] = currentQASet[currentQAIndex].split('\n');
             document.getElementById('numberDisplay').textContent = `${currentQAIndex + 1}`;
             document.getElementById('questionDisplay').textContent = `${question}`;
             document.getElementById('answerDisplay').textContent = answer;
             document.getElementById('answerDisplay').classList.add('hidden');
-
-            if (Math.random() < 0.5 && questionCounter % 2 === 0) { // Randomly show a blurb every 2-3 questions
+            
+            // Show a motivational blurb every 2-3 questions
+            if (currentQAIndex % 2 === 0 && Math.random() < 0.5) {
                 showMotivationalBlurb();
+            } else {
+                document.getElementById('motivationalBlurb').classList.add('hidden');
             }
         }
 
@@ -221,12 +282,19 @@
             const motivationalBlurbs = [
                 "Imagine the future success completing this module will bring!",
                 "You deserve the life that comes with mastering this material!",
-                "Keep going – you're closer to your goals than you were a yesterday!",
+                "Keep going – you're closer to your goals than you were yesterday!",
                 "Picture yourself at the finish line – this effort is all worth it!",
                 "Picture the people you know you deserve to be around!"
             ];
             const blurb = motivationalBlurbs[Math.floor(Math.random() * motivationalBlurbs.length)];
-            alert(blurb); // Display motivational blurb
+
+            // Set the blurb text
+            const motivationalText = document.getElementById('motivationalText');
+            motivationalText.textContent = blurb;
+
+            // Show the blurb container
+            const motivationalBlurb = document.getElementById('motivationalBlurb');
+            motivationalBlurb.classList.remove('hidden');
         }
 
         document.getElementById('reviewView').addEventListener('click', handleSpacebarOrClick);
