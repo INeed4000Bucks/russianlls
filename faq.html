@@ -46,6 +46,7 @@
 
         <div id="reviewView" class="hidden">
             <h2 id="reviewTitle" class="text-2xl font-bold mb-4"></h2>
+            <div id="numberDisplay" class="text-xl mb-4"></div>
             <div id="questionDisplay" class="text-xl mb-4"></div>
             <div id="answerDisplay" class="text-lg mb-4 hidden"></div>
             <button id="backToModule" class="bg-gray-500 text-white px-4 py-2 rounded">Back to Module</button>
@@ -199,9 +200,14 @@
                 return;
             }
             const [question, answer] = currentQASet[currentQAIndex].split('\n');
-            document.getElementById('questionDisplay').textContent = question;
+            document.getElementById('numberDisplay').textContent = `${currentQAIndex + 1}`;
+            document.getElementById('questionDisplay').textContent = `${question}`;
             document.getElementById('answerDisplay').textContent = answer;
             document.getElementById('answerDisplay').classList.add('hidden');
+
+            if (Math.random() < 0.5 && questionCounter % 2 === 0) { // Randomly show a blurb every 2-3 questions
+                showMotivationalBlurb();
+            }
         }
 
         document.addEventListener('keydown', (e) => {
@@ -210,6 +216,18 @@
                 handleSpacebarOrClick();
             }
         });
+
+        function showMotivationalBlurb() {
+            const motivationalBlurbs = [
+                "Imagine the future success completing this module will bring!",
+                "You deserve the life that comes with mastering this material!",
+                "Keep going – you're closer to your goals than you were a yesterday!",
+                "Picture yourself at the finish line – this effort is all worth it!",
+                "Picture the people you know you deserve to be around!"
+            ];
+            const blurb = motivationalBlurbs[Math.floor(Math.random() * motivationalBlurbs.length)];
+            alert(blurb); // Display motivational blurb
+        }
 
         document.getElementById('reviewView').addEventListener('click', handleSpacebarOrClick);
 
