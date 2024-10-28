@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Module App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div id="app" class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Q&A Module App</h1>
+
+        <div id="menu" class="mb-4">
+            <button id="toggleMenu" class="bg-blue-500 text-white px-4 py-2 rounded">Toggle Menu</button>
+            <div id="menuItems" class="hidden mt-2">
+                <button id="createModule" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Create Module</button>
+                <button id="importExport" class="bg-purple-500 text-white px-4 py-2 rounded">Import/Export</button>
+            </div>
+        </div>
+
+        <div id="moduleList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <div id="moduleView" class="hidden">
+            <h2 id="moduleTitle" class="text-2xl font-bold mb-4"></h2>
+            <button id="editModule" class="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Edit</button>
+            <button id="reviewModule" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Review</button>
+            <select id="qaSetSelect" class="border p-2 rounded"></select>
+            <button id="backToList" class="bg-gray-500 text-white px-4 py-2 rounded mt-4">Back to List</button>
+        </div>
+
+        <div id="createView" class="hidden">
+            <h2 class="text-2xl font-bold mb-4">Create Module</h2>
+            <input id="newModuleTitle" type="text" placeholder="Module Title" class="border p-2 rounded mb-4 w-full">
+            <div id="qaSets"></div>
+            <button id="addQASet" class="bg-green-500 text-white px-4 py-2 rounded mr-2 mt-4">Add Q&A Set</button>
+            <button id="saveModule" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Save Module</button>
+            <button id="cancelCreate" class="bg-red-500 text-white px-4 py-2 rounded mt-4 ml-2">Cancel</button>
+        </div>
+
+        <div id="reviewView" class="hidden">
+            <h2 id="reviewTitle" class="text-2xl font-bold mb-4"></h2>
+            <div id="questionDisplay" class="text-xl mb-4"></div>
+            <div id="answerDisplay" class="text-lg mb-4 hidden"></div>
+            <button id="backToModule" class="bg-gray-500 text-white px-4 py-2 rounded">Back to Module</button>
+        </div>
+
+        <div id="congratsView" class="hidden">
+            <h2 class="text-2xl font-bold mb-4">Congratulations!</h2>
+            <p>You've completed the review session.</p>
+            <button id="backToModuleFromCongrats" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Back to
+                Module</button>
+        </div>
+
+        <div id="importExportView" class="hidden">
+            <h2 class="text-2xl font-bold mb-4">Import/Export</h2>
+            <button id="exportData" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Export Data</button>
+            <input type="file" id="importFile" class="hidden" accept=".json">
+            <label for="importFile" class="bg-green-500 text-white px-4 py-2 rounded cursor-pointer">Import Data</label>
+            <button id="backFromImportExport" class="bg-gray-500 text-white px-4 py-2 rounded ml-2">Back</button>
+        </div>
+    </div>
+
+    <script>
+        let modules = JSON.parse(localStorage.getItem('modules')) || [];
+
+        function saveModules() {
+            localStorage.setItem('modules', JSON.stringify(modules));
+        }
+
+        function showView(viewId) {
+            document.querySelectorAll('#app > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function renderModuleList() {
+            const moduleList = document.getElementById('moduleList');
+            moduleList.innerHTML = '';
+            modules.forEach((module, index) => {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'bg-white p-4 rounded shadow';
+                moduleCard.innerHTML = `
+                    <h3 class="text-xl font-bold mb-2">${module.title}</h3>
+                    <button class="viewModule bg-blue-500 text-white px-4 py-2 rounded" data-index="${index}">View</button>
+                `;
+                moduleList.appendChild(moduleCard);
+            });
+        }
+
+        document.getElementById('toggleMenu').addEventListener('click', () => {
+            document.getElementById('menuItems').classList.toggle('hidden');
+        });
+
+        document.getElementById('createModule').addEventListener('click', () => {
+            showView('createView');
+            document.getElementById('qaSets').innerHTML = '';
+            addQASet();
+        });
+
+        document.getElementById('addQASet').addEventListener('click', addQASet);
+
+        function addQASet() {
+            const qaSets = document.getElementById('qaSets');
+            const setIndex = qaSets.children.length;
+            const qaSet = document.createElement('div');
+            qaSet.innerHTML = `
+                <h3 class="text-lg font-bold mt-4 mb-2">Q&A Set ${setIndex + 1}</h3>
+                <textarea class="qaSet border p-2 rounded w-full h-32" placeholder="Enter questions and answers..."></textarea>
+            `;
+            qaSets.appendChild(qaSet);
+        }
+
+        document.getElementById('saveModule').addEventListener('click', () => {
+            const title = document.getElementById('newModuleTitle').value;
+            const qaSets = Array.from(document.getElementsByClassName('qaSet')).map(set => set.value);
+            modules.push({ title, qaSets });
+            saveModules();
+            renderModuleList();
+            showView('moduleList');
+        });
+
+        document.getElementById('cancelCreate').addEventListener('click', () => {
+            showView('moduleList');
+        });
+
+        document.getElementById('moduleList').addEventListener('click', (e) => {
+            if (e.target.classList.contains('viewModule')) {
+                const index = e.target.dataset.index;
+                showModuleView(index);
+            }
+        });
+
+        function showModuleView(index) {
+            const module = modules[index];
+            document.getElementById('moduleTitle').textContent = module.title;
+            const qaSetSelect = document.getElementById('qaSetSelect');
+            qaSetSelect.innerHTML = '';
+            module.qaSets.forEach((_, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Q&A Set ${i + 1}`;
+                qaSetSelect.appendChild(option);
+            });
+            document.getElementById('editModule').dataset.index = index;
+            document.getElementById('reviewModule').dataset.index = index;
+            showView('moduleView');
+        }
+
+        document.getElementById('backToList').addEventListener('click', () => {
+            showView('moduleList');
+        });
+
+        document.getElementById('editModule').addEventListener('click', (e) => {
+            const index = e.target.dataset.index;
+            const module = modules[index];
+            document.getElementById('newModuleTitle').value = module.title;
+            const qaSets = document.getElementById('qaSets');
+            qaSets.innerHTML = '';
+            module.qaSets.forEach(set => {
+                const qaSet = document.createElement('div');
+                qaSet.innerHTML = `
+                    <h3 class="text-lg font-bold mt-4 mb-2">Q&A Set</h3>
+                    <textarea class="qaSet border p-2 rounded w-full h-32">${set}</textarea>
+                `;
+                qaSets.appendChild(qaSet);
+            });
+            showView('createView');
+            document.getElementById('saveModule').dataset.editIndex = index;
+        });
+
+        let currentQASet, currentQAIndex;
+
+        document.getElementById('reviewModule').addEventListener('click', (e) => {
+            const index = e.target.dataset.index;
+            const module = modules[index];
+            const qaSetIndex = document.getElementById('qaSetSelect').value;
+            currentQASet = module.qaSets[qaSetIndex].trim().split('\n\n');
+            currentQAIndex = 0;
+            showNextQuestion();
+            document.getElementById('reviewTitle').textContent = `Reviewing: ${module.title}`;
+            showView('reviewView');
+        });
+
+        function showNextQuestion() {
+            if (currentQAIndex >= currentQASet.length) {
+                showView('congratsView');
+                return;
+            }
+            const [question, answer] = currentQASet[currentQAIndex].split('\n');
+            document.getElementById('questionDisplay').textContent = question;
+            document.getElementById('answerDisplay').textContent = answer;
+            document.getElementById('answerDisplay').classList.add('hidden');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !document.getElementById('reviewView').classList.contains('hidden')) {
+                e.preventDefault();
+                handleSpacebarOrClick();
+            }
+        });
+
+        document.getElementById('reviewView').addEventListener('click', handleSpacebarOrClick);
+
+        function handleSpacebarOrClick() {
+            const answerDisplay = document.getElementById('answerDisplay');
+            if (answerDisplay.classList.contains('hidden')) {
+                answerDisplay.classList.remove('hidden');
+            } else {
+                currentQAIndex++;
+                showNextQuestion();
+            }
+        }
+
+        document.getElementById('backToModule').addEventListener('click', () => {
+            showView('moduleView');
+        });
+
+        document.getElementById('backToModuleFromCongrats').addEventListener('click', () => {
+            showView('moduleView');
+        });
+
+        document.getElementById('importExport').addEventListener('click', () => {
+            showView('importExportView');
+        });
+
+        document.getElementById('exportData').addEventListener('click', () => {
+            const data = JSON.stringify(modules);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qa_modules.json';
+            a.click();
+        });
+
+        document.getElementById('importFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedModules = JSON.parse(e.target.result);
+                        modules = importedModules;
+                        saveModules();
+                        renderModuleList();
+                        alert('Import successful!');
+                    } catch (error) {
+                        alert('Error importing file. Please make sure it\'s a valid JSON file.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('backFromImportExport').addEventListener('click', () => {
+            showView('moduleList');
+        });
+
+        renderModuleList();
+    </script>
+</body>
+
+</html>
