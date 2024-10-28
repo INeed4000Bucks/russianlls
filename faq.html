@@ -10,6 +10,14 @@
         .hidden {
             display: none;
         }
+
+        .points-shop {
+            background-color: #f9f9f9;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
     
         #motivationalBlurb {
             font-size: 1rem;
@@ -93,6 +101,7 @@
             <div id="menuItems" class="hidden mt-2">
                 <button id="createModule" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Create Module</button>
                 <button id="importExport" class="bg-purple-500 text-white px-4 py-2 rounded">Import/Export</button>
+                <button id="pointsShopButton" class="bg-red-500 text-white px-4 py-2 rounded">Points Shop</button>
             </div>
         </div>
 
@@ -142,21 +151,41 @@
             <label for="importFile" class="bg-green-500 text-white px-4 py-2 rounded cursor-pointer">Import Data</label>
             <button id="backFromImportExport" class="bg-gray-500 text-white px-4 py-2 rounded ml-2">Back</button>
         </div>
+
+        <div id="pointsShopView" class="hidden points-shop">
+            <h2 class="text-2xl font-bold mb-4">Points Shop</h2>
+            <p class="text-lg mb-4">Current Points: <span id="pointsDisplay">0</span></p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded mb-2" onclick="redeemReward(10, 'Round in a Mobile Game')">10 Points: Round in Mobile Game</button>
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded mb-2" onclick="redeemReward(20, 'Pushups')">20 Points: Redeem Pushups</button>
+            <button class="bg-purple-500 text-white px-4 py-2 rounded mb-2" onclick="redeemReward(50, 'Sweet Drink')">50 Points: Sweet Drink</button>
+            <button class="bg-green-500 text-white px-4 py-2 rounded mb-2" onclick="redeemReward(150, 'Dance')">150 Points: Dance</button>
+            <button id="backFromPointsShop" class="bg-gray-500 text-white px-4 py-2 rounded mt-4">Back</button>
+        </div>
     </div>
 
     <script>
         let modules = JSON.parse(localStorage.getItem('modules')) || [];
         let currentQASet, currentQAIndex, questionCounter;
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let answeredQuestions = JSON.parse(localStorage.getItem('answeredQuestions')) || {};
 
         function saveModules() {
             localStorage.setItem('modules', JSON.stringify(modules));
+        }
+
+        function saveAnsweredQuestions() {
+            localStorage.setItem('answeredQuestions', JSON.stringify(answeredQuestions));
+        }
+
+        function savePoints() {
+            localStorage.setItem('points', points);
+            document.getElementById('pointsDisplay').textContent = points;
         }
 
         function showView(viewId) {
             document.querySelectorAll('#app > div').forEach(div => div.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
             
-            // Ensure the menu always shows up when displaying the module list
             if (viewId === 'moduleList') {
                 document.getElementById('menu').classList.remove('hidden');
             }
@@ -180,6 +209,15 @@
             document.getElementById('menuItems').classList.toggle('hidden');
         });
 
+        document.getElementById('pointsShopButton').addEventListener('click', () => {
+            showView('pointsShopView');
+            document.getElementById('pointsDisplay').textContent = points;
+        });
+
+        document.getElementById('backFromPointsShop').addEventListener('click', () => {
+            showView('moduleList');
+        });
+
         document.getElementById('createModule').addEventListener('click', () => {
             showView('createView');
             document.getElementById('qaSets').innerHTML = '';
@@ -187,6 +225,35 @@
         });
 
         document.getElementById('addQASet').addEventListener('click', addQASet);
+
+        function awardPointIfNew(question) {
+            const currentModuleTitle = modules[currentQAIndex].title;
+            // Initialize the module entry if it doesn't exist
+            if (!answeredQuestions[currentModuleTitle]) {
+                answeredQuestions[currentModuleTitle] = []; // Initialize with an empty array
+            }
+
+            // Check if the question was already answered
+            if (!answeredQuestions[currentModuleTitle].includes(question)) {
+                answeredQuestions[currentModuleTitle].push(question); // Track the answered question
+                points++;
+                console.log("New question answered, points added.");
+                savePoints();
+                saveAnsweredQuestions();
+            } else {
+                console.log("This was an old question");
+            }
+        }
+
+        function redeemReward(cost, rewardName) {
+            if (points >= cost) {
+                points -= cost;
+                alert(`Redeemed: ${rewardName}`);
+                savePoints();
+            } else {
+                alert("Not enough points.");
+            }
+        }
 
         function addQASet() {
             const qaSets = document.getElementById('qaSets');
@@ -290,6 +357,8 @@
             document.getElementById('questionDisplay').textContent = `${question}`;
             document.getElementById('answerDisplay').textContent = answer;
             document.getElementById('answerDisplay').classList.add('hidden');
+
+            awardPointIfNew(question);
             
             // Show a motivational blurb every 2-3 questions
             if (currentQAIndex % 2 === 0 && Math.random() < 0.5) {
@@ -381,7 +450,7 @@
         document.getElementById('backFromImportExport').addEventListener('click', () => {
             showView('moduleList');
         });
-
+        savePoints();
         renderModuleList();
     </script>
 </body>
