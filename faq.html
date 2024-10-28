@@ -10,6 +10,7 @@
         .hidden {
             display: none;
         }
+    
         #motivationalBlurb {
             font-size: 1rem;
             text-align: center;
@@ -17,14 +18,19 @@
             max-width: 300px; /* Modest width */
             margin: 0 auto; /* Center horizontally */
             opacity: 1;
+            position: fixed; /* Fixed position for bottom alignment */
+            bottom: 1rem; /* Distance from the bottom */
+            left: 50%; /* Center horizontally relative to the viewport */
+            transform: translateX(-50%); /* Center element based on its width */
+            z-index: 10; /* Ensure it stays above other elements */
         }
-
+    
         .motivational-background {
             opacity: 0.5; /* Background opacity */
             padding: 1rem;
             border-radius: 0.5rem;
         }
-
+    
         /* Outer Golden Rectangle */
         .motivational-container {
             max-width: 300px; /* Modest width */
@@ -33,12 +39,12 @@
             border-radius: 0.75rem; /* Rounded corners */
             position: relative;
             overflow: hidden; /* Clip the diagonal shine */
-            padding: 1rem 0; /* Ensures equal height with the black rectangle */
+            padding: 0 1rem; /* Ensures equal height with the black rectangle */
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
+    
         /* Inner Black Rectangle */
         .motivational-inner {
             background-color: #000000; /* Solid black */
@@ -49,8 +55,8 @@
             border-radius: 0; /* Sharp corners */
             z-index: 1; /* Ensures it stays above the shine */
         }
-
-        /* Diagonal Shine */
+    
+        /* First Diagonal Shine */
         .motivational-container::before {
             content: "";
             position: absolute;
@@ -62,7 +68,20 @@
             transform: rotate(45deg); /* Diagonal angle */
             z-index: 0; /* Behind everything else */
         }
-    </style>
+
+        /* Second, Thinner Diagonal Shine */
+        .motivational-container::after {
+            content: "";
+            position: absolute;
+            top: -45%; 
+            left: -55%; /* Shifted slightly to the left of the first shine */
+            width: 150%; /* Thinner than the first shine */
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2); /* Slightly lighter overlay */
+            transform: rotate(45deg); /* Same diagonal angle */
+            z-index: 0; /* Behind everything else */
+        }
+    </style>    
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -183,11 +202,22 @@
         document.getElementById('saveModule').addEventListener('click', () => {
             const title = document.getElementById('newModuleTitle').value;
             const qaSets = Array.from(document.getElementsByClassName('qaSet')).map(set => set.value);
-            modules.push({ title, qaSets });
+            const editIndex = document.getElementById('saveModule').dataset.editIndex;
+
+            if (editIndex !== undefined) {
+                // Update existing module if in edit mode
+                modules[editIndex] = { title, qaSets };
+                delete document.getElementById('saveModule').dataset.editIndex; // Clear edit mode
+            } else {
+                // Add a new module if not in edit mode
+                modules.push({ title, qaSets });
+            }
+            
             saveModules();
             renderModuleList();
             showView('moduleList');
         });
+
 
         document.getElementById('cancelCreate').addEventListener('click', () => {
             showView('moduleList');
@@ -234,11 +264,9 @@
                 `;
                 qaSets.appendChild(qaSet);
             });
+            document.getElementById('saveModule').dataset.editIndex = index; // Set edit mode
             showView('createView');
-            document.getElementById('saveModule').dataset.editIndex = index;
         });
-
-        
 
         document.getElementById('reviewModule').addEventListener('click', (e) => {
             const index = e.target.dataset.index;
