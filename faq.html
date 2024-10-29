@@ -165,23 +165,44 @@
 
     <script>
         let modules = JSON.parse(localStorage.getItem('modules')) || [];
-        let currentQASet, currentQAIndex, questionCounter;
+        let currentQASet, currentQAIndex, currentModuleIndex;
         let points = parseInt(localStorage.getItem('points')) || 0;
         let answeredQuestions = JSON.parse(localStorage.getItem('answeredQuestions')) || {};
-
+    
         function saveModules() {
             localStorage.setItem('modules', JSON.stringify(modules));
         }
-
-        function saveAnsweredQuestions() {
-            localStorage.setItem('answeredQuestions', JSON.stringify(answeredQuestions));
-        }
-
+    
         function savePoints() {
             localStorage.setItem('points', points);
             document.getElementById('pointsDisplay').textContent = points;
         }
-
+    
+        function saveAnsweredQuestions() {
+            localStorage.setItem('answeredQuestions', JSON.stringify(answeredQuestions));
+        }
+    
+        function awardPointIfNew(question) {
+            const currentModuleTitle = modules[currentModuleIndex].title;
+    
+            // Initialize the module entry if it doesn't exist
+            if (!answeredQuestions[currentModuleTitle]) {
+                answeredQuestions[currentModuleTitle] = []; // Initialize with an empty array
+                console.log("First time answering questions in this module.");
+            }
+    
+            // Check if the question was already answered
+            if (!answeredQuestions[currentModuleTitle].includes(question)) {
+                answeredQuestions[currentModuleTitle].push(question); // Track the answered question
+                points++;
+                console.log("New question answered, points added.");
+                savePoints();
+                saveAnsweredQuestions();
+            } else {
+                console.log("This was an old question");
+            }
+        }
+    
         function showView(viewId) {
             document.querySelectorAll('#app > div').forEach(div => div.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
@@ -190,7 +211,7 @@
                 document.getElementById('menu').classList.remove('hidden');
             }
         }
-
+    
         function renderModuleList() {
             const moduleList = document.getElementById('moduleList');
             moduleList.innerHTML = '';
@@ -204,47 +225,29 @@
                 moduleList.appendChild(moduleCard);
             });
         }
-
+    
         document.getElementById('toggleMenu').addEventListener('click', () => {
             document.getElementById('menuItems').classList.toggle('hidden');
         });
-
+    
         document.getElementById('pointsShopButton').addEventListener('click', () => {
             showView('pointsShopView');
             document.getElementById('pointsDisplay').textContent = points;
         });
-
+    
         document.getElementById('backFromPointsShop').addEventListener('click', () => {
             showView('moduleList');
         });
-
+    
         document.getElementById('createModule').addEventListener('click', () => {
             showView('createView');
+            document.getElementById('newModuleTitle').value = '';
             document.getElementById('qaSets').innerHTML = '';
             addQASet();
         });
-
+    
         document.getElementById('addQASet').addEventListener('click', addQASet);
-
-        function awardPointIfNew(question) {
-            const currentModuleTitle = modules[currentQAIndex].title;
-            // Initialize the module entry if it doesn't exist
-            if (!answeredQuestions[currentModuleTitle]) {
-                answeredQuestions[currentModuleTitle] = []; // Initialize with an empty array
-            }
-
-            // Check if the question was already answered
-            if (!answeredQuestions[currentModuleTitle].includes(question)) {
-                answeredQuestions[currentModuleTitle].push(question); // Track the answered question
-                points++;
-                console.log("New question answered, points added.");
-                savePoints();
-                saveAnsweredQuestions();
-            } else {
-                console.log("This was an old question");
-            }
-        }
-
+    
         function redeemReward(cost, rewardName) {
             if (points >= cost) {
                 points -= cost;
@@ -254,7 +257,7 @@
                 alert("Not enough points.");
             }
         }
-
+    
         function addQASet() {
             const qaSets = document.getElementById('qaSets');
             const setIndex = qaSets.children.length;
@@ -265,12 +268,12 @@
             `;
             qaSets.appendChild(qaSet);
         }
-
+    
         document.getElementById('saveModule').addEventListener('click', () => {
             const title = document.getElementById('newModuleTitle').value;
             const qaSets = Array.from(document.getElementsByClassName('qaSet')).map(set => set.value);
             const editIndex = document.getElementById('saveModule').dataset.editIndex;
-
+    
             if (editIndex !== undefined) {
                 // Update existing module if in edit mode
                 modules[editIndex] = { title, qaSets };
@@ -284,19 +287,18 @@
             renderModuleList();
             showView('moduleList');
         });
-
-
+    
         document.getElementById('cancelCreate').addEventListener('click', () => {
             showView('moduleList');
         });
-
+    
         document.getElementById('moduleList').addEventListener('click', (e) => {
             if (e.target.classList.contains('viewModule')) {
                 const index = e.target.dataset.index;
                 showModuleView(index);
             }
         });
-
+    
         function showModuleView(index) {
             const module = modules[index];
             document.getElementById('moduleTitle').textContent = module.title;
@@ -312,11 +314,11 @@
             document.getElementById('reviewModule').dataset.index = index;
             showView('moduleView');
         }
-
+    
         document.getElementById('backToList').addEventListener('click', () => {
             showView('moduleList');
         });
-
+    
         document.getElementById('editModule').addEventListener('click', (e) => {
             const index = e.target.dataset.index;
             const module = modules[index];
@@ -334,10 +336,11 @@
             document.getElementById('saveModule').dataset.editIndex = index; // Set edit mode
             showView('createView');
         });
-
+    
         document.getElementById('reviewModule').addEventListener('click', (e) => {
             const index = e.target.dataset.index;
             const module = modules[index];
+            currentModuleIndex = index; // Keep track of the current module index
             const qaSetIndex = document.getElementById('qaSetSelect').value;
             currentQASet = module.qaSets[qaSetIndex].trim().split('\n\n');
             currentQAIndex = 0;
@@ -345,7 +348,7 @@
             document.getElementById('reviewTitle').textContent = `Reviewing: ${module.title}`;
             showView('reviewView');
         });
-
+    
         function showNextQuestion() {
             if (currentQAIndex >= currentQASet.length) {
                 showView('congratsView');
@@ -357,7 +360,8 @@
             document.getElementById('questionDisplay').textContent = `${question}`;
             document.getElementById('answerDisplay').textContent = answer;
             document.getElementById('answerDisplay').classList.add('hidden');
-
+    
+            // Award points if the question is new
             awardPointIfNew(question);
             
             // Show a motivational blurb every 2-3 questions
@@ -367,14 +371,7 @@
                 document.getElementById('motivationalBlurb').classList.add('hidden');
             }
         }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && !document.getElementById('reviewView').classList.contains('hidden')) {
-                e.preventDefault();
-                handleSpacebarOrClick();
-            }
-        });
-
+    
         function showMotivationalBlurb() {
             const motivationalBlurbs = [
                 "Imagine the future success completing this module will bring!",
@@ -384,18 +381,25 @@
                 "Picture the people you know you deserve to be around!"
             ];
             const blurb = motivationalBlurbs[Math.floor(Math.random() * motivationalBlurbs.length)];
-
+    
             // Set the blurb text
             const motivationalText = document.getElementById('motivationalText');
             motivationalText.textContent = blurb;
-
+    
             // Show the blurb container
             const motivationalBlurb = document.getElementById('motivationalBlurb');
             motivationalBlurb.classList.remove('hidden');
         }
-
+    
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !document.getElementById('reviewView').classList.contains('hidden')) {
+                e.preventDefault();
+                handleSpacebarOrClick();
+            }
+        });
+    
         document.getElementById('reviewView').addEventListener('click', handleSpacebarOrClick);
-
+    
         function handleSpacebarOrClick() {
             const answerDisplay = document.getElementById('answerDisplay');
             if (answerDisplay.classList.contains('hidden')) {
@@ -405,19 +409,19 @@
                 showNextQuestion();
             }
         }
-
+    
         document.getElementById('backToModule').addEventListener('click', () => {
             showView('moduleView');
         });
-
+    
         document.getElementById('backToModuleFromCongrats').addEventListener('click', () => {
             showView('moduleView');
         });
-
+    
         document.getElementById('importExport').addEventListener('click', () => {
             showView('importExportView');
         });
-
+    
         document.getElementById('exportData').addEventListener('click', () => {
             const data = JSON.stringify(modules);
             const blob = new Blob([data], { type: 'application/json' });
@@ -427,7 +431,7 @@
             a.download = 'qa_modules.json';
             a.click();
         });
-
+    
         document.getElementById('importFile').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -446,10 +450,11 @@
                 reader.readAsText(file);
             }
         });
-
+    
         document.getElementById('backFromImportExport').addEventListener('click', () => {
             showView('moduleList');
         });
+    
         savePoints();
         renderModuleList();
     </script>
