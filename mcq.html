@@ -141,13 +141,13 @@
             let currentQuestion = null;
             lines.forEach(line => {
                 line = line.trim();
-                if (line && !line.match(/^[A-Za-z]\)/)) {
+                if (line && !line.match(/^[A-Za-z][\)|\.]/)) {
                     // It's a question
                     if (currentQuestion) {
                         questions.push(currentQuestion);
                     }
                     currentQuestion = { question: line, answers: [] };
-                } else if (line.match(/^[A-Za-z]\)/)) {
+                } else if (line.match(/^[A-Za-z][\)|\.]/)) {
                     // It's an answer
                     if (currentQuestion) {
                         currentQuestion.answers.push(line);
