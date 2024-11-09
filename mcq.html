@@ -21,7 +21,7 @@
             flex-direction: column;
             justify-content: space-between;
             padding: 0;
-            z-index: 1000; /* Ensure the button is on top */
+            z-index: 1000;
         }
         #menuButton .bar1, #menuButton .bar2, #menuButton .bar3 {
             width: 35px;
@@ -38,7 +38,7 @@
             color: white;
             transition: left 0.3s ease-in-out;
             padding: 20px;
-            z-index: 999; /* Ensure the side menu is below the button */
+            z-index: 999;
         }
         #sideMenu.active {
             left: 0;
@@ -132,7 +132,7 @@
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     images.push(event.target.result);
-                }
+                };
                 reader.readAsDataURL(e.target.files[i]);
             }
         });
@@ -165,7 +165,13 @@
                 } else if (line.match(/^[A-Za-z][\)|\.]/)) {
                     // It's an answer
                     if (currentQuestion) {
-                        currentQuestion.answers.push(line);
+                        // Extract label and text
+                        const labelMatch = line.match(/^([A-Za-z][\)|\.])\s*(.*)/);
+                        if (labelMatch) {
+                            const label = labelMatch[1];
+                            const text = labelMatch[2];
+                            currentQuestion.answers.push({ label: label, text: text, fullText: line });
+                        }
                     }
                 }
             });
@@ -184,15 +190,17 @@
             // Randomize answer order
             const randomizedAnswers = shuffleArray([...q.answers]);
 
-            randomizedAnswers.forEach((answer) => {
+            randomizedAnswers.forEach((answerObj) => {
                 const div = document.createElement('div');
                 div.classList.add('answer');
-                div.innerText = answer;
-                div.addEventListener('click', () => selectAnswer(answer, div));
+                div.innerText = answerObj.text; // Display only the answer text
+                div.addEventListener('click', () => selectAnswer(answerObj, div));
                 answersDiv.appendChild(div);
             });
             showRandomImage();
         }
+
+        // Utility function to shuffle an array
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -202,7 +210,7 @@
         }
 
         // Select Answer
-        function selectAnswer(selectedAnswer, element) {
+        function selectAnswer(selectedAnswerObj, element) {
             const answersDiv = document.getElementById('answers');
             [...answersDiv.children].forEach(child => {
                 child.classList.remove('selected');
@@ -212,7 +220,7 @@
             element.classList.add('selected');
             element.style.backgroundColor = getRandomColor(); // Set random background color
             element.style.opacity = '0.25'; // Set opacity to 25%
-            userAnswers[currentQuestionIndex] = selectedAnswer;
+            userAnswers[currentQuestionIndex] = selectedAnswerObj; // Store the entire answer object
         }
 
         // Next Question
@@ -235,9 +243,10 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
             questions.forEach((q, index) => {
+                const userAnswer = userAnswers[index];
                 const div = document.createElement('div');
                 div.innerHTML = `<strong>Question ${index + 1}:</strong> ${q.question}<br>
-                                 <strong>Your Answer:</strong> ${userAnswers[index]}`;
+                                 <strong>Your Answer:</strong> ${userAnswer.label} ${userAnswer.text}`;
                 resultsDiv.appendChild(div);
             });
             document.getElementById('resultsSection').style.display = 'block';
