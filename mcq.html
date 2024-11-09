@@ -12,10 +12,21 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            font-size: 30px;
             background: none;
             border: none;
             cursor: pointer;
+            width: 35px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+            z-index: 1000; /* Ensure the button is on top */
+        }
+        #menuButton .bar1, #menuButton .bar2, #menuButton .bar3 {
+            width: 35px;
+            height: 5px;
+            background-color: black;
         }
         #sideMenu {
             position: fixed;
@@ -25,8 +36,9 @@
             height: 100%;
             background-color: #333;
             color: white;
-            transition: 0.3s;
+            transition: left 0.3s ease-in-out;
             padding: 20px;
+            z-index: 999; /* Ensure the side menu is below the button */
         }
         #sideMenu.active {
             left: 0;
@@ -48,7 +60,6 @@
         }
         .selected {
             border-radius: 15px;
-            /* Removed opacity from here */
         }
         #randomImage img {
             max-width: 100%;
@@ -66,7 +77,11 @@
 <body>
 
     <!-- Hamburger Menu -->
-    <button id="menuButton">&#9776;</button>
+    <button id="menuButton">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </button>
     <div id="sideMenu">
         <h2>Upload Images</h2>
         <input type="file" id="imageUpload" accept="image/*" multiple>
@@ -165,19 +180,29 @@
             document.getElementById('question').innerText = q.question;
             const answersDiv = document.getElementById('answers');
             answersDiv.innerHTML = '';
-            q.answers.forEach((answer, index) => {
+
+            // Randomize answer order
+            const randomizedAnswers = shuffleArray([...q.answers]);
+
+            randomizedAnswers.forEach((answer) => {
                 const div = document.createElement('div');
                 div.classList.add('answer');
                 div.innerText = answer;
-                // Removed the line that sets the background color here
-                div.addEventListener('click', () => selectAnswer(index, div));
+                div.addEventListener('click', () => selectAnswer(answer, div));
                 answersDiv.appendChild(div);
             });
             showRandomImage();
         }
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         // Select Answer
-        function selectAnswer(index, element) {
+        function selectAnswer(selectedAnswer, element) {
             const answersDiv = document.getElementById('answers');
             [...answersDiv.children].forEach(child => {
                 child.classList.remove('selected');
@@ -187,7 +212,7 @@
             element.classList.add('selected');
             element.style.backgroundColor = getRandomColor(); // Set random background color
             element.style.opacity = '0.25'; // Set opacity to 25%
-            userAnswers[currentQuestionIndex] = questions[currentQuestionIndex].answers[index];
+            userAnswers[currentQuestionIndex] = selectedAnswer;
         }
 
         // Next Question
