@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Quiz Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+        }
+        #menuButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        #sideMenu {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            transition: 0.3s;
+            padding: 20px;
+        }
+        #sideMenu.active {
+            left: 0;
+        }
+        #inputSection, #quizSection, #resultsSection {
+            max-width: 600px;
+            margin: 80px auto;
+            text-align: center;
+        }
+        #quizInput {
+            width: 100%;
+            height: 200px;
+        }
+        .answer {
+            margin: 10px 0;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .selected {
+            opacity: 0.5;
+            border-radius: 15px;
+        }
+        #randomImage img {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+        #uploadImages {
+            display: block;
+            margin-top: 20px;
+        }
+        #nextButton {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hamburger Menu -->
+    <button id="menuButton">&#9776;</button>
+    <div id="sideMenu">
+        <h2>Upload Images</h2>
+        <input type="file" id="imageUpload" accept="image/*" multiple>
+    </div>
+
+    <!-- Input Section -->
+    <div id="inputSection">
+        <h1>Enter Your Quiz</h1>
+        <textarea id="quizInput" placeholder="Paste your questions here..."></textarea>
+        <br>
+        <button id="startQuiz">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div id="quizSection" style="display: none;">
+        <div id="question"></div>
+        <div id="answers"></div>
+        <button id="nextButton">Next Question</button>
+        <div id="randomImage"></div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" style="display: none;">
+        <h1>Your Answers</h1>
+        <div id="results"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Variables to store quiz data
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let images = [];
+
+        // Toggle Side Menu
+        const menuButton = document.getElementById('menuButton');
+        const sideMenu = document.getElementById('sideMenu');
+        menuButton.addEventListener('click', () => {
+            sideMenu.classList.toggle('active');
+        });
+
+        // Image Upload
+        const imageUpload = document.getElementById('imageUpload');
+        imageUpload.addEventListener('change', (e) => {
+            images = [];
+            for (let i = 0; i < e.target.files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    images.push(event.target.result);
+                }
+                reader.readAsDataURL(e.target.files[i]);
+            }
+        });
+
+        // Start Quiz
+        document.getElementById('startQuiz').addEventListener('click', () => {
+            const inputText = document.getElementById('quizInput').value;
+            parseInput(inputText);
+            if (questions.length > 0) {
+                document.getElementById('inputSection').style.display = 'none';
+                document.getElementById('quizSection').style.display = 'block';
+                showQuestion();
+            } else {
+                alert('No valid questions found.');
+            }
+        });
+
+        // Parse Input Text
+        function parseInput(text) {
+            const lines = text.split('\n');
+            let currentQuestion = null;
+            lines.forEach(line => {
+                line = line.trim();
+                if (line && !line.match(/^[A-Za-z]\)/)) {
+                    // It's a question
+                    if (currentQuestion) {
+                        questions.push(currentQuestion);
+                    }
+                    currentQuestion = { question: line, answers: [] };
+                } else if (line.match(/^[A-Za-z]\)/)) {
+                    // It's an answer
+                    if (currentQuestion) {
+                        currentQuestion.answers.push(line);
+                    }
+                }
+            });
+            if (currentQuestion) {
+                questions.push(currentQuestion);
+            }
+        }
+
+        // Show Question
+        function showQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('question').innerText = q.question;
+            const answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+            q.answers.forEach((answer, index) => {
+                const div = document.createElement('div');
+                div.classList.add('answer');
+                div.innerText = answer;
+                div.style.backgroundColor = getRandomColor();
+                div.addEventListener('click', () => selectAnswer(index, div));
+                answersDiv.appendChild(div);
+            });
+            showRandomImage();
+        }
+
+        // Select Answer
+        function selectAnswer(index, element) {
+            const answersDiv = document.getElementById('answers');
+            [...answersDiv.children].forEach(child => {
+                child.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            userAnswers[currentQuestionIndex] = questions[currentQuestionIndex].answers[index];
+        }
+
+        // Next Question
+        document.getElementById('nextButton').addEventListener('click', () => {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert('Please select an answer.');
+                return;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        // Show Results
+        function showResults() {
+            document.getElementById('quizSection').style.display = 'none';
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            questions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>Question ${index + 1}:</strong> ${q.question}<br>
+                                 <strong>Your Answer:</strong> ${userAnswers[index]}`;
+                resultsDiv.appendChild(div);
+            });
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+
+        // Show Random Image
+        function showRandomImage() {
+            const imgDiv = document.getElementById('randomImage');
+            imgDiv.innerHTML = '';
+            if (images.length > 0) {
+                const img = document.createElement('img');
+                const randomIndex = Math.floor(Math.random() * images.length);
+                img.src = images[randomIndex];
+                imgDiv.appendChild(img);
+            }
+        }
+
+        // Get Random Color
+        function getRandomColor() {
+            const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF33A8'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+</html>
