@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Custom Quiz Application</title>
+    <title>Custom Quiz Application with Quiz Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,15 +30,16 @@
         }
         #sideMenu {
             position: fixed;
-            left: -250px;
+            left: -300px;
             top: 0;
-            width: 250px;
+            width: 300px;
             height: 100%;
             background-color: #333;
             color: white;
             transition: left 0.3s ease-in-out;
             padding: 20px;
             z-index: 999;
+            overflow-y: auto;
         }
         #sideMenu.active {
             left: 0;
@@ -48,9 +49,16 @@
             margin: 80px auto;
             text-align: center;
         }
+        #quizNameInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
         #quizInput {
             width: 100%;
             height: 200px;
+            font-size: 16px;
         }
         .answer {
             margin: 10px 0;
@@ -72,6 +80,27 @@
         #nextButton {
             margin-top: 20px;
         }
+        #saveQuizButton {
+            margin-top: 10px;
+        }
+        #quizList {
+            margin-top: 20px;
+        }
+        .quizItem {
+            cursor: pointer;
+            padding: 5px;
+            border-bottom: 1px solid #555;
+        }
+        .quizItem:hover {
+            background-color: #444;
+        }
+        .deleteQuizButton {
+            float: right;
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -85,13 +114,17 @@
     <div id="sideMenu">
         <h2>Upload Images</h2>
         <input type="file" id="imageUpload" accept="image/*" multiple>
+        <h2>Saved Quizzes</h2>
+        <div id="quizList"></div>
     </div>
 
     <!-- Input Section -->
     <div id="inputSection">
         <h1>Enter Your Quiz</h1>
+        <input type="text" id="quizNameInput" placeholder="Quiz Name">
         <textarea id="quizInput" placeholder="Paste your questions here..."></textarea>
         <br>
+        <button id="saveQuizButton">Save Quiz</button>
         <button id="startQuiz">Start Quiz</button>
     </div>
 
@@ -107,6 +140,7 @@
     <div id="resultsSection" style="display: none;">
         <h1>Your Answers</h1>
         <div id="results"></div>
+        <button id="backToEditorButton">Back to Quiz Editor</button>
     </div>
 
     <!-- JavaScript -->
@@ -122,6 +156,7 @@
         const sideMenu = document.getElementById('sideMenu');
         menuButton.addEventListener('click', () => {
             sideMenu.classList.toggle('active');
+            loadQuizList(); // Load the quiz list whenever the menu is opened
         });
 
         // Image Upload
@@ -144,14 +179,33 @@
             if (questions.length > 0) {
                 document.getElementById('inputSection').style.display = 'none';
                 document.getElementById('quizSection').style.display = 'block';
+                currentQuestionIndex = 0;
+                userAnswers = [];
                 showQuestion();
             } else {
                 alert('No valid questions found.');
             }
         });
 
+        // Save Quiz
+        document.getElementById('saveQuizButton').addEventListener('click', () => {
+            const quizName = document.getElementById('quizNameInput').value.trim();
+            const quizContent = document.getElementById('quizInput').value;
+            if (!quizName) {
+                alert('Please enter a quiz name.');
+                return;
+            }
+            if (!quizContent) {
+                alert('Quiz content cannot be empty.');
+                return;
+            }
+            saveQuiz(quizName, quizContent);
+            alert('Quiz saved successfully.');
+        });
+
         // Parse Input Text
         function parseInput(text) {
+            questions = [];
             const lines = text.split('\n');
             let currentQuestion = null;
             lines.forEach(line => {
@@ -269,6 +323,71 @@
             const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF33A8'];
             return colors[Math.floor(Math.random() * colors.length)];
         }
+
+        // Save Quiz to Local Storage
+        function saveQuiz(name, content) {
+            let quizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
+            quizzes[name] = content;
+            localStorage.setItem('quizzes', JSON.stringify(quizzes));
+            loadQuizList();
+        }
+
+        // Load Quiz List
+        function loadQuizList() {
+            const quizListDiv = document.getElementById('quizList');
+            quizListDiv.innerHTML = '';
+            let quizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
+            for (let name in quizzes) {
+                const quizItem = document.createElement('div');
+                quizItem.classList.add('quizItem');
+                quizItem.innerText = name;
+
+                // Delete Button
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('deleteQuizButton');
+                deleteButton.innerText = '✖';
+                deleteButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteQuiz(name);
+                });
+                quizItem.appendChild(deleteButton);
+
+                quizItem.addEventListener('click', () => {
+                    loadQuiz(name);
+                    sideMenu.classList.remove('active');
+                });
+                quizListDiv.appendChild(quizItem);
+            }
+        }
+
+        // Load Quiz into Text Area
+        function loadQuiz(name) {
+            let quizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
+            if (quizzes[name]) {
+                document.getElementById('quizNameInput').value = name;
+                document.getElementById('quizInput').value = quizzes[name];
+            }
+        }
+
+        // Delete Quiz
+        function deleteQuiz(name) {
+            if (confirm(`Are you sure you want to delete the quiz "${name}"?`)) {
+                let quizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
+                delete quizzes[name];
+                localStorage.setItem('quizzes', JSON.stringify(quizzes));
+                loadQuizList();
+            }
+        }
+
+        // Load Quiz List on Page Load
+        window.addEventListener('load', () => {
+            loadQuizList();
+        });
+
+        document.getElementById('backToEditorButton').addEventListener('click', () => {
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+        });
     </script>
 </body>
 </html>
