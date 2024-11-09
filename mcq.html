@@ -47,8 +47,8 @@
             border-radius: 10px;
         }
         .selected {
-            opacity: 0.5;
             border-radius: 15px;
+            /* Removed opacity from here */
         }
         #randomImage img {
             max-width: 100%;
@@ -169,7 +169,7 @@
                 const div = document.createElement('div');
                 div.classList.add('answer');
                 div.innerText = answer;
-                div.style.backgroundColor = getRandomColor();
+                // Removed the line that sets the background color here
                 div.addEventListener('click', () => selectAnswer(index, div));
                 answersDiv.appendChild(div);
             });
@@ -181,8 +181,12 @@
             const answersDiv = document.getElementById('answers');
             [...answersDiv.children].forEach(child => {
                 child.classList.remove('selected');
+                child.style.backgroundColor = ''; // Reset background color
+                child.style.opacity = ''; // Reset opacity
             });
             element.classList.add('selected');
+            element.style.backgroundColor = getRandomColor(); // Set random background color
+            element.style.opacity = '0.25'; // Set opacity to 25%
             userAnswers[currentQuestionIndex] = questions[currentQuestionIndex].answers[index];
         }
 
