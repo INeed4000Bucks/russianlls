@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Custom Quiz Application with Quiz Management</title>
+    <title>Custom Quiz Application with Import/Export</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,6 +101,15 @@
             color: red;
             cursor: pointer;
         }
+        /* New styles for Import/Export buttons */
+        #importExportButtons {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        #importExportButtons button {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -112,10 +121,17 @@
         <div class="bar3"></div>
     </button>
     <div id="sideMenu">
-        <h2>Upload Images</h2>
+        <h3>Upload Images</h3>
         <input type="file" id="imageUpload" accept="image/*" multiple>
         <h2>Saved Quizzes</h2>
         <div id="quizList"></div>
+        <!-- Import and Export Buttons -->
+        <div id="importExportButtons">
+            <button id="importQuizzesButton">Import Quizzes</button>
+            <button id="exportQuizzesButton">Export Quizzes</button>
+            <!-- Hidden file input for importing -->
+            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+        </div>
     </div>
 
     <!-- Input Section -->
@@ -140,6 +156,7 @@
     <div id="resultsSection" style="display: none;">
         <h1>Your Answers</h1>
         <div id="results"></div>
+        <!-- Back to Quiz Editor Button -->
         <button id="backToEditorButton">Back to Quiz Editor</button>
     </div>
 
@@ -384,10 +401,69 @@
             loadQuizList();
         });
 
+        // Event Listener for Back to Editor Button
         document.getElementById('backToEditorButton').addEventListener('click', () => {
             document.getElementById('resultsSection').style.display = 'none';
             document.getElementById('inputSection').style.display = 'block';
         });
+
+        // Import and Export Functionality
+
+        // Export Quizzes
+        document.getElementById('exportQuizzesButton').addEventListener('click', () => {
+            let quizzes = localStorage.getItem('quizzes');
+            if (!quizzes) {
+                alert('No quizzes to export.');
+                return;
+            }
+            const blob = new Blob([quizzes], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'quizzes.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Import Quizzes
+        document.getElementById('importQuizzesButton').addEventListener('click', () => {
+            document.getElementById('importFileInput').click();
+        });
+
+        // Handle File Input Change
+        document.getElementById('importFileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const importedQuizzes = JSON.parse(event.target.result);
+                        if (typeof importedQuizzes === 'object' && importedQuizzes !== null) {
+                            let existingQuizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
+                            // Merge quizzes, prompt if duplicate names
+                            for (let name in importedQuizzes) {
+                                if (existingQuizzes[name]) {
+                                    if (confirm(`Quiz "${name}" already exists. Do you want to overwrite it?`)) {
+                                        existingQuizzes[name] = importedQuizzes[name];
+                                    }
+                                } else {
+                                    existingQuizzes[name] = importedQuizzes[name];
+                                }
+                            }
+                            localStorage.setItem('quizzes', JSON.stringify(existingQuizzes));
+                            loadQuizList();
+                            alert('Quizzes imported successfully.');
+                        } else {
+                            alert('Invalid file format.');
+                        }
+                    } catch (error) {
+                        alert('Error parsing the file. Please ensure it is a valid JSON file.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
     </script>
 </body>
 </html>
