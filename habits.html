@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Habit Tracker with Money System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- For mobile responsiveness -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+        }
+        #moneyCounter {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 1000;
+            cursor: pointer;
+        }
+        #pendingIncomeCounter {
+            position: fixed;
+            top: 40px;
+            left: 10px;
+            font-size: 16px;
+            z-index: 1000;
+        }
+        #content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 80px;
+        }
+        #inputSection {
+            text-align: center;
+        }
+        #questionInput, #habitsInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        #saveHabitsButton {
+            margin-top: 10px;
+        }
+        #habitsList {
+            margin-top: 20px;
+        }
+        .habitItem {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #e6ffe6; /* Default to good habit color */
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        .habitItem.badHabit {
+            background-color: #ffe6e6;
+        }
+        .habitItem.completed {
+            opacity: 0.5;
+        }
+        .habitItem .habitText {
+            flex-grow: 1;
+        }
+        .habitItem .progressDots {
+            display: flex;
+            margin-left: 10px;
+        }
+        .habitItem .progressDots .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .habitItem .progressDots .dot.active {
+            background-color: #000;
+        }
+        #questionDisplay {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        @media screen and (max-width: 600px) {
+            body {
+                font-size: 16px;
+            }
+            #moneyCounter, #pendingIncomeCounter {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Money Counter -->
+    <div id="moneyCounter">$0.00</div>
+    <div id="pendingIncomeCounter">Pending Income: $0.00</div>
+
+    <div id="content">
+        <!-- Input Section -->
+        <div id="inputSection">
+            <h1>Enter Your Habits</h1>
+            <textarea id="questionInput" placeholder="Enter your question here..."></textarea>
+            <textarea id="habitsInput" placeholder="Enter your habits here, one per line... enter [bad] for bad habits, [2x] for doing it twice per day."></textarea>
+            <br>
+            <button id="saveHabitsButton">Save Habits</button>
+            <sub>Click the money to return to first screen.</sub>
+        </div>
+
+        <!-- Question Display -->
+        <div id="questionDisplay" style="display: none;"></div>
+
+        <!-- Habits List -->
+        <div id="habitsList"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Variables
+        let money = 0.00;
+        let pendingIncome = 0.00;
+        const baseIncomePerSecond = 0.005; // Half a cent per second
+        let incomePerSecond = baseIncomePerSecond;
+        let incomeMultiplier = 1;
+        let habits = []; // List of habits
+        let lastUpdateTime = Date.now();
+
+        // Load data from localStorage
+        function loadData() {
+            if (localStorage.getItem('money') !== null) {
+                money = parseFloat(localStorage.getItem('money'));
+            }
+            if (localStorage.getItem('pendingIncome') !== null) {
+                pendingIncome = parseFloat(localStorage.getItem('pendingIncome'));
+            }
+            if (localStorage.getItem('incomeMultiplier') !== null) {
+                incomeMultiplier = parseFloat(localStorage.getItem('incomeMultiplier'));
+            }
+            if (localStorage.getItem('habits') !== null) {
+                habits = JSON.parse(localStorage.getItem('habits'));
+            }
+            if (localStorage.getItem('lastUpdateTime') !== null) {
+                lastUpdateTime = parseInt(localStorage.getItem('lastUpdateTime'));
+            }
+            if (localStorage.getItem('question') !== null) {
+                const question = localStorage.getItem('question');
+                document.getElementById('questionDisplay').innerText = question;
+                document.getElementById('questionDisplay').style.display = 'block';
+                document.getElementById('inputSection').style.display = 'none';
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('money', money);
+            localStorage.setItem('pendingIncome', pendingIncome);
+            localStorage.setItem('incomeMultiplier', incomeMultiplier);
+            localStorage.setItem('habits', JSON.stringify(habits));
+            localStorage.setItem('lastUpdateTime', lastUpdateTime);
+        }
+
+        // Update money display
+        function updateMoneyDisplay() {
+            document.getElementById('moneyCounter').innerText = '$' + money.toFixed(2);
+            document.getElementById('pendingIncomeCounter').innerText = 'Pending Income: $' + pendingIncome.toFixed(2);
+        }
+
+        // Update habits list display
+        function updateHabitsDisplay() {
+            const habitsListDiv = document.getElementById('habitsList');
+            habitsListDiv.innerHTML = '';
+            habits.forEach((habit, index) => {
+                const habitDiv = document.createElement('div');
+                habitDiv.classList.add('habitItem');
+                if (habit.type === 'bad') {
+                    habitDiv.classList.add('badHabit');
+                }
+                if (habit.done) {
+                    habitDiv.classList.add('completed');
+                }
+
+                const habitText = document.createElement('div');
+                habitText.classList.add('habitText');
+                habitText.innerText = habit.text;
+
+                // Progress Dots
+                if (habit.requiredClicks > 1) {
+                    const progressDots = document.createElement('div');
+                    progressDots.classList.add('progressDots');
+                    for (let i = 0; i < habit.requiredClicks; i++) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('dot');
+                        if (i < habit.currentClicks) {
+                            dot.classList.add('active');
+                        }
+                        progressDots.appendChild(dot);
+                    }
+                    habitDiv.appendChild(progressDots);
+                }
+
+                habitDiv.appendChild(habitText);
+
+                // Click Event
+                habitDiv.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleHabitClick(index);
+                });
+
+                // Right-Click Event
+                habitDiv.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    handleHabitRightClick(index);
+                });
+
+                habitsListDiv.appendChild(habitDiv);
+            });
+        }
+
+        // Handle Habit Click
+        function handleHabitClick(index) {
+            const habit = habits[index];
+
+            if (!habit.done) {
+                habit.currentClicks++;
+
+                if (habit.currentClicks >= habit.requiredClicks) {
+                    habit.done = true;
+                    habit.currentClicks = habit.requiredClicks;
+                    // Apply visual effect
+                    // Add pending income to money and reset pending income to zero
+                    habit.contribution = pendingIncome; // Store the contribution
+                    money += pendingIncome;
+                    pendingIncome = 0;
+                }
+            }
+
+            // Recalculate incomeMultiplier based on current habits
+            recalculateIncomeMultiplier();
+
+            saveData();
+            updateMoneyDisplay();
+            updateHabitsDisplay();
+        }
+
+        // Handle Habit Right-Click (Undo)
+        function handleHabitRightClick(index) {
+            const habit = habits[index];
+
+            if (habit.done) {
+                // Undo completion
+                habit.done = false;
+                habit.currentClicks = habit.requiredClicks - 1;
+                // Subtract the habit's contribution from money
+                money -= habit.contribution;
+                habit.contribution = 0;
+            } else if (habit.currentClicks > 0) {
+                habit.currentClicks--;
+            }
+
+            // Recalculate incomeMultiplier based on current habits
+            recalculateIncomeMultiplier();
+
+            saveData();
+            updateMoneyDisplay();
+            updateHabitsDisplay();
+        }
+
+        // Recalculate income multiplier
+        function recalculateIncomeMultiplier() {
+            incomeMultiplier = 1; // Reset to base multiplier
+            habits.forEach(h => {
+                if (h.done) {
+                    if (h.type === 'good') {
+                        incomeMultiplier *= 2; // Double for each good habit
+                    } else if (h.type === 'bad') {
+                        incomeMultiplier /= 2; // Halve for each bad habit
+                    }
+                }
+            });
+            incomeMultiplier = Math.max(incomeMultiplier, 0); // Prevent negative multiplier
+        }
+
+        // Save habits from input
+        document.getElementById('saveHabitsButton').addEventListener('click', () => {
+            const question = document.getElementById('questionInput').value.trim();
+            const habitsInput = document.getElementById('habitsInput').value.trim();
+            if (!question || !habitsInput) {
+                alert('Enter a motivational question and habits.');
+                return;
+            }
+
+            // Parse habits
+            habits = [];
+            const habitsLines = habitsInput.split('\n');
+            habitsLines.forEach(line => {
+                line = line.trim();
+                if (line) {
+                    let type = 'good';
+                    let requiredClicks = 1;
+                    let match;
+
+                    // Check for [bad] flag
+                    if (line.toLowerCase().endsWith('[bad]')) {
+                        type = 'bad';
+                        line = line.slice(0, -5).trim();
+                    }
+
+                    // Check for [number]x flag
+                    match = line.match(/\[(\d+)x\]$/);
+                    if (match) {
+                        requiredClicks = parseInt(match[1]);
+                        line = line.slice(0, -match[0].length).trim();
+                    }
+
+                    habits.push({
+                        text: line,
+                        type: type,
+                        requiredClicks: requiredClicks,
+                        currentClicks: 0,
+                        done: false,
+                        contribution: 0
+                    });
+                }
+            });
+
+            // Save habits and question
+            localStorage.setItem('question', question);
+            saveData();
+            updateHabitsDisplay();
+            document.getElementById('questionDisplay').innerText = question;
+            document.getElementById('questionDisplay').style.display = 'block';
+            document.getElementById('inputSection').style.display = 'none';
+        });
+
+        // Income accumulation
+        function accumulateIncome() {
+            const now = Date.now();
+            let deltaTime = now - lastUpdateTime;
+
+            // Check if pendingIncome should reset (at 00:01 AM)
+            const currentTime = new Date();
+            const lastUpdate = new Date(lastUpdateTime);
+            if (currentTime.getDate() !== lastUpdate.getDate() || (currentTime.getHours() === 0 && currentTime.getMinutes() >= 1)) {
+                // It's a new day or past 00:01 AM, reset pendingIncome and contributions
+                pendingIncome = 0;
+                habits.forEach(habit => {
+                    habit.contribution = 0;
+                    habit.currentClicks = 0;
+                    habit.done = false;
+                });
+                lastUpdateTime = now;
+                saveData();
+                updateHabitsDisplay();
+                return;
+            }
+
+            lastUpdateTime = now;
+
+            // Calculate accumulated income
+            let secondsElapsed = deltaTime / 1000;
+            pendingIncome += incomePerSecond * incomeMultiplier * secondsElapsed;
+
+            updateMoneyDisplay();
+            saveData();
+        }
+
+        // Run accumulateIncome every second
+        setInterval(accumulateIncome, 1000);
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadData();
+            updateMoneyDisplay();
+            updateHabitsDisplay();
+
+            // Calculate income accumulated while the site was closed
+            const now = Date.now();
+            let deltaTime = now - lastUpdateTime;
+
+            // Reset pending income if past midnight
+            const currentTime = new Date();
+            const lastUpdate = new Date(lastUpdateTime);
+            if (currentTime.getDate() !== lastUpdate.getDate() || (currentTime.getHours() === 0 && currentTime.getMinutes() >= 1)) {
+                pendingIncome = 0;
+                habits.forEach(habit => {
+                    habit.contribution = 0;
+                    habit.currentClicks = 0;
+                    habit.done = false;
+                });
+                lastUpdateTime = now;
+                saveData();
+                updateHabitsDisplay();
+            } else {
+                // Calculate pending income accumulated while the site was closed
+                let secondsElapsed = deltaTime / 1000;
+                pendingIncome += incomePerSecond * incomeMultiplier * secondsElapsed;
+                lastUpdateTime = now;
+                saveData();
+            }
+
+            updateMoneyDisplay();
+        });
+
+        // Navigate to Input Screen on Ctrl+B or Money Click
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                navigateToInputScreen();
+            }
+        });
+
+        document.getElementById('moneyCounter').addEventListener('click', () => {
+            navigateToInputScreen();
+        });
+
+        function navigateToInputScreen() {
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('questionDisplay').style.display = 'none';
+            document.getElementById('habitsList').innerHTML = '';
+        }
+
+    </script>
+</body>
+</html>
