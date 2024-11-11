@@ -150,22 +150,6 @@
             margin-top: 20px;
             display: none;
         }
-        /* Prediction Input Styles */
-        #predictionContainer {
-            margin-top: 20px;
-        }
-        #predictionInput {
-            width: 50px;
-            text-align: center;
-            font-size: 18px;
-        }
-        #predictionInput:disabled {
-            background-color: #ccc;
-        }
-        #predictionMessage {
-            margin-top: 10px;
-            color: green;
-        }
     </style>
 </head>
 <body>
@@ -211,13 +195,6 @@
     <div id="quizSection" style="display: none;">
         <div id="question"></div>
         <div id="answers"></div>
-        <!-- Prediction Input -->
-        <div id="predictionContainer">
-            <label for="predictionInput">Predict the answer position (1-4) for question <span id="predictionQuestionNumber"></span>:</label>
-            <input type="number" id="predictionInput" min="1" max="4">
-            <button id="submitPredictionButton">Submit Prediction</button>
-            <div id="predictionMessage"></div>
-        </div>
         <button id="nextButton">Next Question</button>
         <div id="randomImage"></div>
         <!-- Progress Bar -->
@@ -273,19 +250,13 @@
             },
             {
                 name: 'Pizza Delivery',
-                baseCost: 5000,
+                baseCost: 5500,
                 cost: 5000,
                 mps: 10,
                 owned: 0
             },
             // Add more assets as needed
         ];
-
-        // Prediction Variables
-        let prediction = null;
-        let predictionMadeAtQuestion = null;
-        let predictionInterval = 4; // Every 4 questions
-        let predictionEnabled = false;
 
         // Update Money Display
         function updateMoneyDisplay() {
@@ -335,9 +306,6 @@
                 document.getElementById('quizSection').style.display = 'block';
                 currentQuestionIndex = 0;
                 userAnswers = [];
-                prediction = null;
-                predictionMadeAtQuestion = null;
-                predictionEnabled = true; // Enable prediction at the start
                 showQuestion();
             } else {
                 alert('No valid questions found.');
@@ -400,19 +368,16 @@
 
             // Randomize answer order
             const randomizedAnswers = shuffleArray([...q.answers]);
-            q.randomizedAnswers = randomizedAnswers; // Store for later reference
 
-            randomizedAnswers.forEach((answerObj, index) => {
+            randomizedAnswers.forEach((answerObj) => {
                 const div = document.createElement('div');
                 div.classList.add('answer');
                 div.innerText = answerObj.text; // Display only the answer text
-                div.dataset.answerIndex = index;
                 div.addEventListener('click', () => selectAnswer(answerObj, div));
                 answersDiv.appendChild(div);
             });
             showRandomImage();
             updateProgressBar();
-            handlePredictionInput();
         }
 
         // Utility function to shuffle an array
@@ -431,10 +396,7 @@
                 child.classList.remove('selected');
             });
             element.classList.add('selected');
-            userAnswers[currentQuestionIndex] = {
-                answerObj: selectedAnswerObj,
-                answerIndex: parseInt(element.dataset.answerIndex)
-            }; // Store the answer object and index
+            userAnswers[currentQuestionIndex] = selectedAnswerObj; // Store the entire answer object
         }
 
         // Next Question
@@ -443,11 +405,10 @@
                 alert('Please select an answer.');
                 return;
             }
-
-            // Check if it's time to evaluate prediction
-            if (prediction !== null && currentQuestionIndex === predictionMadeAtQuestion + predictionInterval - 1) {
-                evaluatePrediction();
-            }
+            // Add money for answering question
+            let moneyEarned = 1;  // For example, $100 per question
+            money += moneyEarned;
+            updateMoneyDisplay();
 
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
@@ -457,68 +418,8 @@
             }
         });
 
-        // Evaluate Prediction
-        function evaluatePrediction() {
-            const predictedQuestionIndex = predictionMadeAtQuestion + predictionInterval - 1;
-            const userAnswer = userAnswers[predictedQuestionIndex];
-            if (userAnswer && userAnswer.answerIndex + 1 === prediction) {
-                money += 100;
-                updateMoneyDisplay();
-                document.getElementById('predictionMessage').innerText = 'Your prediction was correct! You earned $100.';
-            } else {
-                document.getElementById('predictionMessage').innerText = 'Your prediction was incorrect.';
-            }
-            prediction = null;
-            predictionEnabled = true; // Allow new prediction
-            handlePredictionInput();
-        }
-
-        // Handle Prediction Input
-        function handlePredictionInput() {
-            const predictionContainer = document.getElementById('predictionContainer');
-            const predictionInput = document.getElementById('predictionInput');
-            const submitButton = document.getElementById('submitPredictionButton');
-            const predictionMessage = document.getElementById('predictionMessage');
-            const predictionQuestionNumber = document.getElementById('predictionQuestionNumber');
-
-            predictionMessage.innerText = '';
-
-            if (predictionEnabled) {
-                // Show prediction input
-                predictionContainer.style.display = 'block';
-                predictionInput.disabled = false;
-                predictionInput.value = '';
-                predictionQuestionNumber.innerText = currentQuestionIndex + predictionInterval;
-                submitButton.disabled = false;
-            } else {
-                // Hide prediction input
-                predictionContainer.style.display = 'none';
-            }
-        }
-
-        // Submit Prediction
-        document.getElementById('submitPredictionButton').addEventListener('click', () => {
-            const predictionInput = document.getElementById('predictionInput');
-            const predictionValue = parseInt(predictionInput.value);
-            if (predictionValue >= 1 && predictionValue <= 4) {
-                prediction = predictionValue;
-                predictionMadeAtQuestion = currentQuestionIndex;
-                predictionEnabled = false;
-                predictionInput.disabled = true;
-                document.getElementById('submitPredictionButton').disabled = true;
-                document.getElementById('predictionMessage').innerText = 'Prediction saved!';
-            } else {
-                alert('Please enter a valid number between 1 and 4.');
-            }
-        });
-
         // Show Results
         function showResults() {
-            // Evaluate any pending prediction
-            if (prediction !== null && currentQuestionIndex === predictionMadeAtQuestion + predictionInterval) {
-                evaluatePrediction();
-            }
-
             document.getElementById('quizSection').style.display = 'none';
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
@@ -526,7 +427,7 @@
                 const userAnswer = userAnswers[index];
                 const div = document.createElement('div');
                 div.innerHTML = `<strong>Question ${index + 1}:</strong> ${q.question}<br>
-                                 <strong>Your Answer:</strong> ${userAnswer.answerObj.label} ${userAnswer.answerObj.text}`;
+                                 <strong>Your Answer:</strong> ${userAnswer.label} ${userAnswer.text}`;
                 resultsDiv.appendChild(div);
             });
             document.getElementById('resultsSection').style.display = 'block';
@@ -720,7 +621,7 @@
         document.getElementById('prestigeButton').addEventListener('click', () => {
             if (confirm('Are you sure you want to prestige? You will reset your money and assets but gain a bonus.')) {
                 prestigeLevel++;
-                money = 100.00;
+                money = 400.00;
                 moneyPerSecond = 0;
                 assets.forEach(asset => {
                     asset.owned = 0;
