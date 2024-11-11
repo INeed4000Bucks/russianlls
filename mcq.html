@@ -243,7 +243,8 @@
         let images = [];
 
         // Idle Game Variables
-        let money = 20.00; // Starts at $400
+        let money = 20.00; // Starts at $20
+        let pendingIncome = 0; // Accumulated income from assets
         let moneyPerSecond = 0;
         let moneyPerSecondMultiplier = 1;
         let prestigeLevel = 0;
@@ -290,15 +291,17 @@
         // Update Money Display
         function updateMoneyDisplay() {
             document.getElementById('moneyCounter').innerText = '$' + money.toFixed(2);
+            // Save money to localStorage
+            localStorage.setItem('money', money);
         }
 
-        // Idle Money Increment
+        // Idle Income Accumulation
         setInterval(() => {
             const increment = (moneyPerSecond / 10); // Update every 100ms
-            money += increment;
-            updateMoneyDisplay();
+            pendingIncome += increment;
 
-            // Check for Prestige Eligibility
+            // Note: pendingIncome is not displayed to the user
+            // Check for Prestige Eligibility based on total money
             if (money >= prestigeThreshold) {
                 document.getElementById('prestigeButton').style.display = 'block';
             }
@@ -453,6 +456,10 @@
             if (currentQuestionIndex < questions.length) {
                 showQuestion();
             } else {
+                // Evaluate any pending prediction at the end of the quiz
+                if (prediction !== null) {
+                    evaluatePrediction();
+                }
                 showResults();
             }
         });
@@ -462,10 +469,14 @@
             const predictedQuestionIndex = predictionMadeAtQuestion + predictionInterval - 1;
             const userAnswer = userAnswers[predictedQuestionIndex];
             if (userAnswer && userAnswer.answerIndex + 1 === prediction) {
-                money += 100;
+                // Correct prediction
+                money += 100; // $100 reward
+                money += pendingIncome; // Add accumulated income
+                pendingIncome = 0; // Reset pending income
                 updateMoneyDisplay();
-                document.getElementById('predictionMessage').innerText = 'Your prediction was correct! You earned $100.';
+                document.getElementById('predictionMessage').innerText = 'Your prediction was correct! You earned $100 and your accumulated income.';
             } else {
+                // Incorrect prediction
                 document.getElementById('predictionMessage').innerText = 'Your prediction was incorrect.';
             }
             prediction = null;
@@ -483,7 +494,7 @@
 
             predictionMessage.innerText = '';
 
-            if (predictionEnabled) {
+            if (predictionEnabled && currentQuestionIndex <= questions.length - predictionInterval) {
                 // Show prediction input
                 predictionContainer.style.display = 'block';
                 predictionInput.disabled = false;
@@ -514,11 +525,6 @@
 
         // Show Results
         function showResults() {
-            // Evaluate any pending prediction
-            if (prediction !== null && currentQuestionIndex === predictionMadeAtQuestion + predictionInterval) {
-                evaluatePrediction();
-            }
-
             document.getElementById('quizSection').style.display = 'none';
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
@@ -608,6 +614,10 @@
         // Load Quiz List on Page Load
         window.addEventListener('load', () => {
             loadQuizList();
+            // Load money from localStorage
+            if (localStorage.getItem('money') !== null) {
+                money = parseFloat(localStorage.getItem('money'));
+            }
             updateMoneyDisplay();
             displayAssets();
         });
@@ -720,7 +730,8 @@
         document.getElementById('prestigeButton').addEventListener('click', () => {
             if (confirm('Are you sure you want to prestige? You will reset your money and assets but gain a bonus.')) {
                 prestigeLevel++;
-                money = 100.00;
+                money = 20.00;
+                pendingIncome = 0;
                 moneyPerSecond = 0;
                 assets.forEach(asset => {
                     asset.owned = 0;
