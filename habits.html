@@ -237,10 +237,14 @@
                     habit.done = true;
                     habit.currentClicks = habit.requiredClicks;
                     // Apply visual effect
-                    // Add pending income to money and reset pending income to zero
-                    habit.contribution = pendingIncome; // Store the contribution
-                    money += pendingIncome;
-                    pendingIncome = 0;
+
+                    if (habit.type === 'good') {
+                        // Good habit completed
+                        habit.contribution = pendingIncome; // Store the contribution
+                        money += pendingIncome;
+                        pendingIncome = 0;
+                    }
+                    // Bad habits do not add pending income to money
                 }
             }
 
@@ -260,9 +264,13 @@
                 // Undo completion
                 habit.done = false;
                 habit.currentClicks = habit.requiredClicks - 1;
-                // Subtract the habit's contribution from money
-                money -= habit.contribution;
-                habit.contribution = 0;
+
+                if (habit.type === 'good') {
+                    // Subtract the habit's contribution from money
+                    money = Math.max(0, money - habit.contribution);
+                    habit.contribution = 0;
+                }
+                // Bad habits do not affect money when undone
             } else if (habit.currentClicks > 0) {
                 habit.currentClicks--;
             }
