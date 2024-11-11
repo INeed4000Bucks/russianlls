@@ -299,6 +299,7 @@
         setInterval(() => {
             const increment = (moneyPerSecond / 10); // Update every 100ms
             pendingIncome += increment;
+            localStorage.setItem('pendingIncome', pendingIncome);
 
             // Note: pendingIncome is not displayed to the user
             // Check for Prestige Eligibility based on total money
@@ -617,6 +618,9 @@
             // Load money from localStorage
             if (localStorage.getItem('money') !== null) {
                 money = parseFloat(localStorage.getItem('money'));
+            }
+            if (localStorage.getItem('pendingIncome') !== null) {
+                pendingIncome = parseFloat(localStorage.getItem('pendingIncome'));
             }
             updateMoneyDisplay();
             displayAssets();
