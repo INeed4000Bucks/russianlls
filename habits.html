@@ -134,6 +134,7 @@
         let incomeMultiplier = 1;
         let habits = []; // List of habits
         let lastUpdateTime = Date.now();
+        let pressTimer;
 
         // Load data from localStorage
         function loadData() {
@@ -436,7 +437,15 @@
             document.getElementById('questionDisplay').style.display = 'none';
             document.getElementById('habitsList').innerHTML = '';
         }
+        habitDiv.addEventListener('touchstart', (e) => {
+            pressTimer = setTimeout(() => {
+                handleHabitRightClick(index);
+            }, 600);
+        });
 
+        habitDiv.addEventListener('touchend', (e) => {
+            clearTimeout(pressTimer);
+        });
     </script>
 </body>
 </html>
