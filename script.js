@@ -128,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             modules[moduleName] = textInput.value;
             localStorage.setItem('modules', JSON.stringify(modules));
-            alert('Module saved!');
             currentModule = moduleName;
         } else {
             alert('Module title cannot be empty.');
