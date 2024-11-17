@@ -18,6 +18,8 @@
 
     <!-- Main Content -->
     <div id="mainContent">
+        <!-- Module Title Input -->
+        <input type="text" id="moduleTitleInput" placeholder="Enter module title here...">
         <textarea id="textInput" placeholder="Paste your text here..."></textarea>
         <div>
             <button id="saveModule">Save Module</button>
@@ -30,6 +32,7 @@
 
     <!-- Drill Screen -->
     <div id="drillScreen" class="hidden">
+        <h2 id="drillModuleTitle"></h2>
         <p id="drillText"></p>
         <div>
             <button id="gotItRight" class="hidden">I Got It Right</button>
@@ -40,6 +43,7 @@
 
     <!-- Score Screen -->
     <div id="scoreScreen" class="hidden">
+        <h2 id="scoreModuleTitle"></h2>
         <h2>Scores</h2>
         <ul id="scoreList"></ul>
         <button id="returnMain">Return to Main</button>

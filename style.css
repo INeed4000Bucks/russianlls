@@ -129,3 +129,21 @@ button:hover {
 #moduleList li button:hover {
     background-color: darkred;
 }
+
+#drillScreen h2#drillModuleTitle,
+#scoreScreen h2#scoreModuleTitle {
+    text-align: center;
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+/* Adjust main content spacing */
+#mainContent input#moduleTitleInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #444;
+    color: #fff;
+}

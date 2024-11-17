@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeMenu = document.getElementById('closeMenu');
     const moduleList = document.getElementById('moduleList');
     const textInput = document.getElementById('textInput');
+    const moduleTitleInput = document.getElementById('moduleTitleInput'); // New
     const saveModule = document.getElementById('saveModule');
     const startDrill = document.getElementById('startDrill');
     const exportData = document.getElementById('exportData');
@@ -36,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const scoreScreen = document.getElementById('scoreScreen');
     const scoreList = document.getElementById('scoreList');
     const returnMain = document.getElementById('returnMain');
+    const drillModuleTitle = document.getElementById('drillModuleTitle'); // New
+    const scoreModuleTitle = document.getElementById('scoreModuleTitle'); // New
 
     // Event Listeners
     menuButton.addEventListener('click', openMenu);
@@ -110,27 +113,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function loadModule(moduleName) {
         currentModule = moduleName;
+        moduleTitleInput.value = moduleName; // Populate the title input
         textInput.value = modules[moduleName];
         sideMenu.classList.remove('open');
     }
 
     function saveCurrentModule() {
-        let moduleName = prompt('Enter module name:');
-        if (moduleName && moduleName.trim() !== '') {
+        let moduleName = moduleTitleInput.value.trim();
+        if (moduleName !== '') {
+            if (modules[moduleName]) {
+                if (!confirm('A module with this title already exists. Do you want to overwrite it?')) {
+                    return;
+                }
+            }
             modules[moduleName] = textInput.value;
             localStorage.setItem('modules', JSON.stringify(modules));
             alert('Module saved!');
             currentModule = moduleName;
         } else {
-            alert('Module name cannot be empty.');
+            alert('Module title cannot be empty.');
         }
     }
 
     function startDrilling() {
+        if (!moduleTitleInput.value.trim()) {
+            alert('Please enter a module title before starting the drill.');
+            return;
+        }
         if (!textInput.value.trim()) {
             alert('Please enter some text to drill.');
             return;
         }
+        currentModule = moduleTitleInput.value.trim();
         drillData = parseText(textInput.value);
         if (drillData.length === 0) {
             alert('No valid sentences found for drilling.');
@@ -139,22 +153,50 @@ document.addEventListener('DOMContentLoaded', function () {
         drillIndex = 0;
         mainContent.classList.add('hidden');
         drillScreen.classList.remove('hidden');
+        // Set the module title in the drill screen
+        drillModuleTitle.textContent = currentModule;
         displayDrillSentence();
     }
 
     function parseText(text) {
         let sentences = text.split(/(?<=[.?!])\s+/);
         if (sentences.length === 0) sentences = text.split('\n');
-        return sentences.map(sentence => {
-            let clozeSentence = sentence.replace(/\[([^\]]+)\]/g, (_, clozeText) => {
-                return `<span class="faded-text">${clozeText}</span>`;
-            });
-            clozeSentence = stylePunctuation(clozeSentence);
-            return {
-                original: sentence,
-                clozed: clozeSentence
-            };
+
+        let drillData = [];
+        let accumulatedText = '';
+        sentences.forEach((sentence, index) => {
+            // Check if the sentence contains a clozed term
+            if (/\[([^\]]+)\]/.test(sentence)) {
+                // If there's accumulated text, add it to the current sentence
+                if (accumulatedText) {
+                    sentence = accumulatedText + ' ' + sentence;
+                    accumulatedText = '';
+                }
+                let clozeSentence = sentence.replace(/\[([^\]]+)\]/g, (_, clozeText) => {
+                    return `<span class="faded-text">${clozeText}</span>`;
+                });
+                clozeSentence = stylePunctuation(clozeSentence);
+                drillData.push({
+                    original: sentence,
+                    clozed: clozeSentence
+                });
+            } else {
+                // Accumulate sentences without clozed terms
+                accumulatedText += (accumulatedText ? ' ' : '') + sentence;
+            }
         });
+
+        // Handle any remaining accumulated text at the end
+        if (accumulatedText) {
+            // If you want to include the remaining text as the last drill item, uncomment the following code:
+            let clozeSentence = stylePunctuation(accumulatedText);
+            drillData.push({
+                original: accumulatedText,
+                clozed: clozeSentence
+            });
+        }
+
+        return drillData;
     }
 
     function stylePunctuation(text) {
@@ -203,6 +245,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function showScores() {
         drillScreen.classList.add('hidden');
         scoreScreen.classList.remove('hidden');
+        // Set the module title
+        scoreModuleTitle.textContent = currentModule;
         updateScoreList();
     }
 
