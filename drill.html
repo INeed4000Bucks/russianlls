@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloze Text Driller</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Side Menu Button -->
+    <button id="menuButton">☰</button>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <h2>Modules</h2>
+        <ul id="moduleList"></ul>
+        <button id="closeMenu">Close</button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <textarea id="textInput" placeholder="Paste your text here..."></textarea>
+        <div>
+            <button id="saveModule">Save Module</button>
+            <button id="startDrill">Start Drill</button>
+            <button id="exportData">Export Data</button>
+            <button id="importData">Import Data</button>
+            <input type="file" id="importFileInput" accept=".json" class="hidden">
+        </div>
+    </div>
+
+    <!-- Drill Screen -->
+    <div id="drillScreen" class="hidden">
+        <p id="drillText"></p>
+        <div>
+            <button id="gotItRight" class="hidden">I Got It Right</button>
+            <button id="gotItWrong" class="hidden">I Got It Wrong</button>
+        </div>
+        <button id="startOver">Start Over</button>
+    </div>
+
+    <!-- Score Screen -->
+    <div id="scoreScreen" class="hidden">
+        <h2>Scores</h2>
+        <ul id="scoreList"></ul>
+        <button id="returnMain">Return to Main</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
