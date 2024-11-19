@@ -53,6 +53,7 @@
   <script>
     const equations = {
       basic: [
+        { lhs: "\\int 3 dx", rhs: "3x + C" },
         { lhs: "\\int x^n dx", rhs: "\\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)" },
         { lhs: "\\int x^2 dx", rhs: "\\frac{x^3}{3} + C" },
         { lhs: "\\int x^{-3} dx", rhs: "-\\frac{1}{2x^2} + C" }
@@ -65,6 +66,7 @@
         { lhs: "\\int \\frac{1}{x} dx", rhs: "\\ln |x| + C" }
       ],
       radicals: [
+        { lhs: "\\sqrt{x}", rhs: "x^{1/2}" },
         { lhs: "\\int n\\sqrt{x} dx", rhs: "\\frac{n \\cdot x^{\\frac{3}{2}}}{\\frac{3}{2}} + C" }
       ],
       mix: [
