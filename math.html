@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indefinite Integral Basics</title>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #dropdown {
+      margin: 10px auto;
+      display: block;
+      font-size: 18px;
+      padding: 10px;
+    }
+    #equation-display {
+      font-size: 32px;
+      margin: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    .button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Indefinite Integral Basics</h1>
+
+  <select id="dropdown">
+    <option value="basic">Basic Power Rule</option>
+    <option value="exponential">Exponential Functions</option>
+    <option value="ln">Logarithmic Functions</option>
+    <option value="radicals">Radicals</option>
+  </select>
+
+  <div id="equation-display"></div>
+
+  <button id="next-button" class="button">Next</button>
+
+  <script>
+    const equations = {
+      basic: [
+        { lhs: "\\int x^n dx", rhs: "\\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)" },
+        { lhs: "\\int x^2 dx", rhs: "\\frac{x^3}{3} + C" },
+        { lhs: "\\int x^{-3} dx", rhs: "-\\frac{1}{2x^2} + C" }
+      ],
+      exponential: [
+        { lhs: "\\int e^x dx", rhs: "e^x + C" },
+        { lhs: "\\int a^x dx", rhs: "\\frac{a^x}{\\ln a} + C" }
+      ],
+      ln: [
+        { lhs: "\\int \\frac{1}{x} dx", rhs: "\\ln |x| + C" }
+      ],
+      radicals: [
+        { lhs: "\\int n\\sqrt{x} dx", rhs: "\\frac{n \\cdot x^{\\frac{3}{2}}}{\\frac{3}{2}} + C" }
+      ]
+    };
+
+    const dropdown = document.getElementById("dropdown");
+    const equationDisplay = document.getElementById("equation-display");
+    const nextButton = document.getElementById("next-button");
+
+    let currentCategory = "basic";
+    let currentStep = 0;
+    let showRhs = false;
+
+    function renderEquation() {
+      const equation = equations[currentCategory][currentStep];
+      const latex = showRhs ? `${equation.lhs} = ${equation.rhs}` : equation.lhs;
+      equationDisplay.innerHTML = "";
+      katex.render(latex, equationDisplay, { throwOnError: false });
+    }
+
+    dropdown.addEventListener("change", () => {
+      currentCategory = dropdown.value;
+      currentStep = 0;
+      showRhs = false;
+      renderEquation();
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (showRhs) {
+        currentStep = (currentStep + 1) % equations[currentCategory].length;
+        showRhs = false;
+      } else {
+        showRhs = true;
+      }
+      renderEquation();
+    });
+
+    // Initial rendering
+    renderEquation();
+  </script>
+
+</body>
+</html>
