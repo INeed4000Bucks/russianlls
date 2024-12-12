@@ -636,24 +636,26 @@
 
     async function saveCurrentTags() {
         if (currentHash && currentImage.style.display !== 'none') {
+            // Retrieve existing tags from storage
             const oldTags = getStoredTags(currentHash) || [];
-            const analysis = analyzeTags(oldTags, currentTags);
+            const updatedTagsSet = new Set([...oldTags, ...currentTags]); // Merge old and new tags
+            const updatedTags = Array.from(updatedTagsSet);
 
-            displayTagAnalysis(analysis);
-            storeTags(currentHash, currentTags);
+            // Store the merged tags back in local storage
+            storeTags(currentHash, updatedTags);
 
-            // Update "Old Tags" display
+            // Update the display with the merged tags
+            displayTagAnalysis(analyzeTags(oldTags, currentTags));
+            
             oldTagsDisplay.innerHTML = '';
-            if (currentTags.length > 0) {
-                currentTags.forEach(tag => {
-                    const el = document.createElement('span');
-                    el.className = 'tag';
-                    el.textContent = tag;
-                    oldTagsDisplay.appendChild(el);
-                });
-            }
+            updatedTags.forEach(tag => {
+                const el = document.createElement('span');
+                el.className = 'tag';
+                el.textContent = tag;
+                oldTagsDisplay.appendChild(el);
+            });
 
-            // Hide "Previous Tags" to prevent bleed into the next image
+            // Clear "Previous Tags" section for the next image
             prevTagsList.innerHTML = '';
             previousTagsDiv.style.display = 'none';
         }
@@ -723,8 +725,8 @@
     }
 
     function getStoredTags(hash) {
-        const tagsStr = localStorage.getItem('tags_'+hash);
-        return tagsStr ? JSON.parse(tagsStr) : null;
+        const tagsStr = localStorage.getItem('tags_' + hash);
+        return tagsStr ? JSON.parse(tagsStr) : []; // Return an empty array if no tags are found
     }
 
     function storeTags(hash, tags) {
