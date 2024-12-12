@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Image Tagger</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        color: #fff;
+        font-family: sans-serif;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity:0; transform: translateY(20px); }
+        to { opacity:1; transform: translateY(0); }
+    }
+
+    .uploader {
+        margin-bottom: 20px;
+    }
+
+    .uploader input[type="file"] {
+        padding: 10px;
+        background: #333;
+        border: 1px solid #555;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .image-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 1000px;
+        width: 100%;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .image-container img {
+        max-width: 60%;
+        max-height: 80vh;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        margin-right: 20px;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .tagging-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tagging-area textarea {
+        width: 100%;
+        height: 100px;
+        background: #111;
+        border: 1px solid #444;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 20px;
+        padding: 10px;
+        resize: none;
+        box-sizing: border-box;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .tagging-area textarea:focus {
+        outline: none;
+        border-color: #888;
+    }
+
+    .tags-display {
+        margin-top: 20px;
+    }
+
+    .tags-display .tag {
+        display: inline-block;
+        background: #222;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin: 5px;
+        font-size: 18px;
+        opacity: 0;
+        animation: popIn 0.5s forwards;
+    }
+
+    @keyframes popIn {
+        0% { transform: scale(0.5); opacity:0; }
+        100% { transform: scale(1); opacity:1; }
+    }
+
+    .tag.green {
+        background: #2a5d2a;
+    }
+
+    .tag.red {
+        background: #5d2a2a;
+    }
+
+    .tag.yellow {
+        background: #5d5d2a;
+    }
+
+    .navigation {
+        margin-top: 20px;
+    }
+
+    .navigation button {
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 5px;
+        font-size: 16px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: background 0.3s;
+    }
+
+    .navigation button:hover {
+        background: #444;
+    }
+
+    .no-image {
+        font-size: 24px;
+        color: #ccc;
+        margin-top: 50px;
+    }
+
+    .previous-tags {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0,0,0,0.7);
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 200px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .previous-tags h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 18px;
+        border-bottom: 1px solid #444;
+        padding-bottom: 5px;
+    }
+
+    .previous-tags .tag {
+        display: inline-block;
+        background: #333;
+        padding: 5px 8px;
+        border-radius: 4px;
+        margin: 3px;
+        font-size: 14px;
+    }
+
+    .previous-tags .tag.green {
+        background: #2a5d2a;
+    }
+
+    .previous-tags .tag.red {
+        background: #5d2a2a;
+    }
+
+    .previous-tags .tag.yellow {
+        background: #5d5d2a;
+    }
+
+    .summary-screen {
+        width: 100%;
+        max-width: 800px;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .summary-screen h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .summary-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: flex-start;
+        background: #222;
+        padding: 15px;
+        border-radius: 8px;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .summary-item h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #aaa;
+    }
+
+    .summary-item .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .summary-item .tag {
+        background: #333;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .summary-item .thumbnail {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 15px;
+    }
+
+    .summary-item .content {
+        flex: 1;
+    }
+
+    #startOverBtn {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    #startOverBtn:hover {
+        background: #444;
+    }
+
+    /* Centered Summary Button */
+    #summaryBtn {
+        position: fixed;
+        bottom: 20px;
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 5px;
+        font-size: 16px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background 0.3s;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #summaryBtn:hover {
+        background: #444;
+    }
+    .tag-container {
+        position: relative;
+        display: inline-block;
+        margin: 3px;
+    }
+
+    .tag-container .tag {
+        margin: 0;
+        display: inline-block;
+    }
+
+    .tag-container .remove-tag {
+        display: none;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ff4444;
+        color: white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        text-align: center;
+        line-height: 14px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 1000;
+        box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    }
+
+    .tag-container:hover .remove-tag {
+        display: block;
+    }
+
+    .tag-container:hover .tag {
+        filter: brightness(1.2);
+    }
+
+    .remove-tag {
+        opacity: 0.8;
+        transition: opacity 0.2s;
+        z-index: 1000;
+    }
+
+    .remove-tag:hover {
+        opacity: 1;
+        background: #ff6666;
+    }
+    #toggleTagsBtn {
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 5px;
+        font-size: 16px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s;
+    }
+
+    #toggleTagsBtn:hover {
+        background: #444;
+    }
+
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="uploader">
+        <input type="file" id="fileInput" multiple accept="image/*" />
+    </div>
+    <div class="image-container">
+        <img id="currentImage" src="" alt="Current Image" style="display:none;"/>
+        <div class="previous-tags" id="previousTags" style="display:none;">
+            <h3>Previous Tags</h3>
+            <div class="prev-tags-list" id="prevTagsList"></div>
+        </div>
+        <div class="tagging-area">
+            <textarea id="tagInput" placeholder="Type a tag and press Enter..."></textarea>
+            <div class="tags-display" id="oldTagsDisplay"></div>
+        </div>
+    </div>
+    <div class="navigation">
+        <button id="prevBtn" disabled>Previous</button>
+        <button id="nextBtn" disabled>Next</button>
+        <button id="toggleTagsBtn" style="display:none;">Toggle Previous Tags</button>
+    </div>    
+    
+    <div class="no-image" id="noImagesMsg" style="display:none;">No images selected yet.</div>
+    <div class="summary-screen" id="summaryScreen" style="display:none;">
+        <h2>Tagging Summary</h2>
+        <div class="summary-content" id="summaryContent"></div>
+        <button id="startOverBtn">Start Over</button>
+    </div>
+</div>
+
+<!-- Summary button at bottom center -->
+<button id="summaryBtn" style="display:none;">Show Summary</button>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const currentImage = document.getElementById('currentImage');
+    const tagInput = document.getElementById('tagInput');
+    const oldTagsDisplay = document.getElementById('oldTagsDisplay');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const noImagesMsg = document.getElementById('noImagesMsg');
+    const previousTagsDiv = document.getElementById('previousTags');
+    const prevTagsList = document.getElementById('prevTagsList');
+    const summaryScreen = document.getElementById('summaryScreen');
+    const summaryContent = document.getElementById('summaryContent');
+    const summaryBtn = document.getElementById('summaryBtn');
+    const toggleTagsBtn = document.getElementById('toggleTagsBtn');
+
+    // Add a "Show Tag Feedback" button dynamically
+    const showTagFeedbackBtn = document.createElement('button');
+    showTagFeedbackBtn.textContent = 'Show Tag Feedback';
+    showTagFeedbackBtn.style.display = 'none';
+    showTagFeedbackBtn.style.background = '#333';
+    showTagFeedbackBtn.style.color = '#fff';
+    showTagFeedbackBtn.style.border = '1px solid #555';
+    showTagFeedbackBtn.style.borderRadius = '5px';
+    showTagFeedbackBtn.style.fontSize = '16px';
+    showTagFeedbackBtn.style.padding = '10px 20px';
+    showTagFeedbackBtn.style.cursor = 'pointer';
+    showTagFeedbackBtn.style.transition = 'background 0.3s';
+    showTagFeedbackBtn.style.marginTop = '20px';
+    showTagFeedbackBtn.style.transition = 'opacity 0.3s ease-in-out';
+
+    document.querySelector('.container').appendChild(showTagFeedbackBtn);
+    
+
+    function updateTagFeedbackButtonVisibility() {
+        const storedTags = getStoredTags(currentHash);
+        showTagFeedbackBtn.style.display = storedTags && storedTags.length > 0 ? 'block' : 'none';
+    }
+
+    let files = [];
+    let currentIndex = -1;
+    let imageHashes = []; // store hash for each image index
+    let currentHash = null;
+    let currentTags = [];
+    let recognizedCount = 0;
+    let isReviewingPreviousTags = false;
+
+    fileInput.addEventListener('change', async (e) => {
+        files = Array.from(e.target.files);
+        currentIndex = 0;
+        if (files.length > 0) {
+            noImagesMsg.style.display = 'none';
+            // Prepare array for hashes
+            imageHashes = new Array(files.length).fill(null);
+            await showCurrentImage();
+            updateButtons();
+            summaryBtn.style.display = 'block'; // Show summary button once images are loaded
+        } else {
+            noImagesMsg.style.display = 'block';
+            summaryBtn.style.display = 'none';
+        }
+    });
+
+    showTagFeedbackBtn.addEventListener('click', () => {
+        const storedTags = getStoredTags(currentHash);
+        if (storedTags && storedTags.length > 0) {
+            showPreviousTags(storedTags);
+        } else {
+            alert('No tags available for feedback.');
+        }
+    });
+
+    function updateTagToggleButtonVisibility() {
+        const storedTags = getStoredTags(currentHash);
+        if (storedTags && storedTags.length > 0) {
+            toggleTagsBtn.style.display = 'inline-block'; // Show the button
+        } else {
+            toggleTagsBtn.style.display = 'none'; // Hide the button
+            previousTagsDiv.style.display = 'none'; // Hide previous tags div if no tags exist
+        }
+    }
+
+    toggleTagsBtn.addEventListener('click', () => {
+        if (previousTagsDiv.style.display === 'block') {
+            previousTagsDiv.style.display = 'none'; // Hide the div
+        } else {
+            const storedTags = getStoredTags(currentHash);
+            if (storedTags && storedTags.length > 0) {
+                showPreviousTags(storedTags); // Show previous tags if available
+                previousTagsDiv.style.display = 'block'; // Make it visible
+            }
+        }
+    });
+
+    async function showCurrentImage() {
+        if (currentIndex < 0 || currentIndex >= files.length) return;
+
+        const file = files[currentIndex];
+        const dataURL = await readFileAsync(file);
+        currentImage.src = dataURL;
+        currentImage.style.display = 'block';
+
+        tagInput.value = '';
+        currentTags = [];
+        oldTagsDisplay.innerHTML = '';
+
+        currentHash = await hashDataURL(dataURL);
+        imageHashes[currentIndex] = currentHash;
+
+        prevTagsList.innerHTML = ''; // Clear previous tags content
+        previousTagsDiv.style.display = 'none'; // Ensure it's hidden initially
+
+        isReviewingPreviousTags = false; // Reset review state
+
+        // Update the toggle button visibility
+        updateTagToggleButtonVisibility();
+    }
+
+
+    function updateButtons() {
+        prevBtn.disabled = (currentIndex <= 0);
+        nextBtn.disabled = (currentIndex >= files.length - 1 || files.length === 0);
+    }
+
+    prevBtn.addEventListener('click', async () => {
+        await saveCurrentTags();
+        if (currentIndex > 0) {
+            currentIndex--;
+            await showCurrentImage();
+            updateButtons();
+            updateTagToggleButtonVisibility();
+        }
+    });
+
+    nextBtn.addEventListener('click', async () => {
+        // Save the current tags before any action
+        await saveCurrentTags();
+
+        // If reviewing tag feedback, close it and wait for the next click to switch images
+        if (isReviewingPreviousTags) {
+            isReviewingPreviousTags = false;
+            previousTagsDiv.style.display = 'none';
+            return;
+        }
+
+        // Check if there are more images to navigate
+        if (currentIndex < files.length - 1) {
+            currentIndex++;
+            await showCurrentImage();
+            updateButtons();
+
+            // Reset and update displays for the new image
+            oldTagsDisplay.innerHTML = '';
+            prevTagsList.innerHTML = '';
+            previousTagsDiv.style.display = 'none';
+
+            // Update toggle visibility for the new image's tags
+            updateTagToggleButtonVisibility();
+        } else {
+            // Notify the user if no more images are available
+            alert("No more images available.");
+        }
+    });
+
+    tagInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const newTag = tagInput.value.trim();
+            if (newTag) {
+                currentTags.push(newTag);
+                tagInput.value = '';
+            }
+        }
+    });
+
+    function showPreviousTags(storedTags) {
+        prevTagsList.innerHTML = ''; // Clear existing tags
+        previousTagsDiv.style.display = 'block';
+        previousTagsDiv.style.opacity = '0';
+
+        const analysis = analyzeTags(storedTags, currentTags); // Analyze tags for color coding
+
+        storedTags.forEach(tag => {
+            const tagContainer = document.createElement('div');
+            tagContainer.className = 'tag-container';
+            tagContainer.style.position = 'relative';
+            tagContainer.style.margin = '3px';
+
+            const tagSpan = document.createElement('span');
+            tagSpan.className = 'tag';
+
+            // Assign color based on analysis
+            if (analysis.kept.includes(tag)) {
+                tagSpan.className += ' green'; // Kept tags
+            } else if (analysis.missing.includes(tag)) {
+                tagSpan.className += ' red'; // Missing tags
+            } else {
+                const similarTag = analysis.similar.find(s => s.closeTo === tag);
+                if (similarTag) {
+                    tagSpan.className += ' yellow'; // Similar tags
+                }
+            }
+
+            tagSpan.textContent = tag;
+
+            // Add remove button functionality
+            const removeBtn = document.createElement('span');
+            removeBtn.className = 'remove-tag';
+            removeBtn.innerHTML = '×';
+            removeBtn.style.position = 'absolute';
+            removeBtn.style.top = '-8px';
+            removeBtn.style.right = '-8px';
+            removeBtn.style.background = '#ff4444';
+            removeBtn.style.borderRadius = '50%';
+            removeBtn.style.width = '16px';
+            removeBtn.style.height = '16px';
+            removeBtn.style.textAlign = 'center';
+            removeBtn.style.lineHeight = '16px';
+            removeBtn.style.cursor = 'pointer';
+            removeBtn.style.fontSize = '12px';
+            removeBtn.style.display = 'none'; // Hidden by default
+
+            tagContainer.appendChild(tagSpan);
+            tagContainer.appendChild(removeBtn);
+
+            // Hover effects for the remove button
+            tagContainer.addEventListener('mouseenter', () => {
+                removeBtn.style.display = 'block'; // Show remove button on hover
+            });
+
+            tagContainer.addEventListener('mouseleave', () => {
+                removeBtn.style.display = 'none'; // Hide remove button on mouse leave
+            });
+
+            // Remove tag functionality
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const updatedTags = storedTags.filter(t => t !== tag);
+                storeTags(currentHash, updatedTags); // Update stored tags
+                tagContainer.remove();
+
+                // Hide the "Previous Tags" div if no tags are left
+                if (updatedTags.length === 0) {
+                    previousTagsDiv.style.display = 'none';
+                }
+            });
+
+            prevTagsList.appendChild(tagContainer);
+        });
+
+        // Fade-in effect
+        setTimeout(() => {
+            previousTagsDiv.style.opacity = '1';
+        }, 10);
+    }
+
+
+    async function saveCurrentTags() {
+        if (currentHash && currentImage.style.display !== 'none') {
+            const oldTags = getStoredTags(currentHash) || [];
+            const analysis = analyzeTags(oldTags, currentTags);
+
+            displayTagAnalysis(analysis);
+            storeTags(currentHash, currentTags);
+
+            // Update "Old Tags" display
+            oldTagsDisplay.innerHTML = '';
+            if (currentTags.length > 0) {
+                currentTags.forEach(tag => {
+                    const el = document.createElement('span');
+                    el.className = 'tag';
+                    el.textContent = tag;
+                    oldTagsDisplay.appendChild(el);
+                });
+            }
+
+            // Hide "Previous Tags" to prevent bleed into the next image
+            prevTagsList.innerHTML = '';
+            previousTagsDiv.style.display = 'none';
+        }
+    }
+
+    function displayTagAnalysis(analysis) {
+        oldTagsDisplay.innerHTML = '';
+        
+        function createRemovableTag(text, colorClass) {
+            const tagContainer = document.createElement('div');
+            tagContainer.className = 'tag-container';
+
+            const tagSpan = document.createElement('span');
+            tagSpan.className = `tag ${colorClass}`;
+            tagSpan.textContent = text;
+
+            const removeBtn = document.createElement('span');
+            removeBtn.className = 'remove-tag';
+            removeBtn.innerHTML = '×';
+            removeBtn.setAttribute('title', 'Remove tag');
+
+            tagContainer.appendChild(tagSpan);
+            tagContainer.appendChild(removeBtn);
+
+            // Hover effects
+            tagContainer.addEventListener('mouseenter', () => {
+                removeBtn.style.display = 'block';
+            });
+
+            tagContainer.addEventListener('mouseleave', () => {
+                removeBtn.style.display = 'none';
+            });
+
+            // Remove tag functionality
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Remove from currentTags array
+                const index = currentTags.indexOf(text);
+                if (index > -1) {
+                    currentTags.splice(index, 1);
+                }
+                tagContainer.remove();
+                
+                // Update localStorage
+                if (currentHash) {
+                    storeTags(currentHash, currentTags);
+                }
+            });
+
+            return tagContainer;
+        }
+
+        // Green: tags that remain
+        analysis.kept.forEach(t => {
+            oldTagsDisplay.appendChild(createRemovableTag(t, 'green'));
+        });
+
+        // Red: missing tags
+        analysis.missing.forEach(t => {
+            oldTagsDisplay.appendChild(createRemovableTag(t, 'red'));
+        });
+
+        // Yellow: similar tags
+        analysis.similar.forEach(t => {
+            oldTagsDisplay.appendChild(createRemovableTag(t.current, 'yellow'));
+        });
+    }
+
+    function getStoredTags(hash) {
+        const tagsStr = localStorage.getItem('tags_'+hash);
+        return tagsStr ? JSON.parse(tagsStr) : null;
+    }
+
+    function storeTags(hash, tags) {
+        localStorage.setItem('tags_'+hash, JSON.stringify(tags));
+    }
+
+    function readFileAsync(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => { resolve(reader.result); };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function hashDataURL(dataURL) {
+        const msgBuffer = new TextEncoder().encode(dataURL);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
+    function analyzeTags(oldTags, newTags) {
+        const oldSet = new Set(oldTags.map(t => t.toLowerCase()));
+        const newSet = new Set(newTags.map(t => t.toLowerCase()));
+        const kept = [];
+        const missing = [];
+        const similar = [];
+
+        for (const o of oldTags) {
+            if (newSet.has(o.toLowerCase())) {
+                kept.push(o);
+            }
+        }
+
+        for (const o of oldTags) {
+            if (!newSet.has(o.toLowerCase())) {
+                missing.push(o);
+            }
+        }
+
+        for (const n of newTags) {
+            if (!oldSet.has(n.toLowerCase())) {
+                for (const m of missing) {
+                    const dist = levenshteinDistance(n.toLowerCase(), m.toLowerCase());
+                    if (dist <= 2) {
+                        similar.push({current: n, closeTo: m});
+                        break;
+                    }
+                }
+            }
+        }
+        return {kept, missing, similar};
+    }
+
+    function levenshteinDistance(a, b) {
+        const matrix = [];
+        const lenA = a.length, lenB = b.length;
+        for (let i = 0; i <= lenA; i++) {
+            matrix[i] = [i];
+        }
+        for (let j = 1; j <= lenB; j++) {
+            matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= lenA; i++) {
+            for (let j = 1; j <= lenB; j++) {
+                const cost = a[i-1] === b[j-1] ? 0 : 1;
+                matrix[i][j] = Math.min(
+                    matrix[i-1][j] + 1,
+                    matrix[i][j-1] + 1,
+                    matrix[i-1][j-1] + cost
+                );
+            }
+        }
+        return matrix[lenA][lenB];
+    }
+
+    // Show summary screen immediately when the summary button is clicked
+    summaryBtn.addEventListener('click', async () => {
+        await saveCurrentTags();
+        showSummaryScreen();
+    });
+
+    function showSummaryScreen() {
+        document.querySelector('.image-container').style.display = 'none';
+        document.querySelector('.navigation').style.display = 'none';
+        document.querySelector('.uploader').style.display = 'none';
+        summaryBtn.style.display = 'none';
+
+        summaryContent.innerHTML = '';
+        
+        files.forEach(async (file, index) => {
+            const hash = imageHashes[index];
+            if (!hash) return;
+            const tags = getStoredTags(hash) || [];
+            if (tags.length > 0) {
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+                
+                // Create thumbnail
+                const thumbnail = document.createElement('img');
+                thumbnail.className = 'thumbnail';
+                const thumbnailURL = await readFileAsync(file);
+                thumbnail.src = thumbnailURL;
+                
+                const content = document.createElement('div');
+                content.className = 'content';
+                content.innerHTML = `
+                    <h3>Image ${index + 1}</h3>
+                    <div class="tags">
+                        ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                `;
+                
+                summaryItem.appendChild(thumbnail);
+                summaryItem.appendChild(content);
+                summaryContent.appendChild(summaryItem);
+            }
+        });
+        
+        summaryScreen.style.display = 'block';
+    }
+
+    if (!files || files.length === 0) {
+        noImagesMsg.style.display = 'block';
+    }
+</script>
+</body>
+</html>
