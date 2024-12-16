@@ -443,6 +443,15 @@ merci;thank you;thanks:Mercy is being thankful"
             <h3>Upload Images/GIFs</h3>
             <input type="file" id="imageUpload" multiple accept="image/*" />
             <button onclick="toggleImageAssociationPopup()">Associate Images with Terms</button>
+            <div id="russianLearningOptions" style="margin-top: 10px;">
+                <label>
+                    <input type="checkbox" id="learningRussian" onchange="toggleRussianLearning()">
+                    Learning Russian (Enable Speech Input)
+                </label>
+                <div id="speechStatus" style="display: none; color: green; margin-top: 5px;">
+                    Listening for Russian...
+                </div>
+            </div>
         </div>
 
         <div id="textOverlay" class="overlay">
@@ -1402,6 +1411,158 @@ merci;thank you;thanks:Mercy is being thankful"
                     };
                     reader.readAsText(file);
                 }
+            }
+            let recognition = null;
+            let isListeningRussian = false;
+
+            const censoredWords = {
+                'з******': 'задница',
+                'ж***': 'жопа',
+                // Add more mappings as needed
+            };
+            function uncensorWords(text) {
+                console.log('Uncensoring text:', text);
+                let uncensoredText = text.toLowerCase();
+                
+                // Simple direct matching instead of regex
+                Object.entries(censoredWords).forEach(([censored, uncensored]) => {
+                    console.log(`Checking if '${uncensoredText}' matches '${censored}'`);
+                    if (uncensoredText === censored) {
+                        console.log(`Match found! Replacing with: ${uncensored}`);
+                        uncensoredText = uncensored;
+                    }
+                });
+                
+                console.log('Uncensored result:', uncensoredText);
+                return uncensoredText;
+            }
+
+            function setupSpeechRecognition() {
+                window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!window.SpeechRecognition) {
+                    alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+                    return false;
+                }
+                recognition = new SpeechRecognition();
+                recognition.lang = 'ru-RU';
+                recognition.interimResults = false;
+                recognition.continuous = true;
+
+                recognition.onresult = (event) => {
+                    const last = event.results.length - 1;
+                    let text = event.results[last][0].transcript.toLowerCase().trim();
+                    
+                    console.log('Original censored text:', text);
+                    
+                    // Apply uncensoring to the recognized text
+                    const uncensoredText = uncensorWords(text);
+                    console.log('After uncensoring:', uncensoredText);
+                    
+                    if (!teachingPhase && currentWords[currentIndex]) {
+                        const answerInput = document.getElementById('answer');
+                        answerInput.value = uncensoredText;
+                        
+                        // Automatically check if the answer is correct
+                        const currentWord = currentWords[currentIndex];
+                        const correctAnswers = currentWord.translations.map(t => t.toLowerCase());
+                        
+                        if (correctAnswers.includes(uncensoredText)) {
+                            currentWord.correct++;
+                            if (currentWord.correct >= requiredCorrect) {
+                                showFeedback("Correct! You've learned this word!", "green");
+                                currentWords = currentWords.filter((w) => w !== currentWord);
+                            } else {
+                                showFeedback("Correct!", "green");
+                            }
+                            currentIndex++;
+                            nextWord();
+                        }
+                    }
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    if (event.error === 'not-allowed') {
+                        document.getElementById('learningRussian').checked = false;
+                        toggleRussianLearning();
+                    }
+                };
+
+                recognition.onend = () => {
+                    if (isListeningRussian) {
+                        recognition.start();
+                    }
+                };
+
+                return true;
+            }
+
+            function toggleRussianLearning() {
+                const checkbox = document.getElementById('learningRussian');
+                const statusDiv = document.getElementById('speechStatus');
+                
+                if (checkbox.checked) {
+                    if (!recognition && !setupSpeechRecognition()) {
+                        checkbox.checked = false;
+                        return;
+                    }
+                    
+                    isListeningRussian = true;
+                    statusDiv.style.display = 'block';
+                    recognition.start();
+                } else {
+                    isListeningRussian = false;
+                    statusDiv.style.display = 'none';
+                    if (recognition) {
+                        recognition.stop();
+                    }
+                }
+            }
+            function updateRussianLearningVisibility() {
+                const russianOptions = document.getElementById('russianLearningOptions');
+                // Check if any of the words or translations contain Cyrillic characters
+                const hasCyrillic = words.some(word => 
+                    /[а-яА-ЯёЁ]/.test(word.word) || 
+                    word.translations.some(trans => /[а-яА-ЯёЁ]/.test(trans))
+                );
+                
+                russianOptions.style.display = hasCyrillic ? 'block' : 'none';
+                
+                // If switching to non-Russian list, disable speech recognition
+                if (!hasCyrillic && isListeningRussian) {
+                    document.getElementById('learningRussian').checked = false;
+                    toggleRussianLearning();
+                }
+            }
+
+            const originalStartLearning = startLearning;
+            startLearning = function() {
+                originalStartLearning();
+                updateRussianLearningVisibility();
+            };
+            const originalStartQuizzing = startQuizzing;
+            startQuizzing = function() {
+                originalStartQuizzing();
+                updateRussianLearningVisibility();
+            };
+            function filterVulgarWords(text) {
+                console.log('Original censored text:', text);
+                
+                // First uncensor the text
+                let uncensoredText = uncensorText(text);
+                console.log('Uncensored text:', uncensoredText);
+                
+                // Then apply our own censoring
+                let filteredText = uncensoredText;
+                Object.keys(vulgarWords).forEach(vulgarWord => {
+                    const regex = new RegExp(`\\b${vulgarWord}\\b`, 'gi');
+                    if (regex.test(filteredText)) {
+                        filteredText = filteredText.replace(regex, vulgarWords[vulgarWord]);
+                    }
+                });
+                
+                console.log('Our filtered result:', filteredText);
+                return filteredText;
             }
         </script>
         <div class="theme-switch-wrapper">
