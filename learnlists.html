@@ -1424,13 +1424,15 @@ merci;thank you;thanks:Mercy is being thankful"
                 console.log('Uncensoring text:', text);
                 let uncensoredText = text.toLowerCase();
                 
-                // Simple direct matching instead of regex
-                Object.entries(censoredWords).forEach(([censored, uncensored]) => {
+                // Use some() to stop after finding a match
+                Object.entries(censoredWords).some(([censored, uncensored]) => {
                     console.log(`Checking if '${uncensoredText}' matches '${censored}'`);
                     if (uncensoredText === censored) {
                         console.log(`Match found! Replacing with: ${uncensored}`);
                         uncensoredText = uncensored;
+                        return true; // Stop checking after finding a match
                     }
+                    return false;
                 });
                 
                 console.log('Uncensored result:', uncensoredText);
