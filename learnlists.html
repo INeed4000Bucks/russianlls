@@ -1414,6 +1414,8 @@ merci;thank you;thanks:Mercy is being thankful"
             }
             let recognition = null;
             let isListeningRussian = false;
+            let reconnectAttempts = 0;
+            const MAX_RECONNECT_ATTEMPTS = 3;
 
             const censoredWords = {
                 'з******': 'задница',
@@ -1498,6 +1500,7 @@ merci;thank you;thanks:Mercy is being thankful"
 
                 return true;
             }
+            let recognitionResetInterval = null;
 
             function toggleRussianLearning() {
                 const checkbox = document.getElementById('learningRussian');
@@ -1512,12 +1515,19 @@ merci;thank you;thanks:Mercy is being thankful"
                     isListeningRussian = true;
                     statusDiv.style.display = 'block';
                     recognition.start();
+                    clearInterval(recognitionResetInterval); // Clear any existing interval first
+                    recognitionResetInterval = setInterval(() => {
+                    if (isListeningRussian) {
+                        resetRecognition();
+                    }
+                    }, 20000);
                 } else {
                     isListeningRussian = false;
                     statusDiv.style.display = 'none';
                     if (recognition) {
                         recognition.stop();
                     }
+                    clearInterval(recognitionResetInterval);
                 }
             }
             function updateRussianLearningVisibility() {
@@ -1566,6 +1576,16 @@ merci;thank you;thanks:Mercy is being thankful"
                 console.log('Our filtered result:', filteredText);
                 return filteredText;
             }
+            function resetRecognition() {
+                recognition.onend = null; // detach listeners
+                recognition.onerror = null;
+                recognition.stop();
+
+                setupSpeechRecognition(); // Re-run your setup function to create a fresh instance
+                if (isListeningRussian) {
+                    recognition.start();
+                }
+                }
         </script>
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
