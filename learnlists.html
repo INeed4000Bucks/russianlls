@@ -452,6 +452,15 @@ merci;thank you;thanks:Mercy is being thankful"
                     Listening for Russian...
                 </div>
             </div>
+            <div id="japaneseLearningOptions" style="margin-top: 10px;">
+                <label>
+                    <input type="checkbox" id="learningJapanese" onchange="toggleJapaneseLearning()">
+                    Learning Japanese (Enable Speech Input)
+                </label>
+                <div id="japaneseSpeechStatus" style="display: none; color: green; margin-top: 5px;">
+                    Listening for Japanese...
+                </div>
+            </div>
         </div>
 
         <div id="textOverlay" class="overlay">
@@ -1530,32 +1539,119 @@ merci;thank you;thanks:Mercy is being thankful"
                     clearInterval(recognitionResetInterval);
                 }
             }
-            function updateRussianLearningVisibility() {
+            function setupJapaneseSpeechRecognition() {
+                window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!window.SpeechRecognition) {
+                    alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+                    return false;
+                }
+                japaneseRecognition = new SpeechRecognition();
+                japaneseRecognition.lang = 'ja-JP';
+                japaneseRecognition.interimResults = false;
+                japaneseRecognition.continuous = true;
+
+                japaneseRecognition.onresult = (event) => {
+                    const last = event.results.length - 1;
+                    let text = event.results[last][0].transcript.toLowerCase().trim();
+                    
+                    if (!teachingPhase && currentWords[currentIndex]) {
+                        const answerInput = document.getElementById('answer');
+                        answerInput.value = text;
+                        
+                        const currentWord = currentWords[currentIndex];
+                        const correctAnswers = currentWord.translations.map(t => t.toLowerCase());
+                        
+                        if (correctAnswers.includes(text)) {
+                            currentWord.correct++;
+                            if (currentWord.correct >= requiredCorrect) {
+                                showFeedback("Correct! You've learned this word!", "green");
+                                currentWords = currentWords.filter((w) => w !== currentWord);
+                            } else {
+                                showFeedback("Correct!", "green");
+                            }
+                            currentIndex++;
+                            nextWord();
+                        }
+                    }
+                };
+
+                japaneseRecognition.onerror = (event) => {
+                    console.error('Japanese speech recognition error:', event.error);
+                    if (event.error === 'not-allowed') {
+                        document.getElementById('learningJapanese').checked = false;
+                        toggleJapaneseLearning();
+                    }
+                };
+
+                japaneseRecognition.onend = () => {
+                    if (isListeningJapanese) {
+                        japaneseRecognition.start();
+                    }
+                };
+
+                return true;
+            }
+
+            function toggleJapaneseLearning() {
+                const checkbox = document.getElementById('learningJapanese');
+                const statusDiv = document.getElementById('japaneseSpeechStatus');
+                
+                if (checkbox.checked) {
+                    if (!japaneseRecognition && !setupJapaneseSpeechRecognition()) {
+                        checkbox.checked = false;
+                        return;
+                    }
+                    
+                    isListeningJapanese = true;
+                    statusDiv.style.display = 'block';
+                    japaneseRecognition.start();
+                } else {
+                    isListeningJapanese = false;
+                    statusDiv.style.display = 'none';
+                    if (japaneseRecognition) {
+                        japaneseRecognition.stop();
+                    }
+                }
+            }
+            function updateLanguageLearningVisibility() {
                 const russianOptions = document.getElementById('russianLearningOptions');
-                // Check if any of the words or translations contain Cyrillic characters
+                const japaneseOptions = document.getElementById('japaneseLearningOptions');
+                
+                // Check for Cyrillic characters
                 const hasCyrillic = words.some(word => 
                     /[а-яА-ЯёЁ]/.test(word.word) || 
                     word.translations.some(trans => /[а-яА-ЯёЁ]/.test(trans))
                 );
                 
-                russianOptions.style.display = hasCyrillic ? 'block' : 'none';
+                // Check for Japanese characters (Hiragana, Katakana, Kanji)
+                const hasJapanese = words.some(word => 
+                    /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(word.word) || 
+                    word.translations.some(trans => /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(trans))
+                );
                 
-                // If switching to non-Russian list, disable speech recognition
+                russianOptions.style.display = hasCyrillic ? 'block' : 'none';
+                japaneseOptions.style.display = hasJapanese ? 'block' : 'none';
+                
+                // Disable speech recognition if switching to non-matching list
                 if (!hasCyrillic && isListeningRussian) {
                     document.getElementById('learningRussian').checked = false;
                     toggleRussianLearning();
+                }
+                if (!hasJapanese && isListeningJapanese) {
+                    document.getElementById('learningJapanese').checked = false;
+                    toggleJapaneseLearning();
                 }
             }
 
             const originalStartLearning = startLearning;
             startLearning = function() {
                 originalStartLearning();
-                updateRussianLearningVisibility();
+                updateLanguageLearningVisibility();
             };
             const originalStartQuizzing = startQuizzing;
             startQuizzing = function() {
                 originalStartQuizzing();
-                updateRussianLearningVisibility();
+                updateLanguageLearningVisibility();
             };
             function filterVulgarWords(text) {
                 console.log('Original censored text:', text);
