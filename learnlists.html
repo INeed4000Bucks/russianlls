@@ -1510,6 +1510,7 @@ merci;thank you;thanks:Mercy is being thankful"
                 return true;
             }
             let recognitionResetInterval = null;
+            let japaneseRecognitionResetInterval = null;
 
             function toggleRussianLearning() {
                 const checkbox = document.getElementById('learningRussian');
@@ -1605,12 +1606,30 @@ merci;thank you;thanks:Mercy is being thankful"
                     isListeningJapanese = true;
                     statusDiv.style.display = 'block';
                     japaneseRecognition.start();
+                    clearInterval(japaneseRecognitionResetInterval); // Clear any existing interval
+                    japaneseRecognitionResetInterval = setInterval(() => {
+                        if (isListeningJapanese) {
+                            resetJapaneseRecognition();
+                        }
+                    }, 20000);
                 } else {
                     isListeningJapanese = false;
                     statusDiv.style.display = 'none';
                     if (japaneseRecognition) {
                         japaneseRecognition.stop();
                     }
+                    clearInterval(japaneseRecognitionResetInterval);
+                }
+            }
+
+            function resetJapaneseRecognition() {
+                if (japaneseRecognition) {
+                    japaneseRecognition.stop();
+                    setTimeout(() => {
+                        if (isListeningJapanese) {
+                            japaneseRecognition.start();
+                        }
+                    }, 500);
                 }
             }
             function updateLanguageLearningVisibility() {
