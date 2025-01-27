@@ -3,6 +3,7 @@
         {
             "id": "lesson1",
             "title": "Development Documentation",
+            "dictionary": "real-estate-definitions.json",
             "sections": [
                 {
                     "id": "1.1",
@@ -38,13 +39,13 @@
                     "id": "1.6",
                     "title": "Explanation",
                     "audioFile": "6 Explanation.wav",
-                    "text": "A General Plan is a long-term guide that cities use to plan and regulate development in an orderly way. That’s why the city of Mesa approved its General Plan for the next 20 years. It's a document that's designed to outline how the city will grow and develop over time. It includes plans for residential neighborhoods, commercial zones, parks, and natural spaces, but it doesn’t get into the specific details of individual developments. The fact that the general plan doesn't get into specific recreational areas is what's important. That's what sets it apart from a master plan."
+                    "text": "A {General Plan} is a long-term guide that cities use to plan and regulate development in an orderly way. That’s why the city of Mesa approved its General Plan for the next 20 years. It's a document that's designed to outline how the city will grow and develop over time. It includes plans for residential neighborhoods, commercial zones, parks, and natural spaces, but it doesn’t get into the specific details of individual developments. The fact that the general plan doesn't get into specific recreational areas is what's important. That's what sets it apart from a master plan."
                 },
                 {
                     "id": "1.7",
                     "title": "Scenario Continued",
                     "audioFile": "7 Story Continued.wav",
-                    "text": "Developer Sarah sees an opportunity to propose a Master Planned Community that fits the plan's vision. Her community will include family homes, parks and jogging trails, ensuring alignment with the city's long-term goals."
+                    "text": "Developer Sarah sees an opportunity to propose a {Master Planned Community} that fits the plan's vision. Her community will include family homes, parks and jogging trails, ensuring alignment with the city's long-term goals."
                 },
                 {
                     "id": "1.8",
@@ -56,7 +57,7 @@
                     "id": "1.9",
                     "title": "Answer 3",
                     "audioFile": "9 Q3A.wav",
-                    "text": "General plans have a broad focus on land use categories. For example, an area might be designated for medium density residential, which covers a range of housing types but not individual lot sizes or exact building designs. It moreso outlines policies and goals for the future, such as supporting affordable housing initiatives. General plans often include maps showing intended land use patterns, transportation networks, and areas for land conservation. You won't see specific landscaping requirements or building footprints in a general plan."
+                    "text": "General Plans have a broad focus on land use categories. For example, an area might be designated for medium density residential, which covers a range of housing types but not individual lot sizes or exact building designs. It moreso outlines policies and goals for the future, such as supporting affordable housing initiatives. General plans often include maps showing intended land use patterns, transportation networks, and areas for land conservation. You won't see specific landscaping requirements or building footprints in a general plan."
                 },
                 {
                     "id": "1.10",
@@ -68,13 +69,13 @@
                     "id": "1.11",
                     "title": "Answer 4",
                     "audioFile": "11 Q4A.wav",
-                    "text": "A Master Plan is far more specific than a General Plan, as it focuses on the detailed design and development of a particular area or large-scale community. In a master plan, you'll see focus on a specific area, often a large scale project. It includes individual parcels for homes, businesses, recreational spaces, street layouts, sidewalks and bike paths, jogging trails, and placement of community features like parks, schools or shopping areas. A Master Plan specifies what buildings go where and even the building styles and materials. Sarah believes her Master Plan aligns with the General Plan's general goal, but beyond that, the specifics of what she's designing are her own."
+                    "text": "A {Master Plan} is far more specific than a General Plan, as it focuses on the detailed design and development of a particular area or large-scale community. In a master plan, you'll see focus on a specific area, often a large scale project. It includes individual parcels for homes, businesses, recreational spaces, street layouts, sidewalks and bike paths, jogging trails, and placement of community features like parks, schools or shopping areas. A Master Plan specifies what buildings go where and even the building styles and materials. Sarah believes her Master Plan aligns with the General Plan's general goal, but beyond that, the specifics of what she's designing are her own."
                 },
                 {
                     "id": "1.12",
                     "title": "Sarah's Story Cont.",
                     "audioFile": "12 Story Continued.wav",
-                    "text": "To get started, Sarah drafts a **Master Deed** to divide the community into individual lots and parcels for future homes and amenities."
+                    "text": "To get started, Sarah drafts a **{Master Deed}** to divide the community into individual lots and parcels for future homes and amenities."
                 },
                 {
                     "id": "1.13",
@@ -122,13 +123,13 @@
                     "id": "1.20",
                     "title": "Question 7 Explained",
                     "audioFile": "20 Q7 Explanation.wav",
-                    "text": "You heard that Sarah's master planned community included family homes, parks, and jogging trails. The Master Deed was what allowed her to divide the land into separate sections. Some for residential lots, others for recreational spaces, and even areas to preserve as natural open spaces. If there's no master deed, there is no contract that formalizes what plot of land is for what, and where boundaries are."
+                    "text": "You heard that Sarah's {Master Planned Community} included family homes, parks, and jogging trails. The Master Deed was what allowed her to divide the land into separate sections. Some for residential lots, others for recreational spaces, and even areas to preserve as natural open spaces. If there's no master deed, there is no contract that formalizes what plot of land is for what, and where boundaries are."
                 },
                 {
                     "id": "1.21",
                     "title": "NAOS",
                     "audioFile": "21 she also identifies NAOS.wav",
-                    "text": "Sarah identifies a Natural Area Open Space that will remain undeveloped to preserve the local environment. The city is impressed with how well the NAOS fits the general plan, and gives the greenlight for construction."
+                    "text": "Sarah identifies a {Natural Area Open Space} (NAOS) that will remain undeveloped to preserve the local environment. The city is impressed with how well the NAOS fits the general plan, and gives the greenlight for construction."
                 },
                 {
                     "id": "1.22",
@@ -140,7 +141,7 @@
                     "id": "1.23",
                     "title": "Answer 8",
                     "audioFile": "23 Q8A A Natural Area Open Space, is a designated area or easement preserved in its natural state to protect the environment.wav",
-                    "text": "A Natural Area Open Space (NAOS) is a designated area or easement preserved in its natural state to protect the environment and limit development."
+                    "text": "A {Natural Area Open Space} (NAOS) is a designated area or easement preserved in its natural state to protect the environment and limit development."
                 },
                 {
                     "id": "1.24",
@@ -186,9 +187,9 @@
                 },
                 {
                     "id": "1.31",
-                    "title": "Site Plan Explanation",
+                    "title": "Site Plan Defined",
                     "audioFile": "31 A Site Plan is.wav",
-                    "text": "A Site Plan is a detailed architectural document that illustrates the proposed development and layout of a specific parcel of land. It provides a visual representation of how the land will be used and what structures or improvements will be made. You'll see parking and traffic flow, landscaping, and, of course, the **building footprint**."
+                    "text": "A Site Plan is a detailed architectural document that illustrates the proposed development and layout of a specific parcel of land. It provides a visual representation of how the land will be used and what structures or {improvements} will be made. You'll see parking and traffic flow, landscaping, and, of course, the **building footprint**."
                 },
                 {
                     "id": "1.32",
@@ -204,15 +205,15 @@
                 },
                 {
                     "id": "1.34",
-                    "title": "Explanation",
+                    "title": "Site Plan Explanation",
                     "audioFile": "34.wav",
-                    "text": "The Site Plan includes details like the Building Footprint, which shows where the structure will sit on the property, as well as utility lines, parking lots, and landscaping."
+                    "text": "The Site Plan includes details like the {Building Footprint}, which shows where the structure will sit on the property, as well as utility lines, parking lots, and landscaping.<br><img src=\"/images/lesson1/site-plan.jpg\" alt=\"Site Plan example\">"
                 },
                 {
                     "id": "1.35",
                     "title": "Building Footprint",
                     "audioFile": "35 Building Footprint.wav",
-                    "text": "A **Building Footprint** refers to the specific area of land that is occupied by a building or structure, as seen from a top-down (bird's-eye) view. It is essentially the outline of the building on the site, including its external walls and any attached structures like porches, decks, or garages. It has Defined Boundaries, meaning The footprint includes only the physical space occupied by the building itself. Landscaping for the parcel is something different."
+                    "text": "A **{Building Footprint}** refers to the specific area of land that is occupied by a building or structure, as seen from a top-down (bird's-eye) view. It is essentially the outline of the building on the site, including its external walls and any attached structures like porches, decks, or garages. It has Defined Boundaries, meaning The footprint includes only the physical space occupied by the building itself. Landscaping for the parcel is something different."
                 },
                 {
                     "id": "1.36",
@@ -224,7 +225,7 @@
                     "id": "1.37",
                     "title": "Answer 13",
                     "audioFile": "37 Q13A.wav",
-                    "text": "The building footprint shows what ground area is covered by the building, and what the outline of a building is when looking at it from above."
+                    "text": "The {Building Footprint} shows what ground area is covered by the building, and what the outline of a building is when looking at it from above."
                 },
                 {
                     "id": "1.38",
@@ -279,23 +280,24 @@
         {
             "id": "lesson2",
             "title": "Zoning Laws and Regulations",
+            "dictionary": "real-estate-definitions.json",
             "sections": [
                 {
                     "id": "1.1",
                     "title": "Intro Scenario",
-                    "audioFile": "1.wav",
-                    "text": "The town of Greenview was holding a public hearing to discuss a new **zoning ordinance**. The zoning ordinance proposed rezoning a large parcel of land on the edge of town from agricultural use to residential use to accommodate a growing population."
+                    "audioFile": "1 Intro Scenario.wav",
+                    "text": "The town of Greenview is holding a public hearing to discuss a new **zoning ordinance**. The **zoning ordinance** proposed zoning an unused chunk of land on the edge of town to residential use to accommodate a growing population."
                 },
                 {
                     "id": "1.2",
                     "title": "Question 1",
-                    "audioFile": "2.wav",
+                    "audioFile": "2 Q1.wav",
                     "text": "What new thing is being discussed at the public hearing?"
                 },
                 {
                     "id": "1.3",
                     "title": "Answer 1",
-                    "audioFile": "3.wav",
+                    "audioFile": "3 A1.wav",
                     "text": "A zoning ordinance."
                 },
                 {

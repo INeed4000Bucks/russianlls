@@ -22,6 +22,7 @@
                 <% lesson.sections.forEach((section, index) => { %>
                     <li data-section="<%= section.id %>" 
                         data-audio="<%= section.audioFile %>"
+                        data-text="<%- encodeURIComponent(section.text) %>"
                         class="section <%= section.id === currentSection ? 'active' : '' %>">
                         <span class="section-title"><%= section.title %></span>
                     </li>
@@ -44,11 +45,12 @@
                     </div>
                 </div>
             </div>
+            <div id="section-content" class="section-content"></div>
         </div>
     </div>
 
     <style>
-        .keyboard-shortcuts {
+    .keyboard-shortcuts {
             margin: 20px 0;
             padding: 10px;
             background: #f5f5f5;
@@ -56,12 +58,12 @@
             font-size: 0.9em;
         }
 
-        .keyboard-shortcuts ul {
+    .keyboard-shortcuts ul {
             padding-left: 20px;
             margin: 5px 0;
         }
 
-        .section {
+    .section {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -70,28 +72,178 @@
             transition: background-color 0.2s;
         }
 
-        .auto-advance-toggle {
+    .auto-advance-toggle {
             display: flex;
             align-items: center;
             margin-left: 15px;
             cursor: pointer;
         }
 
-        .toggle-label {
+    .toggle-label {
             margin-left: 5px;
             color: #4CAF50;
         }
 
-        .controls {
+    .controls {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
+
+    .section-content {
+        margin: 20px 0;
+        line-height: 1.6;
+        font-size: 1.1em;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .keyword-popup {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        position: relative;
+        display: inline-block;
+        cursor: help;
+        border-bottom: 1px dashed #666;
+    }
+
+    .keyword-popup .popup-content {
+    visibility: hidden;
+    position: fixed; /* Change this from absolute to fixed */
+    background-color: #333;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    width: max-content;
+    max-width: 300px;
+    z-index: 9999; /* Very high z-index */
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-weight: normal;
+    font-style: normal;
+}
+
+    .keyword-popup:hover .popup-content {
+        z-index: 1000;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .emphasized {
+        font-style: italic;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .section-content img {
+        max-width: 50%;
+        height: auto;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    /* Arrow for popup above */
+    .popup-content.popup-top::after {
+        z-index: 999;
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
+
+    /* Arrow for popup below */
+    .popup-content.popup-bottom::after {
+        z-index: 999;
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent #333 transparent;
+    }
+
+
+
+
+
+
+
+    .container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    position: relative; /* Add this */
+}
+
+.sidebar {
+    width: 300px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+    position: relative; /* Add this */
+    z-index: 1;
+}
+
+.main-content {
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px;
+    position: relative; /* Add this */
+    z-index: 2;
+}
+
+/* Webkit scrollbar customization (Chrome, Safari, newer Edge) */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.main-content {
+    z-index: 2;
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* If you have a lesson-sections list, you might want to add this too */
+.lesson-sections {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
     </style>
 
     <script>
         const lessonId = '<%= lessonId %>';
         const currentSection = '<%= currentSection %>';
+        const dictionary = JSON.parse('<%- dictionary %>');
     </script>
     <script src="/js/player.js"></script>
 </body>
