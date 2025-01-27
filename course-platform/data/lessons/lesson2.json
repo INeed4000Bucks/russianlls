@@ -1,0 +1,49 @@
+{
+    "id": "lesson2",
+    "title": "Zoning Laws and Regulations",
+    "dictionary": "real-estate-definitions.json",
+    "sections": [
+        {
+            "id": "1.1",
+            "title": "Intro Scenario",
+            "audioFile": "1 Intro Scenario.wav",
+            "text": "The town of Greenview is holding a public hearing to discuss a new **zoning ordinance**. The **zoning ordinance** proposed zoning an unused chunk of land on the edge of town to residential use to accommodate a growing population."
+        },
+        {
+            "id": "1.2",
+            "title": "Question 1",
+            "audioFile": "2 Q1.wav",
+            "text": "What new thing is being discussed at the public hearing?"
+        },
+        {
+            "id": "1.3",
+            "title": "Answer 1",
+            "audioFile": "3 A1.wav",
+            "text": "A zoning ordinance."
+        },
+        {
+            "id": "1.4",
+            "title": "Explanation",
+            "audioFile": "4.wav",
+            "text": "A **zoning ordinance** is a government regulation that controls how land can be used in a specific area. It’s enacted by municipalities, such as cities or counties, under their police powers to ensure orderly development and protect public welfare. That’s why, in the story, Greenview held a public hearing to decide whether farm land could be re-zoned for residential use. Public hearings are a key part of creating zoning ordinances—they give the community a chance to voice concerns and provide input."
+        },
+        {
+            "id": "1.5",
+            "title": "Story Continued",
+            "audioFile": "5.wav",
+            "text": "During the discussion, the city planner explained that the ordinance would create a Buffer Zone of trees and open land between the new neighborhood and the remaining farmland."
+        },
+        {
+            "id": "1.6",
+            "title": "Question 2",
+            "audioFile": "6 Q.wav",
+            "text": "What would be contained within the buffer zone, and what would it separate?"
+        },
+        {
+            "id": "1.7",
+            "title": "Answer 2",
+            "audioFile": "7 A.wav",
+            "text": "The buffer zone would contain trees and open land, separating the new neighborhood and the remaining farmland zones."
+        }
+    ]
+}

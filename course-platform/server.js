@@ -3,7 +3,12 @@ const path = require('path');
 const app = express();
 
 app.set('view engine', 'ejs');
+
+// Serve static files from public directory
 app.use(express.static('public'));
+
+// Serve dictionary files - add this line
+app.use('/data/dictionaries', express.static(path.join(__dirname, 'data/dictionaries')));
 
 const lessonsRouter = require('./routes/lessons');
 app.use('/', lessonsRouter);
