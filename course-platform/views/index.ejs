@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Selection</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="course-selection">
+            <h1>Available Lessons</h1>
+            
+            <div class="course-grid">
+                <% if (lessons && lessons.length > 0) { %>
+                    <% lessons.forEach(lesson => { %>
+                        <div class="course-card">
+                            <h2><%= lesson.title %></h2>
+                            
+                            <div class="course-info">
+                                <p class="section-count">
+                                    <%= lesson.sections.length %> sections
+                                </p>
+                            </div>
+
+                            <div class="progress-info">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%"></div>
+                                </div>
+                                <span class="progress-text">Not started</span>
+                            </div>
+
+                            <a href="/lesson/<%= lesson.id %>" class="start-button">
+                                Start Lesson
+                            </a>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No lessons available.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .course-selection {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .course-card h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .course-info {
+            margin: 15px 0;
+            color: #666;
+        }
+
+        .course-info p {
+            margin: 5px 0;
+        }
+
+        .progress-info {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .start-button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background 0.2s;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .start-button:hover {
+            background: #45a049;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-selection {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</body>
+</html>

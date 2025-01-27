@@ -1,0 +1,328 @@
+{
+    "lessons": [
+        {
+            "id": "lesson1",
+            "title": "Development Documentation",
+            "sections": [
+                {
+                    "id": "1.1",
+                    "title": "Intro Scenario",
+                    "audioFile": "1 Story Start.wav",
+                    "text": "The city of Mesa has just approved its **{General Plan}** for the next **20** years. The plan outlines areas for residential neighborhoods, commercial zones, parks, and {preserved natural spaces}."
+                },
+                {
+                    "id": "1.2",
+                    "title": "Question 1",
+                    "audioFile": "2 Q1.mp3",
+                    "text": "How long is the general plan good for?"
+                },
+                {
+                    "id": "1.3",
+                    "title": "Answer 1",
+                    "audioFile": "3 Q1A.wav",
+                    "text": "20 years"
+                },
+                {
+                    "id": "1.4",
+                    "title": "Question 2",
+                    "audioFile": "4 Q2.mp3",
+                    "text": "Does the general plan include plans for both commercial and residential zones?"
+                },
+                {
+                    "id": "1.5",
+                    "title": "Answer 2",
+                    "audioFile": "5 Q2A.wav",
+                    "text": "Yes, it includes plans for both residential and commercial. It also includes plans for parks and natural spaces that are meant to be preserved."
+                },
+                {
+                    "id": "1.6",
+                    "title": "Explanation",
+                    "audioFile": "6 Explanation.wav",
+                    "text": "A General Plan is a long-term guide that cities use to plan and regulate development in an orderly way. That’s why the city of Mesa approved its General Plan for the next 20 years. It's a document that's designed to outline how the city will grow and develop over time. It includes plans for residential neighborhoods, commercial zones, parks, and natural spaces, but it doesn’t get into the specific details of individual developments. The fact that the general plan doesn't get into specific recreational areas is what's important. That's what sets it apart from a master plan."
+                },
+                {
+                    "id": "1.7",
+                    "title": "Scenario Continued",
+                    "audioFile": "7 Story Continued.wav",
+                    "text": "Developer Sarah sees an opportunity to propose a Master Planned Community that fits the plan's vision. Her community will include family homes, parks and jogging trails, ensuring alignment with the city's long-term goals."
+                },
+                {
+                    "id": "1.8",
+                    "title": "Question 3",
+                    "audioFile": "8 Q3 How specific does a General Plan get？.mp3",
+                    "text": "How specific does a General Plan get?"
+                },
+                {
+                    "id": "1.9",
+                    "title": "Answer 3",
+                    "audioFile": "9 Q3A.wav",
+                    "text": "General plans have a broad focus on land use categories. For example, an area might be designated for medium density residential, which covers a range of housing types but not individual lot sizes or exact building designs. It moreso outlines policies and goals for the future, such as supporting affordable housing initiatives. General plans often include maps showing intended land use patterns, transportation networks, and areas for land conservation. You won't see specific landscaping requirements or building footprints in a general plan."
+                },
+                {
+                    "id": "1.10",
+                    "title": "Question 4",
+                    "audioFile": "10 Q4 How specific does a Master Plan get？.mp3",
+                    "text": "How specific does a Master Plan get?"
+                },
+                {
+                    "id": "1.11",
+                    "title": "Answer 4",
+                    "audioFile": "11 Q4A.wav",
+                    "text": "A Master Plan is far more specific than a General Plan, as it focuses on the detailed design and development of a particular area or large-scale community. In a master plan, you'll see focus on a specific area, often a large scale project. It includes individual parcels for homes, businesses, recreational spaces, street layouts, sidewalks and bike paths, jogging trails, and placement of community features like parks, schools or shopping areas. A Master Plan specifies what buildings go where and even the building styles and materials. Sarah believes her Master Plan aligns with the General Plan's general goal, but beyond that, the specifics of what she's designing are her own."
+                },
+                {
+                    "id": "1.12",
+                    "title": "Sarah's Story Cont.",
+                    "audioFile": "12 Story Continued.wav",
+                    "text": "To get started, Sarah drafts a **Master Deed** to divide the community into individual lots and parcels for future homes and amenities."
+                },
+                {
+                    "id": "1.13",
+                    "title": "Question 5",
+                    "audioFile": "13 Q5 what does Sarah draft after master plan.mp3",
+                    "text": "What does Sarah draft after her master plan is approved?"
+                },
+                {
+                    "id": "1.14",
+                    "title": "Answer 5",
+                    "audioFile": "14 Q5A Sarah drafts a master deed.mp3",
+                    "text": "Sarah drafts a master deed"
+                },
+                {
+                    "id": "1.15",
+                    "title": "Question 6",
+                    "audioFile": "15 Q6 why master deed.mp3",
+                    "text": "Why did Sarah draft a master deed?"
+                },
+                {
+                    "id": "1.16",
+                    "title": "Answer 6",
+                    "audioFile": "16 Q6A.wav",
+                    "text": "She did it to divide the community into individual lots and parcels for future homes and amenities in the specific area she's planning for."
+                },
+                {
+                    "id": "1.17",
+                    "title": "Master Deed Explained",
+                    "audioFile": "17 Master Deed Explanation.wav",
+                    "text": "A master deed is a legal document that officially divides the planned community into individual lots or parcels for specific purposes and ownership."
+                },
+                {
+                    "id": "1.18",
+                    "title": "Question 7",
+                    "audioFile": "18 Q7 What does a master deed divide？.wav",
+                    "text": "What does a master deed divide?"
+                },
+                {
+                    "id": "1.19",
+                    "title": "Answer 7",
+                    "audioFile": "19 Q7A A master deed divides the land into parcels.mp3",
+                    "text": "A master deed divides the land into parcels for developing individual properties."
+                },
+                {
+                    "id": "1.20",
+                    "title": "Question 7 Explained",
+                    "audioFile": "20 Q7 Explanation.wav",
+                    "text": "You heard that Sarah's master planned community included family homes, parks, and jogging trails. The Master Deed was what allowed her to divide the land into separate sections. Some for residential lots, others for recreational spaces, and even areas to preserve as natural open spaces. If there's no master deed, there is no contract that formalizes what plot of land is for what, and where boundaries are."
+                },
+                {
+                    "id": "1.21",
+                    "title": "NAOS",
+                    "audioFile": "21 she also identifies NAOS.wav",
+                    "text": "Sarah identifies a Natural Area Open Space that will remain undeveloped to preserve the local environment. The city is impressed with how well the NAOS fits the general plan, and gives the greenlight for construction."
+                },
+                {
+                    "id": "1.22",
+                    "title": "Question 8",
+                    "audioFile": "22 Q8 What is a Natural Area Open Space？.wav",
+                    "text": "What is a Natural Area Open Space?"
+                },
+                {
+                    "id": "1.23",
+                    "title": "Answer 8",
+                    "audioFile": "23 Q8A A Natural Area Open Space, is a designated area or easement preserved in its natural state to protect the environment.wav",
+                    "text": "A Natural Area Open Space (NAOS) is a designated area or easement preserved in its natural state to protect the environment and limit development."
+                },
+                {
+                    "id": "1.24",
+                    "title": "Question 9",
+                    "audioFile": "24 Q9 Can you recall what a master deed divides.wav",
+                    "text": "Can you recall what a Master Deed divides?"
+                },
+                {
+                    "id": "1.25",
+                    "title": "Answer 9",
+                    "audioFile": "25 Q9A For developing individual properties, a master deed divides.wav",
+                    "text": "For developing individual properties, a **Master Deed** divides the land into individualized parcels."
+                },
+                {
+                    "id": "1.26",
+                    "title": "Question 10",
+                    "audioFile": "26 Q10 Regarding specificity, what is the difference between a General Plan and a Master Plan.wav",
+                    "text": "Regarding specificity, what is the difference between a General Plan and a Master Plan?"
+                },
+                {
+                    "id": "1.27",
+                    "title": "Answer 10",
+                    "audioFile": "27 Q10A Master plans can get highly specific.wav",
+                    "text": "Master plans can get highly specific, whereas general plans get as specific as zoning land and placing transportation networks."
+                },
+                {
+                    "id": "1.28",
+                    "title": "Story 2 Start: The Digging Dilemma",
+                    "audioFile": "28 Story 2 Start.wav",
+                    "text": "When planning a new office building in Scottsdale, architect Mark consults the **{Site Plan}** to ensure all improvements are properly laid out. The Site Plan includes details like the **Building Footprint**, which shows where the structure will sit on the property."
+                },
+                {
+                    "id": "1.29",
+                    "title": "Question 11",
+                    "audioFile": "29 Q11 What did Mark the architect consult.wav",
+                    "text": "What did Mark the architect consult to make sure improvements are properly laid out?"
+                },
+                {
+                    "id": "1.30",
+                    "title": "Answer 11",
+                    "audioFile": "30 Q11A Mark consulted the site plan to see how everything will be arranged on the land.wav",
+                    "text": "Mark consulted the **Site Plan** to see how everything will be arranged on the land."
+                },
+                {
+                    "id": "1.31",
+                    "title": "Site Plan Explanation",
+                    "audioFile": "31 A Site Plan is.wav",
+                    "text": "A Site Plan is a detailed architectural document that illustrates the proposed development and layout of a specific parcel of land. It provides a visual representation of how the land will be used and what structures or improvements will be made. You'll see parking and traffic flow, landscaping, and, of course, the **building footprint**."
+                },
+                {
+                    "id": "1.32",
+                    "title": "Question 12",
+                    "audioFile": "32 Q12 Site Plan vs Master Plan.wav",
+                    "text": "What kind of area does a Site Plan focus on? And what kind of area does a Master Plan focus on?"
+                },
+                {
+                    "id": "1.33",
+                    "title": "Answer 12",
+                    "audioFile": "33 Q12A.wav",
+                    "text": "A Master Plan focuses on a large community or area, whereas a Site Plan focuses on a specific parcel."
+                },
+                {
+                    "id": "1.34",
+                    "title": "Explanation",
+                    "audioFile": "34.wav",
+                    "text": "The Site Plan includes details like the Building Footprint, which shows where the structure will sit on the property, as well as utility lines, parking lots, and landscaping."
+                },
+                {
+                    "id": "1.35",
+                    "title": "Building Footprint",
+                    "audioFile": "35 Building Footprint.wav",
+                    "text": "A **Building Footprint** refers to the specific area of land that is occupied by a building or structure, as seen from a top-down (bird's-eye) view. It is essentially the outline of the building on the site, including its external walls and any attached structures like porches, decks, or garages. It has Defined Boundaries, meaning The footprint includes only the physical space occupied by the building itself. Landscaping for the parcel is something different."
+                },
+                {
+                    "id": "1.36",
+                    "title": "Question 13",
+                    "audioFile": "36 Q13.wav",
+                    "text": "Imagine you’re reviewing a **site plan** for a new office building. How would you describe the **building footprint** to your client?"
+                },
+                {
+                    "id": "1.37",
+                    "title": "Answer 13",
+                    "audioFile": "37 Q13A.wav",
+                    "text": "The building footprint shows what ground area is covered by the building, and what the outline of a building is when looking at it from above."
+                },
+                {
+                    "id": "1.38",
+                    "title": "Question 14",
+                    "audioFile": "38 Q14.wav",
+                    "text": "Is it the site plan or the building footprint that includes things like utility lines, parking lots, and landscaping?"
+                },
+                {
+                    "id": "1.39",
+                    "title": "Answer 14",
+                    "audioFile": "39 Q14A.wav",
+                    "text": "That would be the site plan. In fact, the site plan includes the building footprint for the parcel."
+                },
+                {
+                    "id": "1.40",
+                    "title": "Story 2 Continued",
+                    "audioFile": "40 Story Continued.wav",
+                    "text": "Before any digging begins, Mark wants to know the the construction team won't accidentally hit a water or gas line, and so he calls **Arizona 811** to mark the underground utilities on the site."
+                },
+                {
+                    "id": "1.41",
+                    "title": "Question 15",
+                    "audioFile": "41 Q15.wav",
+                    "text": "What service does Mark call to find out where underground utilities are?"
+                },
+                {
+                    "id": "1.42",
+                    "title": "Answer 15",
+                    "audioFile": "42 Q15A.wav",
+                    "text": "Arizona 811"
+                },
+                {
+                    "id": "1.43",
+                    "title": "Story Continued",
+                    "audioFile": "43.wav",
+                    "text": "And so Mark calls **Arizona 811** to mark the underground utilities on the site. Once the utilities are clearly identified, the construction team starts digging with confidence, knowing they won’t accidentally hit a water or gas line. Thanks to Mark’s thorough planning, the project stays on schedule and avoids costly mistakes."
+                },
+                {
+                    "id": "1.44",
+                    "title": "Question 16",
+                    "audioFile": "44 Q16.wav",
+                    "text": "Is is the site plan or **Arizona 811** that shows existing utility lines?"
+                },
+                {
+                    "id": "1.45",
+                    "title": "Answer 16",
+                    "audioFile": "45 Q16A.wav",
+                    "text": "Site Plans for existing properties show existing utility lines if they are relevant to the project. Site Plans for New Construction focus on proposed utility lines, but just might indicate nearby existing utilities to connect to. Even if existing utilities are shown on a site plan a developer is using, their exact location should be confirmed and physically marked by contacting **Arizona 811** before digging."
+                }
+            ]
+        },
+        {
+            "id": "lesson2",
+            "title": "Zoning Laws and Regulations",
+            "sections": [
+                {
+                    "id": "1.1",
+                    "title": "Intro Scenario",
+                    "audioFile": "1.wav",
+                    "text": "The town of Greenview was holding a public hearing to discuss a new **zoning ordinance**. The zoning ordinance proposed rezoning a large parcel of land on the edge of town from agricultural use to residential use to accommodate a growing population."
+                },
+                {
+                    "id": "1.2",
+                    "title": "Question 1",
+                    "audioFile": "2.wav",
+                    "text": "What new thing is being discussed at the public hearing?"
+                },
+                {
+                    "id": "1.3",
+                    "title": "Answer 1",
+                    "audioFile": "3.wav",
+                    "text": "A zoning ordinance."
+                },
+                {
+                    "id": "1.4",
+                    "title": "Explanation",
+                    "audioFile": "4.wav",
+                    "text": "A **zoning ordinance** is a government regulation that controls how land can be used in a specific area. It’s enacted by municipalities, such as cities or counties, under their police powers to ensure orderly development and protect public welfare. That’s why, in the story, Greenview held a public hearing to decide whether farm land could be re-zoned for residential use. Public hearings are a key part of creating zoning ordinances—they give the community a chance to voice concerns and provide input."
+                },
+                {
+                    "id": "1.5",
+                    "title": "Story Continued",
+                    "audioFile": "5.wav",
+                    "text": "During the discussion, the city planner explained that the ordinance would create a Buffer Zone of trees and open land between the new neighborhood and the remaining farmland."
+                },
+                {
+                    "id": "1.6",
+                    "title": "Question 2",
+                    "audioFile": "6 Q.wav",
+                    "text": "What would be contained within the buffer zone, and what would it separate?"
+                },
+                {
+                    "id": "1.7",
+                    "title": "Answer 2",
+                    "audioFile": "7 A.wav",
+                    "text": "The buffer zone would contain trees and open land, separating the new neighborhood and the remaining farmland zones."
+                }
+            ]
+        }
+    ]
+}
