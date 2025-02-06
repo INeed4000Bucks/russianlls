@@ -452,16 +452,16 @@ app.post('/lesson/:lessonId/updateQuestions', (req, res) => {
     return res.status(400).json({ message: 'Invalid questions data' });
   }
 
-  // Reassign question IDs sequentially (starting at 1) and update lesson.questions.
-  // Also, preserve existing progress if a matching tempId is found.
+  // 1. Identify original question IDs before update.
+  const originalQuestionIds = lesson.questions.map(q => q.id);
+
+  // 2. Prepare to track new question IDs and updated questions array.
   const newQuestions = [];
+  const newQuestionIds = new Set(); // Use a Set for efficient lookups
+
   updatedQuestions.forEach((qData, index) => {
     const newId = index + 1; // new numeric id for the question
-    // Try to preserve progress if an old question had the same tempId.
-    let existingProgress = {};
-    if (progressData[lessonId] && progressData[lessonId].questions[qData.tempId]) {
-      existingProgress = progressData[lessonId].questions[qData.tempId];
-    }
+    newQuestionIds.add(newId); // Add new ID to the set
     newQuestions.push({
       id: newId,
       question: qData.question,
@@ -469,31 +469,48 @@ app.post('/lesson/:lessonId/updateQuestions', (req, res) => {
       help: qData.help,
       audio: qData.audio || null
     });
-    // Also, update progressData for this question.
-    if (!progressData[lessonId].questions) {
-      progressData[lessonId].questions = {};
-    }
-    // Save progress using newId as key.
-    // If existing progress exists (from a previous question with same tempId), keep it; otherwise, default.
-    progressData[lessonId].questions[newId] = existingProgress.consecutiveCorrect !== undefined
-      ? existingProgress
-      : { consecutiveCorrect: 0, totalCorrect: 0 };
+    // Progress data will be handled separately after rebuilding questions array.
   });
 
-  // Replace lesson.questions with newQuestions.
+  // 3. Update lesson.questions with the new set of questions.
   lesson.questions = newQuestions;
 
-  // For simplicity, set the lesson's queue to be all questions in order.
-  progressData[lessonId].queue = newQuestions.map(q => q.id);
+  // 4. Update progressData[lessonId].questions:
+  if (!progressData[lessonId].questions) {
+    progressData[lessonId].questions = {}; // Initialize if it doesn't exist (shouldn't happen normally)
+  }
 
-  // Now, rebuild the entire qa.txt file from the lessons array.
-  // (Assuming qa.txt contains all lessons in order, with each lesson starting with a line like "@id:animals Lesson About Animals"
-  // followed by question lines.)
+  // 4a. Remove progress for deleted questions.
+  originalQuestionIds.forEach(oldId => {
+    if (!newQuestionIds.has(oldId)) {
+      delete progressData[lessonId].questions[oldId]; // Remove progress entry for deleted question
+    }
+  });
+
+  // 4b. Ensure progress exists for new/remaining questions (and *preserve* existing progress).
+  lesson.questions.forEach(q => {
+    if (!progressData[lessonId].questions[q.id]) {
+      progressData[lessonId].questions[q.id] = { consecutiveCorrect: 0, totalCorrect: 0 }; // Default progress for new questions
+    } // If progress already exists for a question with this *new* ID (due to reordering and ID reassignment), it is *preserved*.
+  });
+
+
+  // 5. Update progressData[lessonId].queue: Rebuild queue, keeping only questions that still exist.
+  const oldQueue = progressData[lessonId].queue || []; // Get the old queue, default to empty array if it doesn't exist.
+  const newQueue = [];
+  oldQueue.forEach(questionId => {
+    if (newQuestionIds.has(questionId)) { // Only add question IDs that are still in the lesson
+      newQueue.push(questionId); // Preserve order as much as possible.
+    }
+  });
+  progressData[lessonId].queue = newQueue;
+
+
+  // 6. Rebuild qa.txt file (same as before).
   let newQaContent = '';
   lessons.forEach(lessonItem => {
     newQaContent += `@id:${lessonItem.id} ${lessonItem.title}\n`;
     lessonItem.questions.forEach(q => {
-      // Build each question line as: Question<TAB>Answer<TAB>Help<TAB>Audio (if audio exists)
       let line = `${q.question}\t${q.answer}`;
       if (q.help || q.audio) {
         line += `\t${q.help || ''}`;
@@ -505,12 +522,10 @@ app.post('/lesson/:lessonId/updateQuestions', (req, res) => {
     });
     newQaContent += '\n'; // extra newline between lessons
   });
-
-  // Write the new content to qa.txt.
   const qaFilePath = path.join(__dirname, 'qa.txt');
   fs.writeFileSync(qaFilePath, newQaContent, 'utf-8');
 
-  // Save progress.json with updated progress.
+  // 7. Save progress.json.
   saveProgress();
 
   res.json({ message: 'Lesson questions updated successfully' });
