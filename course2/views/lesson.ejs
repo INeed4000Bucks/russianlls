@@ -1,0 +1,112 @@
+<!-- public/views/lesson.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= lesson.title %> – Practice</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Additional styles for lesson page controls */
+    .answer-buttons {
+      display: none;
+    }
+    #mastery-form {
+      text-align: center;
+      margin-top: 15px;
+    }
+    #mastery-form input {
+      width: 50px;
+      padding: 5px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><%= lesson.title %></h1>
+    <% if (question) { %>
+      <div class="question-card" tabindex="0" id="question-card">
+        <div class="question-text">
+          <!-- Only output the rendered media version -->
+          <%- renderEmbeddedMedia(question.question.replace(/\\n/g, '<br>')) %>
+        </div>
+        <div class="answer-text" id="answer-text" style="display: none;">
+          <p><strong>Answer:</strong> <%- renderEmbeddedMedia(question.answer.replace(/\\n/g, '<br>')) %></p>
+          <% if (question.audio) { %>
+            <audio id="question-audio" controls>
+              <source src="/media/<%= question.audio %>" type="audio/<%= question.audio.endsWith('.mp3') ? 'mpeg' : 'wav' %>" id="question-audio-source">
+              Your browser does not support the audio element.
+            </audio>
+          <% } %>
+          <% if (question.help) { %>
+            <p class="help-text"><em>Hint:</em> <%- renderEmbeddedMedia(question.help.replace(/\\n/g, '<br>')) %></p>
+          <% } %>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="reveal-button">Reveal Answer (SPACE)</button>
+        <div class="answer-buttons">
+          <button id="correct-button">Strong (1)</button>
+          <button id="incorrect-button">Strengthen This (2)</button>
+        </div>
+      </div>
+      <form id="mastery-form">
+        <label for="masteryThreshold">Mastery Threshold:</label>
+        <input type="number" id="masteryThreshold" name="masteryThreshold" value="<%= masteryThreshold %>" min="1">
+      </form>
+    <% } else { %>
+      <h2>Lesson completed for today!</h2>
+    <% } %>
+  </div>
+  <!-- Modal for editing questions -->
+  <div id="edit-questions-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-modal" class="close-button" style="cursor:pointer; float:right; font-size:1.5em;">&times;</span>
+      <h2>Edit Lesson Questions</h2>
+      <form id="edit-questions-form">
+        <table id="questions-table" border="1" style="width:100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Question</th>
+              <th>Answer</th>
+              <th>Hint</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% lesson.questions.forEach((q, index) => { %>
+              <tr data-temp-id="<%= q.id %>">
+                <td><%= index+1 %></td>
+                <td>
+                  <textarea name="question" class="embed-input" placeholder="Enter question text. Use [] to embed media."><%= q.question %></textarea>
+                </td>
+                <td>
+                  <textarea name="answer" class="embed-input" placeholder="Enter answer text. Use [] to embed media."><%= q.answer %></textarea>
+                </td>
+                <td>
+                  <textarea name="hint" class="embed-input" placeholder="Enter hint text. Use [] to embed media."><%= q.help %></textarea>
+                </td>
+                <td>
+                  <button type="button" class="remove-row-button">Remove</button>
+                  <button type="button" class="move-up-button">↑</button>
+                  <button type="button" class="move-down-button">↓</button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <br/>
+        <button type="button" id="add-row-button">Add Question</button>
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+  <script src="/js/lesson.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Expose the lesson ID to client-side scripts.
+    window.lessonId = "<%= lesson.id %>";
+  </script>
+</body>
+</html>

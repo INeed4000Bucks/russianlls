@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Collected Media</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Collected Media</h1>
+    <div class="media-gallery">
+      <% if (rewards && rewards.length > 0) { %>
+        <% rewards.forEach(file => { %>
+          <% if (!file || !file.name) { return; } %>
+          <div class="media-item">
+            <% 
+              // Use file.name to get the extension
+              const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+            %>
+            <% if (['.mp4', '.m4v'].includes(ext)) { %>
+              <video width="320" height="240" controls>
+                <source src="<%= file.url %>" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            <% } else { %>
+              <img src="<%= file.url %>" alt="Media Reward">
+            <% } %>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>No media rewards collected yet.</p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

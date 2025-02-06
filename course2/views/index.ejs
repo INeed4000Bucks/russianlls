@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Course Selection</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div id="add-lesson-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-add-lesson" class="close-button" style="cursor:pointer; float:right; font-size:1.5em;">&times;</span>
+      <h2>Add New Lesson</h2>
+      <form id="add-lesson-form">
+        <label for="lesson-id">Lesson ID (stable):</label>
+        <input type="text" id="lesson-id" name="lessonId" placeholder="e.g., newlesson" required/><br/><br/>
+        <label for="lesson-title">Lesson Title:</label>
+        <input type="text" id="lesson-title" name="lessonTitle" placeholder="Lesson Title" required/><br/><br/>
+        <label for="lesson-content">Lesson Content (paste tab-spaced questions):</label>
+        <textarea id="lesson-content" name="lessonContent" rows="10" cols="50" placeholder="Each line should be: Question[TAB]Answer[TAB]Hint (optional)[TAB]Audio (optional)"></textarea><br/><br/>
+        <button type="submit">Add Lesson</button>
+      </form>
+    </div>
+  </div>
+  <button id="add-lesson-button">+ Add Lesson</button>
+  
+  <script>
+    // Script for handling Add Lesson modal on index.ejs.
+    document.getElementById('add-lesson-button').addEventListener('click', function() {
+      document.getElementById('add-lesson-modal').style.display = 'block';
+    });
+    document.getElementById('close-add-lesson').addEventListener('click', function() {
+      document.getElementById('add-lesson-modal').style.display = 'none';
+    });
+  
+    document.getElementById('add-lesson-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const lessonId = document.getElementById('lesson-id').value.trim();
+      const lessonTitle = document.getElementById('lesson-title').value.trim();
+      const lessonContent = document.getElementById('lesson-content').value.trim();
+      fetch('/addLesson', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lessonId, lessonTitle, lessonContent })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        location.reload();
+      })
+      .catch(err => console.error('Error adding lesson:', err));
+    });
+  </script>
+  
+  <div class="container">
+    <div class="course-selection">
+      <h1>Available Lessons</h1>
+      <div class="course-grid">
+        <% if (lessons && lessons.length > 0) { %>
+          <% lessons.forEach(lesson => { %>
+            <div class="course-card">
+              <h2><%= lesson.title %></h2>
+              <div class="course-info">
+                <p class="section-count">
+                  <%= lesson.questions ? lesson.questions.length : '0' %> questions
+                </p>
+              </div>
+              <div class="progress-info">
+                <div class="progress-bar">
+                  <div class="progress" style="width: <%= lesson.progressPercent %>%"></div>
+                </div>
+                <span class="progress-text"><%= lesson.progressPercent %>% complete</span>
+              </div>
+              <a href="/lesson/<%= lesson.id %>" class="start-button">Start Lesson</a>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p>No lessons available.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
