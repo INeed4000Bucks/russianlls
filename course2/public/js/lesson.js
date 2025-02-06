@@ -164,10 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
       .then(response => response.json())
       .then(data => {
-        // If a reward was earned, show the reward notification overlay.
-        if (data.rewardFile) {
-          showRewardNotification(data.rewardFile);
-        }
         if (data.message && data.message === 'Lesson completed') {
           document.querySelector('.container').innerHTML =
             '<h2>Lesson completed for today!</h2>';
@@ -186,55 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Autoplay was prevented. May happen in some browsers depending on settings.
       console.warn("Autoplay prevented for question audio:", error);
     });
-  }
-
-  // Display a modal overlay with the reward image or video.
-  function showRewardNotification(rewardFile) {
-    const overlay = document.createElement('div');
-    overlay.id = 'reward-overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.top = 0;
-    overlay.style.left = 0;
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
-    overlay.style.display = 'flex';
-    overlay.style.justifyContent = 'center';
-    overlay.style.alignItems = 'center';
-    overlay.style.zIndex = 1000;
-
-    const rewardContainer = document.createElement('div');
-    rewardContainer.style.backgroundColor = '#fff';
-    rewardContainer.style.padding = '20px';
-    rewardContainer.style.borderRadius = '8px';
-    rewardContainer.style.textAlign = 'center';
-
-    const ext = rewardFile.slice(rewardFile.lastIndexOf('.')).toLowerCase();
-    if (ext === '.mp4' || ext === '.m4v') {
-      const video = document.createElement('video');
-      video.src = '/media/' + rewardFile;
-      video.controls = true;
-      video.autoplay = true;
-      video.style.maxWidth = '100%';
-      rewardContainer.appendChild(video);
-    } else {
-      const img = document.createElement('img');
-      img.src = '/media/' + rewardFile;
-      img.alt = 'Reward';
-      img.style.maxWidth = '100%';
-      rewardContainer.appendChild(img);
-    }
-
-    const closeButton = document.createElement('button');
-    closeButton.innerText = 'Close';
-    closeButton.style.marginTop = '10px';
-    closeButton.addEventListener('click', () => {
-      document.body.removeChild(overlay);
-    });
-    rewardContainer.appendChild(closeButton);
-
-    overlay.appendChild(rewardContainer);
-    document.body.appendChild(overlay);
   }
 
   function openEditQuestionsModal() {
@@ -338,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <textarea name="hint" class="embed-input" placeholder="Enter hint text. Use [] to embed media."></textarea>
       </td>
       <td>
-        <button type="button" class="remove-row-button">Remove</button>
+        <button type="button" class="remove-row-button">×</button>
         <button type="button" class="move-up-button">↑</button>
         <button type="button" class="move-down-button">↓</button>
       </td>
@@ -361,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const answerEl = row.querySelector('textarea[name="answer"]');
       const hintEl = row.querySelector('textarea[name="hint"]');
       // If any of these elements are missing, skip this row.
-      if (!questionEl || !answerEl || !hintEl) return;
+      if (!questionEl || !answerEl) return;
       
       // Optionally, convert actual newline characters to literal "\n"
       const questionText = questionEl.value.replace(/\r?\n/g, '\\n').trim();
